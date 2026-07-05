@@ -1,0 +1,73 @@
+"use client";
+
+import { useState } from "react";
+
+const galleryImages = [
+  "/jewelry/leaf1.jpg",
+  "/jewelry/leaf2.jpg",
+  "/jewelry/leaf3.jpg",
+  "/jewelry/leaf4.jpg",
+  "/jewelry/leaf5.jpg",
+  "/jewelry/faceted1.jpg",
+  "/jewelry/implo.jpg",
+  "/jewelry/faceted3.jpg",
+];
+
+export default function Page() {
+  const [activeImage, setActiveImage] = useState<string | null>(null);
+
+  return (
+    <main className="min-h-screen bg-black px-6 py-32 text-white">
+      <section className="mx-auto max-w-7xl">
+        <p className="mb-4 text-center text-sm font-bold uppercase tracking-[0.5em] text-orange-300">
+          Gallery
+        </p>
+
+        <h1 className="text-center text-6xl font-black uppercase">
+          Glass Archive
+        </h1>
+
+        <p className="mx-auto mt-6 mb-16 max-w-2xl text-center text-neutral-300">
+          A growing collection of handcrafted borosilicate glass art from the
+          FRGLASS studio.
+        </p>
+
+        <div className="grid gap-6 md:grid-cols-3">
+          {galleryImages.map((src) => (
+            <button
+              key={src}
+              onClick={() => setActiveImage(src)}
+              className="group overflow-hidden rounded-3xl border border-white/10 bg-white/5 text-left"
+            >
+              <img
+                src={src}
+                alt="FRGLASS gallery piece"
+                className="h-[460px] w-full object-cover transition duration-700 group-hover:scale-110"
+              />
+            </button>
+          ))}
+        </div>
+      </section>
+
+      {activeImage && (
+        <div
+          onClick={() => setActiveImage(null)}
+          className="fixed inset-0 z-[999] flex items-center justify-center bg-black/90 p-6"
+        >
+          <img
+            src={activeImage}
+            alt="FRGLASS enlarged piece"
+            className="max-h-[90vh] max-w-[90vw] rounded-3xl object-contain"
+          />
+
+          <button
+            onClick={() => setActiveImage(null)}
+            className="absolute right-8 top-8 text-4xl text-white"
+          >
+            ×
+          </button>
+        </div>
+      )}
+    </main>
+  );
+}
