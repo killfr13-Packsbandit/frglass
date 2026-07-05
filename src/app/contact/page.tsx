@@ -10,12 +10,12 @@ export default function Page() {
           </p>
 
           <h1 className="text-6xl font-black uppercase leading-tight">
-            Let&apos;s talk about glass.
+            Let&apos;s talk glass.
           </h1>
 
           <p className="mt-8 text-lg leading-8 text-neutral-300">
-            Interested in a piece, studio time, workshops or collaboration?
-            Send a message and we will talk personally.
+            Interested in a piece, a custom idea, studio updates or the future
+            open studio concept? Send a message and we can talk personally.
           </p>
 
           <div className="mt-10 flex flex-col gap-4">
@@ -38,18 +38,19 @@ export default function Page() {
 
         <div className="rounded-3xl border border-white/10 bg-white/5 p-10">
           <h2 className="text-3xl font-black uppercase">
-            Studio Requests
+            Future Studio Vision
           </h2>
 
           <div className="mt-8 grid gap-5 text-neutral-300">
-            <p>🔥 Torch rental</p>
-            <p>🎓 Small workshops</p>
-            <p>💎 Available pieces</p>
-            <p>🤝 Open studio / community</p>
+            <p>💎 Available pieces and custom inquiries</p>
+            <p>🔥 Future open studio time</p>
+            <p>🎓 Possible small personal sessions later on</p>
+            <p>💛 Community and exchange around glass</p>
           </div>
 
           <p className="mt-8 text-neutral-400">
-            Based in Austria. More booking options coming soon.
+            FRGLASS is based in Austria. The studio concept is growing step by
+            step — handmade glass comes first.
           </p>
         </div>
       </section>

@@ -4,30 +4,32 @@ export default function Page() {
       <section className="mx-auto grid max-w-7xl gap-16 md:grid-cols-2 md:items-center">
         <div>
           <p className="mb-4 text-sm font-bold uppercase tracking-[0.5em] text-orange-300">
-            About
-          </p>
+  About
+</p>
 
-          <h1 className="text-6xl font-black uppercase leading-tight">
-            FRGLASS is born from fire.
-          </h1>
+<h1 className="text-6xl font-black uppercase leading-tight">
+  Shaped by flame.
+  <br />
+  Made by hand.
+</h1>
 
-          <p className="mt-8 text-lg leading-8 text-neutral-300">
-  FRGLASS is my borosilicate glass studio in Austria — a place where fire,
-  color and patience come together. Every piece is shaped by hand directly in
-  the flame.
+<p className="mt-8 text-lg leading-8 text-neutral-300">
+  This is a place for handmade borosilicate glass art — shaped by fire, color
+  and patience. Every piece is made by hand directly in the flame.
 </p>
 
 <p className="mt-6 text-lg leading-8 text-neutral-300">
-  I create wearable glass art, pendants, marbles, decorative objects and
-  experimental pieces. No mass production, no copies — every object is a
-  one-of-a-kind piece.
+  The work includes wearable glass art, marbles, decorative objects and
+  experimental pieces. No mass production — every object is a one-of-a-kind
+  piece.
 </p>
 
 <p className="mt-6 text-lg leading-8 text-neutral-300">
-  The studio is also a place for exchange, learning and community. Whether it is
-  open studio time, small workshops or simply sharing ideas at the flame,
-  FRGLASS is built around handmade glass and the people who love it.
+  Over time, this space may grow into an art workshop for creative process,
+  exchange and small personal sessions. For now, the focus is simple: handmade
+  glass art, honest work and pieces born from the flame.
 </p>
+
         </div>
 
         <div className="overflow-hidden rounded-3xl border border-white/10 bg-white/5">
