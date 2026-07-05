@@ -10,7 +10,7 @@ export default function Page() {
           </p>
 
           <h1 className="text-6xl font-black uppercase leading-tight">
-            Let&apos;s talk glass.
+            Let&apos;s talk about glass.
           </h1>
 
           <p className="mt-8 text-lg leading-8 text-neutral-300">
