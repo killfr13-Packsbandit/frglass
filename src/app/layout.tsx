@@ -20,7 +20,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: `${siteConfig.name}`,
   description:
-    "Handmade borosilicate glass art, jewelry, studio work and small workshops in Austria.",
+    "Handmade borosilicate glass, jewelry and studio work from Austria.",
 };
 
 export default function RootLayout({
