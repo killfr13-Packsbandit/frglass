@@ -18,8 +18,8 @@ export const products = [
     ],
     material: "Borosilicate glass",
     materialDe: "Borosilikatglas",
-    colors: "Amber, purple and warm iridescent tones",
-    colorsDe: "Amber, Violett und warme irisierende Farbtöne",
+    colors: "Amber and purple tones",
+    colorsDe: "Amber- und Violetttöne",
     size: "Size details coming soon",
     sizeDe: "Größenangaben folgen",
     year: "2026",
@@ -28,8 +28,8 @@ export const products = [
     descriptionDe:
       "Handgemachter Anhänger aus Borosilikatglas mit offener, pfeilspitzenähnlicher Form in Amber- und Violetttönen.",
     story:
-      "Made individually at the torch. The open structure and layered color pattern give the piece a light, organic look that changes with the light.",
+      "Made individually at the torch. The open structure and layered colors change noticeably with the light.",
     storyDe:
-      "Einzeln am Brenner gefertigt. Die offene Struktur und die geschichteten Farben geben dem Stück eine leichte, organische Wirkung, die sich je nach Licht verändert.",
+      "Einzeln am Brenner gefertigt. Die offene Struktur und die geschichteten Farben verändern ihre Wirkung deutlich mit dem Licht.",
   },
 ];
