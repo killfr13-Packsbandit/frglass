@@ -147,49 +147,51 @@ export default function Page() {
         </div>
       </section>
 
-      <section className="mx-auto mt-28 max-w-7xl">
-        <p className="mb-4 text-sm font-bold uppercase tracking-[0.5em] text-orange-300">
-          {t.similar}
-        </p>
+      {similarProducts.length > 0 && (
+        <section className="mx-auto mt-28 max-w-7xl">
+          <p className="mb-4 text-sm font-bold uppercase tracking-[0.5em] text-orange-300">
+            {t.similar}
+          </p>
 
-        <h2 className="mb-10 text-4xl font-black uppercase">
-          {t.alsoLike}
-        </h2>
+          <h2 className="mb-10 text-4xl font-black uppercase">
+            {t.alsoLike}
+          </h2>
 
-        <div className="grid gap-8 md:grid-cols-3">
-          {similarProducts.map((item) => {
-            const itemName = language === "de" ? item.nameDe : item.name;
-            const itemStatus = language === "de" ? item.statusDe : item.status;
-            const itemPrice = language === "de" ? item.priceDe : item.price;
+          <div className="grid gap-8 md:grid-cols-3">
+            {similarProducts.map((item) => {
+              const itemName = language === "de" ? item.nameDe : item.name;
+              const itemStatus = language === "de" ? item.statusDe : item.status;
+              const itemPrice = language === "de" ? item.priceDe : item.price;
 
-            return (
-              <Link
-                key={item.slug}
-                href={`/shop/${item.slug}`}
-                className="group overflow-hidden rounded-3xl border border-white/10 bg-white/5 transition duration-500 hover:-translate-y-2 hover:border-orange-300 hover:shadow-2xl hover:shadow-orange-500/20"
-              >
-                <img
-                  src={item.image}
-                  alt={itemName}
-                  className="h-[360px] w-full object-cover transition duration-700 group-hover:scale-110"
-                />
+              return (
+                <Link
+                  key={item.slug}
+                  href={`/shop/${item.slug}`}
+                  className="group overflow-hidden rounded-3xl border border-white/10 bg-white/5 transition duration-500 hover:-translate-y-2 hover:border-orange-300 hover:shadow-2xl hover:shadow-orange-500/20"
+                >
+                  <img
+                    src={item.image}
+                    alt={itemName}
+                    className="h-[360px] w-full object-cover transition duration-700 group-hover:scale-110"
+                  />
 
-                <div className="p-6">
-                  <p className="mb-2 text-xs font-bold uppercase tracking-[0.3em] text-orange-300">
-                    {itemStatus}
-                  </p>
+                  <div className="p-6">
+                    <p className="mb-2 text-xs font-bold uppercase tracking-[0.3em] text-orange-300">
+                      {itemStatus}
+                    </p>
 
-                  <h3 className="text-2xl font-black uppercase">
-                    {itemName}
-                  </h3>
+                    <h3 className="text-2xl font-black uppercase">
+                      {itemName}
+                    </h3>
 
-                  <p className="mt-3 text-neutral-300">{itemPrice}</p>
-                </div>
-              </Link>
-            );
-          })}
-        </div>
-      </section>
+                    <p className="mt-3 text-neutral-300">{itemPrice}</p>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        </section>
+      )}
     </main>
   );
 }
