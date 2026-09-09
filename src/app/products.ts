@@ -102,7 +102,8 @@ export const products = [
       "The flower is built into the glass at the torch, creating depth that changes with the viewing angle.",
     storyDe:
       "Die Blüte wird am Brenner in das Glas eingearbeitet und bekommt dadurch eine Tiefe, die sich je nach Blickwinkel verändert.",
-  },  {
+  },
+  {
     slug: "jellyfish-implosion",
     name: "Jellyfish Implosion",
     nameDe: "Jellyfish Implosion",
@@ -112,12 +113,12 @@ export const products = [
     priceDe: "€50",
     status: "Available",
     statusDe: "Verfügbar",
-    image: "/jewelry/Jellyfish Implosion (1).JPG",
+    image: "/jewelry/Jellyfish Implosion  (1).JPG",
     images: [
-      "/jewelry/Jellyfish Implosion (1).JPG",
-      "/jewelry/Jellyfish Implosion (2).JPG",
-      "/jewelry/Jellyfish Implosion (3).JPG",
-      "/jewelry/Jellyfish Implosion (4).JPG",
+      "/jewelry/Jellyfish Implosion  (1).JPG",
+      "/jewelry/Jellyfish Implosion  (2).JPG",
+      "/jewelry/Jellyfish Implosion  (3).JPG",
+      "/jewelry/Jellyfish Implosion  (4).JPG",
     ],
     material: "Borosilicate glass",
     materialDe: "Borosilikatglas",
@@ -131,7 +132,6 @@ export const products = [
     story: "Made individually at the torch.",
     storyDe: "Einzeln am Brenner gefertigt.",
   },
-
   {
     slug: "jetblack-illuminati-arrowhead",
     name: "JetBlack x Illuminati Arrowhead",
@@ -162,7 +162,6 @@ export const products = [
     story: "Made individually at the torch.",
     storyDe: "Einzeln am Brenner gefertigt.",
   },
-
   {
     slug: "licking-chili",
     name: "Licking Chili",
@@ -194,7 +193,6 @@ export const products = [
     story: "Made individually at the torch.",
     storyDe: "Einzeln am Brenner gefertigt.",
   },
-
   {
     slug: "metaterrania-moonstone-leaf",
     name: "MetaTerrania x Moonstone Leaf",
@@ -224,7 +222,6 @@ export const products = [
     story: "Made individually at the torch.",
     storyDe: "Einzeln am Brenner gefertigt.",
   },
-
   {
     slug: "monstera-ns-yellow-ns-irrid",
     name: "Monstera Leaf (NS Yellow x NS Irrid)",
@@ -235,10 +232,10 @@ export const products = [
     priceDe: "€85",
     status: "Available",
     statusDe: "Verfügbar",
-    image: "/jewelry/Monstera Leaf (NS Yellow x NS Irrid) (1).JPG",
+    image: "/jewelry/Monstera Leaf (NS Yellow x NS Irrid)  (1).JPG",
     images: [
-      "/jewelry/Monstera Leaf (NS Yellow x NS Irrid) (1).JPG",
-      "/jewelry/Monstera Leaf (NS Yellow x NS Irrid) (2).JPG",
+      "/jewelry/Monstera Leaf (NS Yellow x NS Irrid)  (1).JPG",
+      "/jewelry/Monstera Leaf (NS Yellow x NS Irrid)  (2).JPG",
     ],
     material: "Borosilicate glass",
     materialDe: "Borosilikatglas",
@@ -252,7 +249,6 @@ export const products = [
     story: "Made individually at the torch.",
     storyDe: "Einzeln am Brenner gefertigt.",
   },
-
   {
     slug: "monstera-redmix",
     name: "Monstera Leaf (Redmix)",
@@ -282,7 +278,6 @@ export const products = [
     story: "Made individually at the torch.",
     storyDe: "Einzeln am Brenner gefertigt.",
   },
-
   {
     slug: "moonstone-metaterrania-arrowhead",
     name: "Moonstone x MetaTerrania Arrowhead",
@@ -312,7 +307,6 @@ export const products = [
     story: "Made individually at the torch.",
     storyDe: "Einzeln am Brenner gefertigt.",
   },
-
   {
     slug: "olea-tree-implosion",
     name: "Olea Tree Implosion",
@@ -323,13 +317,13 @@ export const products = [
     priceDe: "€65",
     status: "Available",
     statusDe: "Verfügbar",
-    image: "/jewelry/Olea Tree Implosion (1).JPG",
+    image: "/jewelry/Olea Tree Implosion  (1).JPG",
     images: [
-      "/jewelry/Olea Tree Implosion (1).JPG",
-      "/jewelry/Olea Tree Implosion (2).JPG",
-      "/jewelry/Olea Tree Implosion (3).JPG",
-      "/jewelry/Olea Tree Implosion (7).JPG",
-      "/jewelry/Olea Tree Implosion (11).JPG",
+      "/jewelry/Olea Tree Implosion  (1).JPG",
+      "/jewelry/Olea Tree Implosion  (2).JPG",
+      "/jewelry/Olea Tree Implosion  (3).JPG",
+      "/jewelry/Olea Tree Implosion  (7).JPG",
+      "/jewelry/Olea Tree Implosion  (11).JPG",
     ],
     material: "Borosilicate glass",
     materialDe: "Borosilikatglas",
@@ -343,7 +337,6 @@ export const products = [
     story: "Made individually at the torch.",
     storyDe: "Einzeln am Brenner gefertigt.",
   },
-
   {
     slug: "royaljelly-leaf",
     name: "RoyalJelly Leaf",
@@ -372,7 +365,6 @@ export const products = [
     story: "Made individually at the torch.",
     storyDe: "Einzeln am Brenner gefertigt.",
   },
-
   {
     slug: "royaljelly-shroom",
     name: "RoyalJelly Shroom",
@@ -402,7 +394,6 @@ export const products = [
     story: "Made individually at the torch.",
     storyDe: "Einzeln am Brenner gefertigt.",
   },
-
   {
     slug: "uv-monstera-leaf",
     name: "UV Monstera Leaf",
@@ -413,14 +404,14 @@ export const products = [
     priceDe: "€85",
     status: "Available",
     statusDe: "Verfügbar",
-    image: "/jewelry/UV Monstera Leaf (1).JPG",
+    image: "/jewelry/UV Monstera Leaf  (1).JPG",
     images: [
-      "/jewelry/UV Monstera Leaf (1).JPG",
-      "/jewelry/UV Monstera Leaf (2).JPG",
-      "/jewelry/UV Monstera Leaf (3).JPG",
-      "/jewelry/UV Monstera Leaf (4).JPG",
-      "/jewelry/UV Monstera Leaf (5).JPG",
-      "/jewelry/UV Monstera Leaf (8).JPG",
+      "/jewelry/UV Monstera Leaf  (1).JPG",
+      "/jewelry/UV Monstera Leaf  (2).JPG",
+      "/jewelry/UV Monstera Leaf  (3).JPG",
+      "/jewelry/UV Monstera Leaf  (4).JPG",
+      "/jewelry/UV Monstera Leaf  (5).JPG",
+      "/jewelry/UV Monstera Leaf  (8).JPG",
     ],
     material: "Borosilicate glass",
     materialDe: "Borosilikatglas",
@@ -434,7 +425,6 @@ export const products = [
     story: "Made individually at the torch.",
     storyDe: "Einzeln am Brenner gefertigt.",
   },
-
   {
     slug: "wooden-leaf",
     name: "Wooden Leaf",
