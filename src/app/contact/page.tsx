@@ -29,7 +29,7 @@ const copy = {
     items: [
       "Verfügbaren Stücken",
       "Eigener Ideen und Anfragen",
-      "Späterer Brennervermietung",
+      "Späterer Brennermietung",
       "Kleinen Workshops oder Werkstattzeit",
     ],
     outro: "Ich bin in Österreich und verwende FRGLASS als Namen für meine Glasarbeiten online. Bei Fragen zu Versand, Sonderanfertigungen oder zur Werkstatt schreib mir einfach.",
