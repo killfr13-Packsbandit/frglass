@@ -7,17 +7,17 @@ const copy = {
     eyebrow: "About",
     title1: "FRGLASS",
     title2: "Borosilicate from Austria.",
-    p1: "I make borosilicate glass by hand at the torch. Most of the work is jewelry, marbles, small objects and whatever else I feel like trying.",
-    p2: "I like clean shapes, strong colors and pieces that still feel handmade. Everything is made individually in my workshop.",
-    p3: "The workshop is still growing. Over time I would like to open it up a bit more for other glassworkers, small workshops and shared time at the torch.",
+    p1: "FRGLASS is simply the name I use online for my glasswork. I work by hand with borosilicate glass at the torch.",
+    p2: "Most of what I make is jewelry, marbles, small objects and whatever else I feel like trying. I like clean shapes, strong colors and pieces that still feel handmade.",
+    p3: "The workshop itself is still growing. Over time I would like to open the space a little more for other glassworkers, small workshops and shared time at the torch.",
   },
   de: {
     eyebrow: "Über mich",
     title1: "FRGLASS",
     title2: "Borosilikat aus Österreich.",
-    p1: "Ich arbeite von Hand mit Borosilikatglas am Brenner. Dabei entstehen vor allem Schmuck, Murmeln, kleine Objekte und immer wieder neue Versuche.",
-    p2: "Ich mag klare Formen, kräftige Farben und Stücke, bei denen man noch sieht, dass sie handgemacht sind. Alles entsteht einzeln in meiner Werkstatt.",
-    p3: "Die Werkstatt wächst noch. Mit der Zeit möchte ich sie etwas mehr für andere Glasbläser, kleine Workshops und gemeinsame Zeit am Brenner öffnen.",
+    p1: "FRGLASS ist einfach der Name, unter dem ich meine Glasarbeiten online zeige. Ich arbeite von Hand mit Borosilikatglas am Brenner.",
+    p2: "Dabei entstehen vor allem Schmuck, Murmeln, kleine Objekte und immer wieder neue Versuche. Ich mag klare Formen, kräftige Farben und Stücke, bei denen man noch sieht, dass sie handgemacht sind.",
+    p3: "Die Werkstatt selbst wächst noch. Mit der Zeit möchte ich den Platz etwas mehr für andere Glasbläser, kleine Workshops und gemeinsame Zeit am Brenner öffnen.",
   },
 } as const;
 
@@ -47,7 +47,7 @@ export default function Page() {
         <div className="overflow-hidden rounded-3xl border border-white/10 bg-white/5">
           <img
             src="/workshop/me1.png"
-            alt="FRGLASS studio"
+            alt={language === "de" ? "Arbeit am Glasbrenner" : "Working at the glass torch"}
             className="h-[720px] w-full object-cover"
           />
         </div>
