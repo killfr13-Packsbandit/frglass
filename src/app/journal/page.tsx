@@ -6,44 +6,44 @@ import { useLanguage } from "../components/LanguageProvider";
 const posts = {
   en: [
     {
-      title: "New Pieces From The Flame",
-      category: "New Work",
+      title: "New work",
+      category: "Pieces",
       image: "/jewelry/leaf1.jpg",
-      excerpt: "A look at recent borosilicate pieces, colors and forms coming out of the flame.",
+      excerpt: "A few recent pieces, colors and shapes from the workshop.",
     },
     {
-      title: "Behind The Scenes",
-      category: "Process",
+      title: "Behind the scenes",
+      category: "Workshop",
       image: "/workshop/me1.png",
-      excerpt: "Small moments from the bench: fire, glass, tools and the process behind handmade pieces.",
+      excerpt: "A look at the torch, tools and the way the pieces are made.",
       href: "/journal/behind-the-scenes",
     },
     {
-      title: "Future Art Workshop",
-      category: "Future Vision",
+      title: "The workshop",
+      category: "Studio",
       image: "/workshop/me2.jpg",
-      excerpt: "A slowly growing idea for exchange, creative process and small personal sessions in the future.",
+      excerpt: "A bit about the space, what I am building and what I would like to do with it later.",
     },
   ],
   de: [
     {
-      title: "Neue Stücke aus der Flamme",
-      category: "Neue Arbeiten",
+      title: "Neue Arbeiten",
+      category: "Stücke",
       image: "/jewelry/leaf1.jpg",
-      excerpt: "Ein Blick auf neue Borosilikat-Arbeiten, Farben und Formen, die direkt aus der Flamme entstehen.",
+      excerpt: "Ein paar neue Stücke, Farben und Formen aus der Werkstatt.",
     },
     {
       title: "Hinter den Kulissen",
-      category: "Prozess",
+      category: "Werkstatt",
       image: "/workshop/me1.png",
-      excerpt: "Kleine Momente an der Werkbank: Feuer, Glas, Werkzeuge und der Prozess hinter handgemachten Einzelstücken.",
+      excerpt: "Ein Blick auf Brenner, Werkzeuge und darauf, wie die Stücke entstehen.",
       href: "/journal/behind-the-scenes",
     },
     {
-      title: "Zukünftige Kunstwerkstatt",
-      category: "Zukunftsvision",
+      title: "Die Werkstatt",
+      category: "Studio",
       image: "/workshop/me2.jpg",
-      excerpt: "Eine langsam wachsende Idee für Austausch, kreativen Prozess und kleine persönliche Sessions in der Zukunft.",
+      excerpt: "Ein bisschen über den Raum, was gerade entsteht und was später daraus werden soll.",
     },
   ],
 } as const;
@@ -51,14 +51,14 @@ const posts = {
 const copy = {
   en: {
     eyebrow: "Journal",
-    title: "Process Notes",
-    intro: "Notes from the flame — new pieces, process shots, quiet experiments and ideas around handmade borosilicate glass art.",
-    readMore: "Read More",
+    title: "From the workshop",
+    intro: "New pieces, process photos and small updates from the workshop.",
+    readMore: "Read more",
   },
   de: {
     eyebrow: "Journal",
-    title: "Notizen aus dem Prozess",
-    intro: "Notizen aus der Flamme — neue Stücke, Einblicke in den Prozess, ruhige Experimente und Ideen rund um handgemachte Borosilikat-Glaskunst.",
+    title: "Aus der Werkstatt",
+    intro: "Neue Stücke, Bilder vom Prozess und kleine Updates aus der Werkstatt.",
     readMore: "Mehr lesen",
   },
 } as const;
