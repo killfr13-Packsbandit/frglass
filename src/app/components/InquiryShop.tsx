@@ -8,15 +8,15 @@ import { useLanguage } from "./LanguageProvider";
 const copy = {
   en: {
     eyebrow: "Shop",
-    title: "Available Pieces",
-    intro: "Every piece is handmade and one of a kind. Instead of checkout, send a request and we will arrange payment and shipping personally.",
-    request: "Request Piece",
+    title: "Available pieces",
+    intro: "These pieces are currently available. If you are interested in one, send me a message and we can arrange payment and shipping directly.",
+    request: "Ask about this piece",
     subject: "Request",
   },
   de: {
     eyebrow: "Shop",
     title: "Verfügbare Stücke",
-    intro: "Jedes Stück ist handgefertigt und ein Unikat. Statt eines klassischen Checkouts schickst du einfach eine Anfrage – Bezahlung und Versand klären wir persönlich.",
+    intro: "Diese Stücke sind aktuell verfügbar. Wenn dich eines interessiert, schreib mir einfach und wir klären Bezahlung und Versand direkt.",
     request: "Stück anfragen",
     subject: "Anfrage",
   },
