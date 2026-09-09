@@ -65,11 +65,11 @@ export default function Page() {
     <main className="min-h-screen bg-black px-6 py-32 text-white">
       <section className="mx-auto grid max-w-7xl gap-12 md:grid-cols-2">
         <div>
-          <div className="overflow-hidden rounded-3xl border border-white/10 bg-white/5">
+          <div className="flex h-[720px] items-center justify-center overflow-hidden rounded-3xl border border-white/10 bg-neutral-950 p-4">
             <img
               src={product.image}
               alt={name}
-              className="h-[720px] w-full object-cover"
+              className="h-full w-full object-contain"
             />
           </div>
 
@@ -77,12 +77,12 @@ export default function Page() {
             {product.images.map((image) => (
               <div
                 key={image}
-                className="overflow-hidden rounded-2xl border border-white/10 bg-white/5"
+                className="flex h-40 items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-neutral-950 p-2"
               >
                 <img
                   src={image}
                   alt={name}
-                  className="h-40 w-full object-cover"
+                  className="h-full w-full object-contain"
                 />
               </div>
             ))}
@@ -169,11 +169,13 @@ export default function Page() {
                   href={`/shop/${item.slug}`}
                   className="group overflow-hidden rounded-3xl border border-white/10 bg-white/5 transition duration-500 hover:-translate-y-2 hover:border-orange-300 hover:shadow-2xl hover:shadow-orange-500/20"
                 >
-                  <img
-                    src={item.image}
-                    alt={itemName}
-                    className="h-[360px] w-full object-cover transition duration-700 group-hover:scale-110"
-                  />
+                  <div className="flex h-[360px] items-center justify-center bg-neutral-950 p-3">
+                    <img
+                      src={item.image}
+                      alt={itemName}
+                      className="h-full w-full object-contain transition duration-700 group-hover:scale-[1.03]"
+                    />
+                  </div>
 
                   <div className="p-6">
                     <p className="mb-2 text-xs font-bold uppercase tracking-[0.3em] text-orange-300">
