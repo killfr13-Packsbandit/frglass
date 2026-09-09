@@ -5,19 +5,19 @@ import { useLanguage } from "../components/LanguageProvider";
 const copy = {
   en: {
     eyebrow: "About",
-    title1: "Me, glass",
-    title2: "and the torch.",
-    p1: "FRGLASS started simply as my Instagram name. Today I use it to show the glasswork I make and the things I am trying along the way.",
-    p2: "I like working directly at the torch and experimenting with borosilicate glass. Sometimes I start with a clear idea, sometimes I just begin and see where it goes. That can turn into a pendant, a marble, a small object or something completely different.",
-    p3: "I am also building up my workshop step by step. At some point I would like to open the space a little more for other glassworkers, shared sessions and maybe small workshops. For now, I mainly want to keep making glass, trying new things and getting better at it.",
+    title1: "Florian Robatsch",
+    title2: "from Carinthia, Austria.",
+    p1: "I'm Florian Robatsch from St. Veit an der Glan in Carinthia, Austria. I've always liked making things with my hands — and if fire is involved, even better.",
+    p2: "Glass fits that perfectly. I work with borosilicate glass at the torch and make jewelry, marbles, small objects and all kinds of experiments. Some pieces are planned, others simply develop while I work.",
+    p3: "FRGLASS is the name I use to show my work online. My workshop is still growing step by step, and over time I would like to open the space a little more for other glassworkers, shared sessions and maybe small workshops.",
   },
   de: {
     eyebrow: "Über mich",
-    title1: "Ich, Glas",
-    title2: "und der Brenner.",
-    p1: "FRGLASS war ursprünglich einfach mein Instagram-Name. Heute zeige ich darunter meine Glasarbeiten und alles, was ich rund ums Borosilikatglas ausprobiere.",
-    p2: "Ich arbeite gern direkt am Brenner und probiere viel aus. Manchmal habe ich vorher eine klare Idee, manchmal fange ich einfach an und schaue, was daraus wird. So entstehen Anhänger, Murmeln, kleine Objekte oder auch Sachen, die in keine richtige Kategorie passen.",
-    p3: "Auch meine Werkstatt baue ich Stück für Stück weiter aus. Irgendwann möchte ich den Platz etwas mehr für andere Glasbläser, gemeinsame Sessions und vielleicht kleine Workshops öffnen. Im Moment geht es mir aber vor allem darum, weiter Glas zu machen, Neues auszuprobieren und besser darin zu werden.",
+    title1: "Florian Robatsch",
+    title2: "aus Kärnten, Österreich.",
+    p1: "Ich bin Florian Robatsch aus St. Veit an der Glan in Kärnten. Ich mache einfach gern Dinge mit den Händen — und wenn dabei Feuer im Spiel ist, umso besser.",
+    p2: "Da passt Glas ziemlich gut. Ich arbeite am Brenner mit Borosilikatglas und mache Schmuck, Murmeln, kleine Objekte und alles Mögliche, das ich ausprobieren möchte. Manche Sachen plane ich vorher, andere entstehen einfach beim Machen.",
+    p3: "FRGLASS ist der Name, unter dem ich meine Arbeiten online zeige. Meine Werkstatt wächst Stück für Stück weiter und irgendwann möchte ich den Platz auch etwas mehr für andere Glasbläser, gemeinsame Sessions und vielleicht kleine Workshops öffnen.",
   },
 } as const;
 
@@ -47,7 +47,7 @@ export default function Page() {
         <div className="overflow-hidden rounded-3xl border border-white/10 bg-white/5">
           <img
             src="/workshop/me1.png"
-            alt={language === "de" ? "Arbeit am Glasbrenner" : "Working at the glass torch"}
+            alt={language === "de" ? "Florian Robatsch am Glasbrenner" : "Florian Robatsch at the glass torch"}
             className="h-[720px] w-full object-cover"
           />
         </div>
