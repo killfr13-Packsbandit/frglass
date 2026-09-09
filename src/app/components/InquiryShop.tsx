@@ -52,11 +52,14 @@ export default function InquiryShop() {
                 key={product.slug}
                 className="overflow-hidden rounded-3xl border border-white/10 bg-white/5 transition duration-500 hover:-translate-y-2 hover:border-orange-300 hover:shadow-2xl hover:shadow-orange-500/20"
               >
-                <Link href={`/shop/${product.slug}`}>
+                <Link
+                  href={`/shop/${product.slug}`}
+                  className="flex h-[460px] items-center justify-center bg-neutral-950 p-3"
+                >
                   <img
                     src={product.image}
                     alt={name}
-                    className="h-[460px] w-full object-cover"
+                    className="h-full w-full object-contain"
                   />
                 </Link>
 
