@@ -58,12 +58,12 @@ export default function Page() {
             <button
               key={src}
               onClick={() => setActiveImage(src)}
-              className="group overflow-hidden rounded-3xl border border-white/10 bg-white/5 text-left"
+              className="group flex h-[460px] items-center justify-center overflow-hidden rounded-3xl border border-white/10 bg-neutral-950 p-3 text-left"
             >
               <img
                 src={src}
                 alt={t.imageAlt}
-                className="h-[460px] w-full object-cover transition duration-700 group-hover:scale-110"
+                className="h-full w-full object-contain transition duration-700 group-hover:scale-[1.03]"
               />
             </button>
           ))}
