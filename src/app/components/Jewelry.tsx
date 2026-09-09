@@ -1,18 +1,13 @@
 "use client";
 
+import Link from "next/link";
+import { products } from "../products";
 import { translations, useLanguage } from "./LanguageProvider";
-
-const jewelryImages = [
-  "/jewelry/leaf1.jpg",
-  "/jewelry/leaf2.jpg",
-  "/jewelry/leaf3.jpg",
-  "/jewelry/leaf4.jpg",
-  "/jewelry/leaf5.jpg",
-];
 
 export default function JewelryShowcase() {
   const { language } = useLanguage();
   const t = translations[language].jewelry;
+  const featuredProducts = products.slice(0, 5);
 
   return (
     <section id="collections" className="bg-black px-6 py-28 text-white">
@@ -29,38 +24,48 @@ export default function JewelryShowcase() {
       </p>
 
       <div className="mx-auto grid max-w-7xl gap-6 md:grid-cols-4">
-        {jewelryImages.map((src, index) => (
-          <div
-            key={src}
-            className={`group relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 backdrop-blur-md transition-all duration-500 hover:-translate-y-2 hover:border-orange-300/60 hover:shadow-[0_0_50px_rgba(255,170,80,0.25)] ${
-              index === 0 || index === 3 ? "md:col-span-2" : ""
-            }`}
-          >
-            <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/85 via-black/10 to-transparent" />
+        {featuredProducts.map((product, index) => {
+          const productName = language === "de" ? product.nameDe : product.name;
+          const productPrice = language === "de" ? product.priceDe : product.price;
 
-            <img
-              src={src}
-              alt="FRGLASS Jewelry"
-              className={`w-full object-cover transition duration-700 group-hover:scale-110 ${
-                index === 0 || index === 3 ? "h-[620px]" : "h-[420px]"
+          return (
+            <Link
+              key={product.slug}
+              href={`/shop/${product.slug}`}
+              className={`group relative overflow-hidden rounded-3xl border border-white/10 bg-neutral-950 transition-all duration-500 hover:-translate-y-2 hover:border-orange-300/60 hover:shadow-[0_0_50px_rgba(255,170,80,0.25)] ${
+                index === 0 || index === 3 ? "md:col-span-2" : ""
               }`}
-            />
+            >
+              <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/90 via-black/10 to-transparent" />
 
-            <div className="absolute bottom-0 left-0 z-20 p-6">
-              <p className="mb-3 text-xs font-bold uppercase tracking-[0.35em] text-orange-300">
-                FRGLASS
-              </p>
+              <div
+                className={`flex w-full items-center justify-center p-4 ${
+                  index === 0 || index === 3 ? "h-[620px]" : "h-[420px]"
+                }`}
+              >
+                <img
+                  src={product.image}
+                  alt={productName}
+                  className="h-full w-full object-contain transition duration-700 group-hover:scale-105"
+                />
+              </div>
 
-              <h3 className="text-2xl font-black uppercase tracking-[0.18em]">
-                {t.itemTitle}
-              </h3>
+              <div className="absolute bottom-0 left-0 z-20 p-6">
+                <p className="mb-3 text-xs font-bold uppercase tracking-[0.35em] text-orange-300">
+                  FRGLASS
+                </p>
 
-              <p className="mt-2 text-sm text-neutral-300">
-                {t.itemSubtitle}
-              </p>
-            </div>
-          </div>
-        ))}
+                <h3 className="text-2xl font-black uppercase tracking-[0.12em]">
+                  {productName}
+                </h3>
+
+                <p className="mt-2 text-sm text-neutral-300">
+                  {productPrice}
+                </p>
+              </div>
+            </Link>
+          );
+        })}
       </div>
     </section>
   );
