@@ -66,4 +66,37 @@ export const products = [
     storyDe:
       "Die facettierte Oberfläche verändert die Reflexionen je nach Licht und Blickwinkel.",
   },
+  {
+    slug: "flower-implosion",
+    name: "FlowerImplosion",
+    nameDe: "FlowerImplosion",
+    category: "Jewelry",
+    categoryDe: "Schmuck",
+    price: "€65",
+    priceDe: "€65",
+    status: "Available",
+    statusDe: "Verfügbar",
+    image: "/jewelry/flower-implosion-1.webp",
+    images: [
+      "/jewelry/flower-implosion-1.webp",
+      "/jewelry/flower-implosion-2.webp",
+      "/jewelry/flower-implosion-3.webp",
+      "/jewelry/flower-implosion-4.webp",
+    ],
+    material: "Borosilicate glass",
+    materialDe: "Borosilikatglas",
+    colors: "Clear glass with white, yellow and dark flower details",
+    colorsDe: "Klares Glas mit weißen, gelben und dunklen Blütendetails",
+    size: "Size details coming soon",
+    sizeDe: "Größenangaben folgen",
+    year: "2026",
+    description:
+      "Handmade borosilicate pendant with an imploded flower design inside clear glass.",
+    descriptionDe:
+      "Handgemachter Anhänger aus Borosilikatglas mit einer implodierten Blüte im klaren Glas.",
+    story:
+      "The flower is built into the glass at the torch, creating depth that changes with the viewing angle.",
+    storyDe:
+      "Die Blüte wird am Brenner in das Glas eingearbeitet und bekommt dadurch eine Tiefe, die sich je nach Blickwinkel verändert.",
+  },
 ];
