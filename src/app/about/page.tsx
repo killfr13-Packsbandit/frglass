@@ -6,18 +6,18 @@ const copy = {
   en: {
     eyebrow: "About",
     title1: "Florian Robatsch",
-    title2: "from Carinthia, Austria.",
-    p1: "I'm Florian Robatsch from St. Veit an der Glan in Carinthia, Austria. I've always liked making things with my hands — and if fire is involved, even better.",
-    p2: "Glass fits that perfectly. I work with borosilicate glass at the torch and make jewelry, marbles, small objects and all kinds of experiments. Some pieces are planned, others simply develop while I work.",
-    p3: "FRGLASS is the name I use to show my work online. My workshop is still growing step by step, and over time I would like to open the space a little more for other glassworkers, shared sessions and maybe small workshops.",
+    title2: "Carinthia, Austria.",
+    p1: "I'm Florian Robatsch from Carinthia, Austria. I enjoy working with my hands and I like processes where material, tools and heat come together directly.",
+    p2: "That is exactly what drew me to borosilicate glass. At the torch I make jewelry, marbles, small objects and all kinds of experiments. Some pieces are planned in advance, while others develop during the process.",
+    p3: "FRGLASS is the name I use to show this work online. I am continuously building up my workshop and, over time, I would like to create more space for exchange, shared sessions and maybe small workshops.",
   },
   de: {
     eyebrow: "Über mich",
     title1: "Florian Robatsch",
-    title2: "aus Kärnten, Österreich.",
-    p1: "Ich bin Florian Robatsch aus St. Veit an der Glan in Kärnten. Ich mache einfach gern Dinge mit den Händen — und wenn dabei Feuer im Spiel ist, umso besser.",
-    p2: "Da passt Glas ziemlich gut. Ich arbeite am Brenner mit Borosilikatglas und mache Schmuck, Murmeln, kleine Objekte und alles Mögliche, das ich ausprobieren möchte. Manche Sachen plane ich vorher, andere entstehen einfach beim Machen.",
-    p3: "FRGLASS ist der Name, unter dem ich meine Arbeiten online zeige. Meine Werkstatt wächst Stück für Stück weiter und irgendwann möchte ich den Platz auch etwas mehr für andere Glasbläser, gemeinsame Sessions und vielleicht kleine Workshops öffnen.",
+    title2: "Kärnten, Österreich.",
+    p1: "Ich bin Florian Robatsch aus Kärnten in Österreich. Ich arbeite gerne mit den Händen und mag Prozesse, bei denen Material, Werkzeug und Hitze direkt zusammenspielen.",
+    p2: "Genau deshalb hat mich Borosilikatglas schnell gepackt. Am Brenner entstehen Schmuck, Murmeln, kleine Objekte und immer wieder neue Versuche. Manche Stücke sind vorher geplant, andere entwickeln sich erst während der Arbeit.",
+    p3: "FRGLASS ist der Name, unter dem ich diese Arbeiten online zeige. Meine Werkstatt baue ich laufend weiter aus. Langfristig möchte ich dort auch Raum für Austausch, gemeinsame Sessions und vielleicht kleine Workshops schaffen.",
   },
 } as const;
 
@@ -47,7 +47,7 @@ export default function Page() {
         <div className="overflow-hidden rounded-3xl border border-white/10 bg-white/5">
           <img
             src="/workshop/me1.png"
-            alt={language === "de" ? "Florian Robatsch am Glasbrenner" : "Florian Robatsch at the glass torch"}
+            alt={language === "de" ? "Arbeit am Glasbrenner" : "Working at the glass torch"}
             className="h-[720px] w-full object-cover"
           />
         </div>
