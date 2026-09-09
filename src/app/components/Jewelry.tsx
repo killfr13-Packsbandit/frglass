@@ -1,4 +1,6 @@
-import Image from "next/image"
+"use client";
+
+import { translations, useLanguage } from "./LanguageProvider";
 
 const jewelryImages = [
   "/jewelry/leaf1.jpg",
@@ -9,18 +11,21 @@ const jewelryImages = [
 ];
 
 export default function JewelryShowcase() {
+  const { language } = useLanguage();
+  const t = translations[language].jewelry;
+
   return (
     <section id="collections" className="bg-black px-6 py-28 text-white">
       <p className="mb-4 text-center text-sm font-bold uppercase tracking-[0.5em] text-orange-300">
-        Jewelry
+        {t.eyebrow}
       </p>
 
       <h2 className="mb-6 text-center text-4xl font-black uppercase tracking-[0.2em]">
-        Wearable Glass Art
+        {t.title}
       </h2>
 
       <p className="mx-auto mb-14 max-w-2xl text-center text-neutral-400">
-        Handcrafted borosilicate pendants shaped by fire, color and precision.
+        {t.intro}
       </p>
 
       <div className="mx-auto grid max-w-7xl gap-6 md:grid-cols-4">
@@ -47,11 +52,11 @@ export default function JewelryShowcase() {
               </p>
 
               <h3 className="text-2xl font-black uppercase tracking-[0.18em]">
-                Handmade Glass
+                {t.itemTitle}
               </h3>
 
               <p className="mt-2 text-sm text-neutral-300">
-                Borosilicate Jewelry
+                {t.itemSubtitle}
               </p>
             </div>
           </div>
