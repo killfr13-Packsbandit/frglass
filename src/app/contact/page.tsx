@@ -7,7 +7,7 @@ const copy = {
   en: {
     eyebrow: "Contact",
     title: "Get in touch.",
-    intro: "Interested in a piece, a custom idea or the future studio? Send me a message and we can sort out the details directly.",
+    intro: "Interested in a piece, a custom idea or the future workshop setup? Send me a message and we can sort out the details directly.",
     email: "Send email",
     subject: "FRGLASS inquiry",
     vision: "You can ask me about",
@@ -15,14 +15,14 @@ const copy = {
       "Available pieces",
       "Custom ideas",
       "Future torch rental",
-      "Small workshops or studio time",
+      "Small workshops or workshop time",
     ],
-    outro: "FRGLASS is based in Austria. For shipping, custom work or studio questions, just send me a message.",
+    outro: "I am based in Austria and use FRGLASS as the name for my glasswork online. For shipping, custom work or workshop questions, just send me a message.",
   },
   de: {
     eyebrow: "Kontakt",
     title: "Meld dich.",
-    intro: "Du interessierst dich für ein Stück, eine eigene Idee oder das spätere Studio? Schreib mir einfach und wir klären die Details direkt.",
+    intro: "Du interessierst dich für ein Stück, eine eigene Idee oder die spätere Werkstatt-Nutzung? Schreib mir einfach und wir klären die Details direkt.",
     email: "E-Mail senden",
     subject: "FRGLASS Anfrage",
     vision: "Du kannst mich fragen wegen",
@@ -32,7 +32,7 @@ const copy = {
       "Späterer Brennervermietung",
       "Kleinen Workshops oder Werkstattzeit",
     ],
-    outro: "FRGLASS ist in Österreich. Bei Fragen zu Versand, Sonderanfertigungen oder zum Studio schreib mir einfach.",
+    outro: "Ich bin in Österreich und verwende FRGLASS als Namen für meine Glasarbeiten online. Bei Fragen zu Versand, Sonderanfertigungen oder zur Werkstatt schreib mir einfach.",
   },
 } as const;
 
