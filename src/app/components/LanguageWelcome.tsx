@@ -37,16 +37,12 @@ export default function LanguageWelcome() {
         />
 
         <p className="mb-4 text-sm font-bold uppercase tracking-[0.45em] text-orange-300">
-          Welcome · Willkommen
+          FRGLASS
         </p>
 
         <h1 className="text-4xl font-black uppercase tracking-[0.08em] sm:text-5xl">
-          Choose your language
+          Sprache · Language
         </h1>
-
-        <p className="mt-3 text-lg text-neutral-400">
-          Sprache auswählen
-        </p>
 
         <div className="mt-10 grid gap-4 sm:grid-cols-2">
           <button
@@ -58,7 +54,7 @@ export default function LanguageWelcome() {
               Deutsch
             </span>
             <span className="mt-2 block text-sm text-neutral-400">
-              Website auf Deutsch anzeigen
+              Seite auf Deutsch
             </span>
           </button>
 
@@ -71,13 +67,13 @@ export default function LanguageWelcome() {
               English
             </span>
             <span className="mt-2 block text-sm text-neutral-400">
-              View the website in English
+              View in English
             </span>
           </button>
         </div>
 
         <p className="mt-8 text-xs uppercase tracking-[0.2em] text-neutral-600">
-          You can change the language anytime in the menu.
+          DE / EN can be changed later in the menu.
         </p>
       </div>
     </div>
