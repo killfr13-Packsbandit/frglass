@@ -5,19 +5,19 @@ import { useLanguage } from "../components/LanguageProvider";
 const copy = {
   en: {
     eyebrow: "About",
-    title1: "FRGLASS",
-    title2: "Borosilicate from Austria.",
-    p1: "FRGLASS is simply the name I use online for my glasswork. I work by hand with borosilicate glass at the torch.",
-    p2: "Most of what I make is jewelry, marbles, small objects and whatever else I feel like trying. I like clean shapes, strong colors and pieces that still feel handmade.",
-    p3: "The workshop itself is still growing. Over time I would like to open the space a little more for other glassworkers, small workshops and shared time at the torch.",
+    title1: "Me, glass",
+    title2: "and the torch.",
+    p1: "FRGLASS started simply as my Instagram name. Today I use it to show the glasswork I make and the things I am trying along the way.",
+    p2: "I like working directly at the torch and experimenting with borosilicate glass. Sometimes I start with a clear idea, sometimes I just begin and see where it goes. That can turn into a pendant, a marble, a small object or something completely different.",
+    p3: "I am also building up my workshop step by step. At some point I would like to open the space a little more for other glassworkers, shared sessions and maybe small workshops. For now, I mainly want to keep making glass, trying new things and getting better at it.",
   },
   de: {
     eyebrow: "Über mich",
-    title1: "FRGLASS",
-    title2: "Borosilikat aus Österreich.",
-    p1: "FRGLASS ist einfach der Name, unter dem ich meine Glasarbeiten online zeige. Ich arbeite von Hand mit Borosilikatglas am Brenner.",
-    p2: "Dabei entstehen vor allem Schmuck, Murmeln, kleine Objekte und immer wieder neue Versuche. Ich mag klare Formen, kräftige Farben und Stücke, bei denen man noch sieht, dass sie handgemacht sind.",
-    p3: "Die Werkstatt selbst wächst noch. Mit der Zeit möchte ich den Platz etwas mehr für andere Glasbläser, kleine Workshops und gemeinsame Zeit am Brenner öffnen.",
+    title1: "Ich, Glas",
+    title2: "und der Brenner.",
+    p1: "FRGLASS war ursprünglich einfach mein Instagram-Name. Heute zeige ich darunter meine Glasarbeiten und alles, was ich rund ums Borosilikatglas ausprobiere.",
+    p2: "Ich arbeite gern direkt am Brenner und probiere viel aus. Manchmal habe ich vorher eine klare Idee, manchmal fange ich einfach an und schaue, was daraus wird. So entstehen Anhänger, Murmeln, kleine Objekte oder auch Sachen, die in keine richtige Kategorie passen.",
+    p3: "Auch meine Werkstatt baue ich Stück für Stück weiter aus. Irgendwann möchte ich den Platz etwas mehr für andere Glasbläser, gemeinsame Sessions und vielleicht kleine Workshops öffnen. Im Moment geht es mir aber vor allem darum, weiter Glas zu machen, Neues auszuprobieren und besser darin zu werden.",
   },
 } as const;
 
@@ -33,7 +33,7 @@ export default function Page() {
             {t.eyebrow}
           </p>
 
-          <h1 className="text-6xl font-black uppercase leading-tight">
+          <h1 className="text-6xl font-black leading-tight">
             {t.title1}
             <br />
             {t.title2}
