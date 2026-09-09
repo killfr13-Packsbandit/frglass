@@ -17,19 +17,19 @@ export const products = [
     ],
     material: "Borosilicate glass",
     materialDe: "Borosilikatglas",
-    colors: "Blue, green, opal tones",
-    colorsDe: "Blau, Grün, Opal-Töne",
+    colors: "Blue, green and opal tones",
+    colorsDe: "Blau, Grün und Opal-Töne",
     size: "Size details coming soon",
     sizeDe: "Größenangaben folgen",
     year: "2026",
     description:
-      "A handmade borosilicate pendant with blue tones and a leaf-inspired form.",
+      "Handmade borosilicate pendant with blue and green tones and a leaf-like shape.",
     descriptionDe:
-      "Ein handgefertigter Anhänger aus Borosilikatglas mit blauen Farbtönen und einer vom Blatt inspirierten Form.",
+      "Handgemachter Anhänger aus Borosilikatglas in Blau- und Grüntönen mit einer blattähnlichen Form.",
     story:
-      "Shaped directly in the flame, this piece combines organic movement with deep glass color and light reflection.",
+      "Made by hand at the torch. The shape and color pattern developed while working the glass.",
     storyDe:
-      "Direkt in der Flamme geformt, verbindet dieses Stück organische Bewegung mit tiefen Glasfarben und Lichtreflexionen.",
+      "Von Hand am Brenner gemacht. Form und Farbverlauf haben sich während der Arbeit mit dem Glas entwickelt.",
   },
   {
     slug: "purple-leaf-pendant",
@@ -49,19 +49,19 @@ export const products = [
     ],
     material: "Borosilicate glass",
     materialDe: "Borosilikatglas",
-    colors: "Purple, blue, warm highlights",
-    colorsDe: "Violett, Blau, warme Highlights",
+    colors: "Purple, blue and warm highlights",
+    colorsDe: "Violett, Blau und warme Akzente",
     size: "Size details coming soon",
     sizeDe: "Größenangaben folgen",
     year: "2026",
     description:
-      "A one-of-a-kind purple borosilicate pendant shaped in the flame.",
+      "Handmade borosilicate pendant in purple and blue tones.",
     descriptionDe:
-      "Ein einzigartiger violetter Anhänger aus Borosilikatglas, direkt in der Flamme geformt.",
+      "Handgemachter Anhänger aus Borosilikatglas in Violett- und Blautönen.",
     story:
-      "This pendant plays with darker cosmic tones and soft reflections, giving it a deep and mysterious look.",
+      "Made individually at the torch with darker colors and soft reflections in the glass.",
     storyDe:
-      "Dieser Anhänger spielt mit dunkleren kosmischen Farbtönen und weichen Reflexionen und erhält dadurch eine tiefe, geheimnisvolle Wirkung.",
+      "Einzeln am Brenner gefertigt, mit dunkleren Farben und weichen Reflexionen im Glas.",
   },
   {
     slug: "faceted-pendant",
@@ -81,18 +81,18 @@ export const products = [
     ],
     material: "Borosilicate glass",
     materialDe: "Borosilikatglas",
-    colors: "Clear, reflective, optical depth",
-    colorsDe: "Klar, reflektierend, optische Tiefe",
+    colors: "Clear glass with reflections",
+    colorsDe: "Klares Glas mit Reflexionen",
     size: "Size details coming soon",
     sizeDe: "Größenangaben folgen",
     year: "2026",
     description:
-      "A faceted handmade glass pendant with optical depth and bright reflections.",
+      "Handmade faceted glass pendant with a clear, reflective finish.",
     descriptionDe:
-      "Ein facettierter handgefertigter Glasanhänger mit optischer Tiefe und starken Lichtreflexionen.",
+      "Handgemachter facettierter Glasanhänger mit klarer, reflektierender Oberfläche.",
     story:
-      "Cut-like geometry and glass clarity give this piece a refined, jewel-like appearance.",
+      "The faceted surface changes the reflections depending on the light and viewing angle.",
     storyDe:
-      "Die geschliffene Geometrie und die Klarheit des Glases verleihen diesem Stück eine edle, schmucksteinartige Wirkung.",
+      "Durch die facettierte Oberfläche verändern sich die Reflexionen je nach Licht und Blickwinkel.",
   },
 ];
