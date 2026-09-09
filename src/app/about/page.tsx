@@ -5,19 +5,19 @@ import { useLanguage } from "../components/LanguageProvider";
 const copy = {
   en: {
     eyebrow: "About",
-    title1: "Shaped by flame.",
-    title2: "Made by hand.",
-    p1: "This is a place for handmade borosilicate glass art — shaped by fire, color and patience. Every piece is made by hand directly in the flame.",
-    p2: "The work includes wearable glass art, marbles, decorative objects and experimental pieces. No mass production — every object is a one-of-a-kind piece.",
-    p3: "Over time, this space may grow into an art workshop for creative process, exchange and small personal sessions. For now, the focus is simple: handmade glass art, honest work and pieces born from the flame.",
+    title1: "FRGLASS",
+    title2: "Borosilicate from Austria.",
+    p1: "I make borosilicate glass by hand at the torch. Most of the work is jewelry, marbles, small objects and whatever else I feel like trying.",
+    p2: "I like clean shapes, strong colors and pieces that still feel handmade. Everything is made individually in my workshop.",
+    p3: "The workshop is still growing. Over time I would like to open it up a bit more for other glassworkers, small workshops and shared time at the torch.",
   },
   de: {
     eyebrow: "Über mich",
-    title1: "Von der Flamme geformt.",
-    title2: "Von Hand gemacht.",
-    p1: "Hier geht es um handgemachte Glaskunst aus Borosilikatglas — geformt durch Feuer, Farbe und Geduld. Jedes Stück entsteht von Hand direkt in der Flamme.",
-    p2: "Meine Arbeiten reichen von tragbarer Glaskunst über Murmeln und dekorative Objekte bis zu experimentellen Einzelstücken. Keine Massenproduktion — jedes Objekt ist ein Unikat.",
-    p3: "Mit der Zeit kann dieser Ort zu einer offenen Kunstwerkstatt für kreativen Austausch und kleine persönliche Sessions wachsen. Im Mittelpunkt steht aber zuerst das Wesentliche: handgemachte Glaskunst, ehrliche Arbeit und Stücke, die aus der Flamme entstehen.",
+    title1: "FRGLASS",
+    title2: "Borosilikat aus Österreich.",
+    p1: "Ich arbeite von Hand mit Borosilikatglas am Brenner. Dabei entstehen vor allem Schmuck, Murmeln, kleine Objekte und immer wieder neue Versuche.",
+    p2: "Ich mag klare Formen, kräftige Farben und Stücke, bei denen man noch sieht, dass sie handgemacht sind. Alles entsteht einzeln in meiner Werkstatt.",
+    p3: "Die Werkstatt wächst noch. Mit der Zeit möchte ich sie etwas mehr für andere Glasbläser, kleine Workshops und gemeinsame Zeit am Brenner öffnen.",
   },
 } as const;
 
