@@ -17,18 +17,18 @@ const galleryImages = [
 const copy = {
   en: {
     eyebrow: "Gallery",
-    title: "Glass Archive",
-    intro: "A growing collection of handcrafted borosilicate glass art from the FRGLASS studio.",
-    imageAlt: "FRGLASS gallery piece",
-    enlargedAlt: "FRGLASS enlarged piece",
+    title: "Selected work",
+    intro: "A selection of jewelry, objects and experiments made in the workshop.",
+    imageAlt: "FRGLASS glass piece",
+    enlargedAlt: "FRGLASS glass piece enlarged",
     close: "Close image",
   },
   de: {
     eyebrow: "Galerie",
-    title: "Glasarchiv",
-    intro: "Eine wachsende Sammlung handgefertigter Glaskunst aus Borosilikatglas aus dem FRGLASS-Studio.",
-    imageAlt: "FRGLASS Galeriestück",
-    enlargedAlt: "FRGLASS vergrößertes Galeriestück",
+    title: "Ausgewählte Arbeiten",
+    intro: "Eine Auswahl an Schmuck, Objekten und Experimenten aus der Werkstatt.",
+    imageAlt: "FRGLASS Glasstück",
+    enlargedAlt: "FRGLASS Glasstück vergrößert",
     close: "Bild schließen",
   },
 } as const;
