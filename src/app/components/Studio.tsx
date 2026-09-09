@@ -35,7 +35,7 @@ export default function Studio() {
             >
               <img
                 src={src}
-                alt="FRGLASS studio"
+                alt={language === "de" ? "Arbeit mit Borosilikatglas" : "Working with borosilicate glass"}
                 className="h-[520px] w-full object-cover"
               />
             </div>
