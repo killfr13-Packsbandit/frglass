@@ -6,33 +6,33 @@ import { useLanguage } from "../components/LanguageProvider";
 const copy = {
   en: {
     eyebrow: "Contact",
-    title: "Let's talk about glass.",
-    intro: "Interested in a piece, a custom idea, studio updates or the future open studio concept? Send a message and we can talk personally.",
-    email: "Send Email",
-    subject: "FRGLASS Inquiry",
-    vision: "Future Studio Vision",
+    title: "Get in touch.",
+    intro: "Interested in a piece, a custom idea or the future studio? Send me a message and we can sort out the details directly.",
+    email: "Send email",
+    subject: "FRGLASS inquiry",
+    vision: "You can ask me about",
     items: [
-      "💎 Available pieces and custom inquiries",
-      "🔥 Future open studio time",
-      "🎓 Possible small personal sessions later on",
-      "💛 Community and exchange around glass",
+      "Available pieces",
+      "Custom ideas",
+      "Future torch rental",
+      "Small workshops or studio time",
     ],
-    outro: "FRGLASS is based in Austria. The studio concept is growing step by step — handmade glass comes first.",
+    outro: "FRGLASS is based in Austria. For shipping, custom work or studio questions, just send me a message.",
   },
   de: {
     eyebrow: "Kontakt",
-    title: "Reden wir über Glas.",
-    intro: "Du interessierst dich für ein Stück, eine individuelle Idee, Studio-Updates oder das zukünftige offene Studio? Schreib mir einfach und wir besprechen alles persönlich.",
+    title: "Meld dich.",
+    intro: "Du interessierst dich für ein Stück, eine eigene Idee oder das spätere Studio? Schreib mir einfach und wir klären die Details direkt.",
     email: "E-Mail senden",
     subject: "FRGLASS Anfrage",
-    vision: "Vision für das zukünftige Studio",
+    vision: "Du kannst mich fragen wegen",
     items: [
-      "💎 Verfügbare Stücke und individuelle Anfragen",
-      "🔥 Zukünftige offene Studiozeiten",
-      "🎓 Später eventuell kleine persönliche Sessions",
-      "💛 Community und Austausch rund um Glas",
+      "Verfügbaren Stücken",
+      "Eigener Ideen und Anfragen",
+      "Späterer Brennervermietung",
+      "Kleinen Workshops oder Werkstattzeit",
     ],
-    outro: "FRGLASS ist in Österreich zuhause. Das Studiokonzept wächst Schritt für Schritt — handgemachte Glaskunst steht dabei an erster Stelle.",
+    outro: "FRGLASS ist in Österreich. Bei Fragen zu Versand, Sonderanfertigungen oder zum Studio schreib mir einfach.",
   },
 } as const;
 
@@ -82,7 +82,7 @@ export default function Page() {
 
           <div className="mt-8 grid gap-5 text-neutral-300">
             {t.items.map((item) => (
-              <p key={item}>{item}</p>
+              <p key={item}>— {item}</p>
             ))}
           </div>
 
