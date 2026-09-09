@@ -18,6 +18,7 @@ export default function Navbar() {
   const { language, setLanguage } = useLanguage();
   const [menuOpen, setMenuOpen] = useState(false);
   const t = translations[language];
+  const languageLabel = language === "de" ? "Sprache" : "Language";
 
   return (
     <nav className="fixed left-0 top-0 z-50 w-full border-b border-white/10 bg-black/50 backdrop-blur-xl">
@@ -90,7 +91,7 @@ export default function Navbar() {
           </div>
 
           <div className="mt-5 flex items-center justify-between">
-            <span className="text-xs font-bold uppercase tracking-[0.2em] text-neutral-500">Language</span>
+            <span className="text-xs font-bold uppercase tracking-[0.2em] text-neutral-500">{languageLabel}</span>
             <div className="flex items-center rounded-full border border-white/15 bg-white/5 p-1 text-xs font-bold">
               <button
                 type="button"
