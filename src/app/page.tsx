@@ -1,7 +1,8 @@
 import Hero from "./components/Hero";
 import JewelryShowcase from "./components/Jewelry";
 import Workshop from "./components/Workshop";
-import Studio from "./components/Studio";
+import HomeCommunityReviews from "./components/HomeCommunityReviews";
+import HomeStudioTeaser from "./components/HomeStudioTeaser";
 
 export default function Home() {
   return (
@@ -9,7 +10,8 @@ export default function Home() {
       <Hero />
       <JewelryShowcase />
       <Workshop />
-      <Studio />
+      <HomeCommunityReviews />
+      <HomeStudioTeaser />
     </main>
   );
 }
