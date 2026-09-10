@@ -33,6 +33,7 @@ export default function Workshop() {
 
         <div className="min-w-0 space-y-4 sm:space-y-6">
           <video
+            src="/workshop/hero.mp4"
             autoPlay
             muted
             loop
@@ -40,10 +41,7 @@ export default function Workshop() {
             preload="metadata"
             poster="/workshop/me2.jpg"
             className="aspect-video w-full rounded-2xl border border-white/10 object-cover shadow-2xl sm:rounded-3xl"
-          >
-            <source src="/workshop/hero.mp4" type="video/mp4" />
-            <source src="/workshop/hero.mov" type="video/quicktime" />
-          </video>
+          />
 
           <div className="grid grid-cols-2 gap-3 sm:gap-6">
             {workshopImages.map((src) => (
