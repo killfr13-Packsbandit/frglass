@@ -55,8 +55,8 @@ export default function Page() {
 
   if (!product) {
     return (
-      <main className="min-h-screen bg-black px-6 py-32 text-white">
-        <h1 className="text-5xl font-black uppercase">{t.notFound}</h1>
+      <main className="min-h-screen bg-black px-4 py-24 text-white sm:px-6 sm:py-32">
+        <h1 className="text-4xl font-black uppercase sm:text-5xl">{t.notFound}</h1>
       </main>
     );
   }
@@ -85,16 +85,16 @@ export default function Page() {
   const story = language === "de" ? product.storyDe : product.story;
 
   return (
-    <main className="min-h-screen bg-black px-6 py-32 text-white">
-      <section className="mx-auto grid max-w-7xl gap-12 md:grid-cols-2">
-        <div>
-          <div className="relative flex h-[720px] items-center justify-center overflow-hidden rounded-3xl border border-white/10 bg-neutral-950 p-4">
+    <main className="min-h-screen overflow-x-hidden bg-black px-4 py-24 text-white sm:px-6 sm:py-32">
+      <section className="mx-auto grid max-w-7xl gap-10 md:grid-cols-2 md:gap-12">
+        <div className="min-w-0">
+          <div className="relative flex h-[420px] items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-neutral-950 p-2 sm:h-[560px] sm:rounded-3xl sm:p-4 lg:h-[720px]">
             <Image
               src={currentImage}
               alt={name}
               fill
               sizes="(min-width: 768px) 50vw, 100vw"
-              className="object-contain p-4"
+              className="object-contain p-2 sm:p-4"
             />
 
             {hasMultipleImages && (
@@ -103,7 +103,7 @@ export default function Page() {
                   type="button"
                   onClick={() => goToImage(-1)}
                   aria-label={t.previousImage}
-                  className="absolute left-4 top-1/2 z-10 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/70 text-2xl text-white backdrop-blur transition hover:border-orange-300 hover:text-orange-300"
+                  className="absolute left-2 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/70 text-xl text-white backdrop-blur transition hover:border-orange-300 hover:text-orange-300 sm:left-4 sm:h-12 sm:w-12 sm:text-2xl"
                 >
                   ‹
                 </button>
@@ -111,7 +111,7 @@ export default function Page() {
                   type="button"
                   onClick={() => goToImage(1)}
                   aria-label={t.nextImage}
-                  className="absolute right-4 top-1/2 z-10 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/70 text-2xl text-white backdrop-blur transition hover:border-orange-300 hover:text-orange-300"
+                  className="absolute right-2 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/70 text-xl text-white backdrop-blur transition hover:border-orange-300 hover:text-orange-300 sm:right-4 sm:h-12 sm:w-12 sm:text-2xl"
                 >
                   ›
                 </button>
@@ -119,13 +119,13 @@ export default function Page() {
             )}
           </div>
 
-          <div className="mt-6 grid grid-cols-3 gap-4">
+          <div className="mt-3 grid grid-cols-3 gap-2 sm:mt-6 sm:gap-4">
             {product.images.map((image) => (
               <button
                 type="button"
                 key={image}
                 onClick={() => setActiveImage(image)}
-                className={`relative flex h-40 items-center justify-center overflow-hidden rounded-2xl border bg-neutral-950 p-2 transition hover:border-orange-300 ${
+                className={`relative flex h-24 items-center justify-center overflow-hidden rounded-xl border bg-neutral-950 p-1 transition hover:border-orange-300 sm:h-40 sm:rounded-2xl sm:p-2 ${
                   currentImage === image
                     ? "border-orange-300"
                     : "border-white/10"
@@ -136,60 +136,60 @@ export default function Page() {
                   alt={name}
                   fill
                   sizes="(min-width: 768px) 16vw, 33vw"
-                  className="object-contain p-2"
+                  className="object-contain p-1 sm:p-2"
                 />
               </button>
             ))}
           </div>
         </div>
 
-        <div className="flex flex-col justify-center">
-          <p className="mb-4 text-sm font-bold uppercase tracking-[0.5em] text-orange-300">
+        <div className="flex min-w-0 flex-col justify-center">
+          <p className="mb-3 text-xs font-bold uppercase tracking-[0.4em] text-orange-300 sm:mb-4 sm:text-sm sm:tracking-[0.5em]">
             {status}
           </p>
 
-          <h1 className="text-5xl font-black uppercase leading-tight sm:text-6xl">
+          <h1 className="break-words text-3xl font-black uppercase leading-tight sm:text-5xl lg:text-6xl">
             {name}
           </h1>
 
-          <p className="mt-4 text-sm font-bold uppercase tracking-[0.3em] text-neutral-500">
+          <p className="mt-4 text-xs font-bold uppercase tracking-[0.25em] text-neutral-500 sm:text-sm sm:tracking-[0.3em]">
             {category}
           </p>
 
-          <p className="mt-8 text-3xl text-neutral-100">{price}</p>
+          <p className="mt-6 text-3xl text-neutral-100 sm:mt-8">{price}</p>
 
-          <p className="mt-8 max-w-xl text-lg leading-8 text-neutral-300">
+          <p className="mt-6 max-w-xl text-base leading-7 text-neutral-300 sm:mt-8 sm:text-lg sm:leading-8">
             {description}
           </p>
 
-          <div className="mt-10 border-y border-white/10 py-8">
-            <h2 className="mb-4 text-sm font-bold uppercase tracking-[0.4em] text-orange-300">
+          <div className="mt-8 border-y border-white/10 py-6 sm:mt-10 sm:py-8">
+            <h2 className="mb-4 text-xs font-bold uppercase tracking-[0.32em] text-orange-300 sm:text-sm sm:tracking-[0.4em]">
               {t.story}
             </h2>
 
-            <p className="leading-8 text-neutral-300">{story}</p>
+            <p className="leading-7 text-neutral-300 sm:leading-8">{story}</p>
           </div>
 
-          <div className="mt-8 grid gap-4 text-neutral-300 sm:grid-cols-3">
+          <div className="mt-6 grid gap-5 text-neutral-300 sm:mt-8 sm:grid-cols-3 sm:gap-4">
             <div>
-              <p className="text-sm uppercase tracking-[0.3em] text-neutral-500">{t.material}</p>
+              <p className="text-xs uppercase tracking-[0.25em] text-neutral-500 sm:text-sm sm:tracking-[0.3em]">{t.material}</p>
               <p className="mt-2">{material}</p>
             </div>
 
             <div>
-              <p className="text-sm uppercase tracking-[0.3em] text-neutral-500">{t.colors}</p>
+              <p className="text-xs uppercase tracking-[0.25em] text-neutral-500 sm:text-sm sm:tracking-[0.3em]">{t.colors}</p>
               <p className="mt-2">{colors}</p>
             </div>
 
             <div>
-              <p className="text-sm uppercase tracking-[0.3em] text-neutral-500">{t.year}</p>
+              <p className="text-xs uppercase tracking-[0.25em] text-neutral-500 sm:text-sm sm:tracking-[0.3em]">{t.year}</p>
               <p className="mt-2">{product.year}</p>
             </div>
           </div>
 
           <a
             href={`mailto:${siteConfig.email}?subject=${encodeURIComponent(`${t.subject} ${name}`)}`}
-            className="mt-10 inline-block w-fit rounded-full border border-orange-300 px-8 py-4 font-bold uppercase tracking-widest text-orange-300 transition hover:bg-orange-300 hover:text-black"
+            className="mt-8 inline-block w-full rounded-full border border-orange-300 px-6 py-4 text-center text-sm font-bold uppercase tracking-widest text-orange-300 transition hover:bg-orange-300 hover:text-black sm:mt-10 sm:w-fit sm:px-8"
           >
             {t.request}
           </a>
@@ -197,16 +197,16 @@ export default function Page() {
       </section>
 
       {similarProducts.length > 0 && (
-        <section className="mx-auto mt-28 max-w-7xl">
-          <p className="mb-4 text-sm font-bold uppercase tracking-[0.5em] text-orange-300">
+        <section className="mx-auto mt-20 max-w-7xl sm:mt-28">
+          <p className="mb-4 text-xs font-bold uppercase tracking-[0.4em] text-orange-300 sm:text-sm sm:tracking-[0.5em]">
             {t.similar}
           </p>
 
-          <h2 className="mb-10 text-4xl font-black uppercase">
+          <h2 className="mb-8 text-3xl font-black uppercase sm:mb-10 sm:text-4xl">
             {t.alsoLike}
           </h2>
 
-          <div className="grid gap-8 md:grid-cols-3">
+          <div className="grid gap-6 md:grid-cols-3 md:gap-8">
             {similarProducts.map((item) => {
               const itemName = language === "de" ? item.nameDe : item.name;
               const itemStatus = language === "de" ? item.statusDe : item.status;
@@ -218,7 +218,7 @@ export default function Page() {
                   href={`/shop/${item.slug}`}
                   className="group overflow-hidden rounded-3xl border border-white/10 bg-white/5 transition duration-500 hover:-translate-y-2 hover:border-orange-300 hover:shadow-2xl hover:shadow-orange-500/20"
                 >
-                  <div className="relative h-[360px] bg-neutral-950">
+                  <div className="relative h-[300px] bg-neutral-950 sm:h-[360px]">
                     <Image
                       src={item.image}
                       alt={itemName}
@@ -228,12 +228,12 @@ export default function Page() {
                     />
                   </div>
 
-                  <div className="p-6">
+                  <div className="p-5 sm:p-6">
                     <p className="mb-2 text-xs font-bold uppercase tracking-[0.3em] text-orange-300">
                       {itemStatus}
                     </p>
 
-                    <h3 className="text-2xl font-black uppercase">
+                    <h3 className="break-words text-xl font-black uppercase sm:text-2xl">
                       {itemName}
                     </h3>
 
