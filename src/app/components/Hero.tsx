@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { translations, useLanguage } from "./LanguageProvider";
 
 export default function Hero() {
@@ -29,17 +30,20 @@ export default function Hero() {
             <div className="mt-8 rounded-[2rem] border border-white/10 bg-white/[0.025] p-6 shadow-2xl shadow-black/30 backdrop-blur-sm sm:p-8">
               <div className="flex items-center gap-6 sm:gap-8">
                 <div className="flex h-32 w-24 shrink-0 items-center justify-center sm:h-40 sm:w-28">
-                  <img
+                  <Image
                     src="/favicon.png?v=5"
                     alt="FRGLASS Logo"
+                    width={128}
+                    height={160}
+                    sizes="112px"
                     className="max-h-full max-w-full object-contain drop-shadow-[0_0_22px_rgba(253,186,116,0.12)]"
                   />
                 </div>
 
                 <div className="min-w-0">
-                  <p className="text-3xl font-semibold uppercase tracking-[0.16em] text-white sm:text-4xl">
+                  <h1 className="text-3xl font-semibold uppercase tracking-[0.16em] text-white sm:text-4xl">
                     FRGLASS
-                  </p>
+                  </h1>
                   <p className="mt-3 text-sm font-semibold uppercase tracking-[0.2em] text-neutral-400 sm:text-base">
                     {t.subtitle}
                   </p>
@@ -81,6 +85,7 @@ export default function Hero() {
             muted
             loop
             playsInline
+            preload="metadata"
             className="absolute inset-0 h-full w-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-black/25 via-transparent to-black/10" />
