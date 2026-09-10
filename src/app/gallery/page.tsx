@@ -9,9 +9,7 @@ const galleryImages = [
   "/jewelry/leaf3.jpg",
   "/jewelry/leaf4.jpg",
   "/jewelry/leaf5.jpg",
-  "/jewelry/faceted1.jpg",
   "/jewelry/implo.jpg",
-  "/jewelry/faceted3.jpg",
 ];
 
 const copy = {
