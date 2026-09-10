@@ -39,6 +39,11 @@ const copy = {
   },
 } as const;
 
+function formatPrice(value: string) {
+  const price = value.trim();
+  return price.startsWith("€") ? price : `€${price}`;
+}
+
 export default function Page() {
   const params = useParams<{ slug: string }>();
   const { language } = useLanguage();
@@ -74,7 +79,7 @@ export default function Page() {
 
   const name = language === "de" ? product.nameDe : product.name;
   const category = language === "de" ? product.categoryDe : product.category;
-  const price = language === "de" ? product.priceDe : product.price;
+  const price = formatPrice(language === "de" ? product.priceDe : product.price);
   const status = language === "de" ? product.statusDe : product.status;
   const material = language === "de" ? product.materialDe : product.material;
   const colors = language === "de" ? product.colorsDe : product.colors;
@@ -213,7 +218,7 @@ export default function Page() {
             {similarProducts.map((item) => {
               const itemName = language === "de" ? item.nameDe : item.name;
               const itemStatus = language === "de" ? item.statusDe : item.status;
-              const itemPrice = language === "de" ? item.priceDe : item.price;
+              const itemPrice = formatPrice(language === "de" ? item.priceDe : item.price);
 
               return (
                 <Link
