@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { siteConfig } from "../siteConfig";
 import { products } from "../products";
@@ -25,6 +26,7 @@ const copy = {
 export default function InquiryShop() {
   const { language } = useLanguage();
   const t = copy[language];
+  const availableProducts = products.filter((product) => product.status === "Available");
 
   return (
     <section className="bg-black px-6 py-32 text-white">
@@ -33,7 +35,7 @@ export default function InquiryShop() {
           {t.eyebrow}
         </p>
 
-        <h1 className="text-center text-6xl font-black uppercase">
+        <h1 className="text-center text-5xl font-black uppercase sm:text-6xl">
           {t.title}
         </h1>
 
@@ -42,7 +44,7 @@ export default function InquiryShop() {
         </p>
 
         <div className="grid gap-8 md:grid-cols-3">
-          {products.map((product) => {
+          {availableProducts.map((product) => {
             const name = language === "de" ? product.nameDe : product.name;
             const status = language === "de" ? product.statusDe : product.status;
             const price = language === "de" ? product.priceDe : product.price;
@@ -54,12 +56,14 @@ export default function InquiryShop() {
               >
                 <Link
                   href={`/shop/${product.slug}`}
-                  className="flex h-[460px] items-center justify-center bg-neutral-950 p-3"
+                  className="relative flex h-[460px] items-center justify-center bg-neutral-950 p-3"
                 >
-                  <img
+                  <Image
                     src={product.image}
                     alt={name}
-                    className="h-full w-full object-contain"
+                    fill
+                    sizes="(min-width: 768px) 33vw, 100vw"
+                    className="object-contain p-3"
                   />
                 </Link>
 
