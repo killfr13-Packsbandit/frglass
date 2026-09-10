@@ -24,7 +24,7 @@ export const translations = {
       close: "Close",
     },
     hero: {
-      eyebrow: "Handmade in Austria",
+      eyebrow: "Handmade on planet Earth",
       subtitle: "Borosilicate Glass",
       text: "Handmade borosilicate glass, jewelry and small experiments.",
       cta: "See the work",
@@ -91,7 +91,7 @@ export const translations = {
       close: "Schließen",
     },
     hero: {
-      eyebrow: "Handgemacht in Österreich",
+      eyebrow: "Handgemacht auf dem Planeten Erde",
       subtitle: "Borosilikatglas",
       text: "Handgemachtes Borosilikatglas, Schmuck und kleine Experimente.",
       cta: "Arbeiten ansehen",
