@@ -26,6 +26,7 @@ body {
 }
 
 h1,
-h2 {
-  font-family: var(--font-display), Georgia, serif;
+h2,
+h3 {
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
 }
