@@ -11,6 +11,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/shop",
     "/journal",
     "/journal/behind-the-scenes",
+    "/community",
     "/about",
     "/contact",
     "/impressum",
@@ -21,8 +22,20 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...staticRoutes.map((route) => ({
       url: `${baseUrl}${route}`,
       lastModified: new Date(),
-      changeFrequency: route === "" || route === "/shop" ? ("weekly" as const) : ("monthly" as const),
-      priority: route === "" ? 1 : route === "/shop" ? 0.9 : route === "/impressum" || route === "/datenschutz" ? 0.3 : 0.7,
+      changeFrequency:
+        route === "" || route === "/shop" || route === "/community"
+          ? ("weekly" as const)
+          : ("monthly" as const),
+      priority:
+        route === ""
+          ? 1
+          : route === "/shop"
+            ? 0.9
+            : route === "/community"
+              ? 0.8
+              : route === "/impressum" || route === "/datenschutz"
+                ? 0.3
+                : 0.7,
     })),
     ...products.map((product) => ({
       url: `${baseUrl}/shop/${product.slug}`,
