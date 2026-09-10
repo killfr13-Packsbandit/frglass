@@ -26,11 +26,13 @@ jobs:
       - name: Convert MOV to web MP4
         run: |
           ffmpeg -y -i public/workshop/hero.mov \
+            -vf "scale=720:-2" \
             -c:v libx264 \
             -preset medium \
-            -crf 24 \
+            -crf 26 \
             -pix_fmt yuv420p \
             -movflags +faststart \
+            -map_metadata -1 \
             -an \
             public/workshop/hero.mp4
 
@@ -42,6 +44,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "No video changes to commit."
           else
-            git commit -m "Optimize workshop video for web"
+            git commit -m "Further optimize workshop video"
             git push
           fi
