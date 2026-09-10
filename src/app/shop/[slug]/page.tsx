@@ -14,7 +14,6 @@ const copy = {
     story: "About this piece",
     material: "Material",
     colors: "Colors",
-    size: "Size",
     year: "Year",
     request: "Ask about this piece",
     subject: "Request",
@@ -28,7 +27,6 @@ const copy = {
     story: "Zum Stück",
     material: "Material",
     colors: "Farben",
-    size: "Größe",
     year: "Jahr",
     request: "Stück anfragen",
     subject: "Anfrage",
@@ -83,7 +81,6 @@ export default function Page() {
   const status = language === "de" ? product.statusDe : product.status;
   const material = language === "de" ? product.materialDe : product.material;
   const colors = language === "de" ? product.colorsDe : product.colors;
-  const size = language === "de" ? product.sizeDe : product.size;
   const description = language === "de" ? product.descriptionDe : product.description;
   const story = language === "de" ? product.storyDe : product.story;
 
@@ -173,7 +170,7 @@ export default function Page() {
             <p className="leading-8 text-neutral-300">{story}</p>
           </div>
 
-          <div className="mt-8 grid gap-4 text-neutral-300 sm:grid-cols-2">
+          <div className="mt-8 grid gap-4 text-neutral-300 sm:grid-cols-3">
             <div>
               <p className="text-sm uppercase tracking-[0.3em] text-neutral-500">{t.material}</p>
               <p className="mt-2">{material}</p>
@@ -182,11 +179,6 @@ export default function Page() {
             <div>
               <p className="text-sm uppercase tracking-[0.3em] text-neutral-500">{t.colors}</p>
               <p className="mt-2">{colors}</p>
-            </div>
-
-            <div>
-              <p className="text-sm uppercase tracking-[0.3em] text-neutral-500">{t.size}</p>
-              <p className="mt-2">{size}</p>
             </div>
 
             <div>
