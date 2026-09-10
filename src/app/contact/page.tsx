@@ -17,7 +17,6 @@ const copy = {
       "Future torch rental",
       "Small workshops or workshop time",
     ],
-    outro: "I am based in Austria and use FRGLASS as the name for my glasswork online. For shipping, custom work or workshop questions, just send me a message.",
   },
   de: {
     eyebrow: "Kontakt",
@@ -32,7 +31,6 @@ const copy = {
       "Späterer Brennermietung",
       "Kleinen Workshops oder Werkstattzeit",
     ],
-    outro: "Ich bin in Österreich und verwende FRGLASS als Namen für meine Glasarbeiten online. Bei Fragen zu Versand, Sonderanfertigungen oder zur Werkstatt schreib mir einfach.",
   },
 } as const;
 
@@ -85,10 +83,6 @@ export default function Page() {
               <p key={item}>— {item}</p>
             ))}
           </div>
-
-          <p className="mt-8 text-neutral-400">
-            {t.outro}
-          </p>
         </div>
       </section>
     </main>
