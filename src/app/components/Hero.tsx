@@ -31,11 +31,12 @@ export default function Hero() {
               <div className="flex items-center gap-6 sm:gap-8">
                 <div className="flex h-32 w-24 shrink-0 items-center justify-center sm:h-40 sm:w-28">
                   <Image
-                    src="/favicon.png"
+                    src="/logo.png"
                     alt="FRGLASS Logo"
-                    width={128}
-                    height={160}
+                    width={240}
+                    height={320}
                     sizes="112px"
+                    priority
                     className="max-h-full max-w-full object-contain drop-shadow-[0_0_22px_rgba(253,186,116,0.12)]"
                   />
                 </div>
