@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { siteConfig } from "../siteConfig";
 import { translations, useLanguage } from "./LanguageProvider";
 
@@ -58,6 +59,23 @@ export default function Studio() {
           <p className="text-lg leading-8 text-neutral-300 sm:text-xl sm:leading-9">
             {t.vision}
           </p>
+        </div>
+
+        <div className="mx-auto mt-10 max-w-3xl rounded-2xl border border-white/10 bg-black/30 p-6 text-center sm:mt-12 sm:rounded-3xl sm:p-8">
+          <p className="text-xs font-bold uppercase tracking-[0.35em] text-orange-300">
+            Behind the Scenes
+          </p>
+          <p className="mx-auto mt-4 max-w-xl leading-7 text-neutral-400">
+            {language === "de"
+              ? "Aktuelle Bilder, Videos und kleine Updates direkt aus der Werkstatt."
+              : "Recent photos, videos and small updates straight from the studio."}
+          </p>
+          <Link
+            href="/journal/behind-the-scenes"
+            className="mt-6 inline-block rounded-full border border-white/20 px-6 py-3 text-sm font-bold uppercase tracking-widest transition hover:border-orange-300 hover:text-orange-300"
+          >
+            {language === "de" ? "Hinter die Kulissen" : "Behind the Scenes"}
+          </Link>
         </div>
       </div>
 
