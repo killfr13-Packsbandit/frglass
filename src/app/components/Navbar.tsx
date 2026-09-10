@@ -29,7 +29,7 @@ export default function Navbar() {
           onClick={() => setMenuOpen(false)}
         >
           <img
-            src="/favicon.png?v=5"
+            src="/logo.png"
             alt=""
             aria-hidden="true"
             className="h-8 w-6 object-contain sm:h-9 sm:w-7"
