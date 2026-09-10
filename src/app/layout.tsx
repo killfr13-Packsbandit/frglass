@@ -21,8 +21,8 @@ export const metadata: Metadata = {
   title: `${siteConfig.name}`,
   description: "Handmade borosilicate glass and jewelry from Austria.",
   icons: {
-    icon: "/favicon.svg",
-    shortcut: "/favicon.svg",
+    icon: "/favicon.png?v=4",
+    shortcut: "/favicon.png?v=4",
     apple: "/logo.png",
   },
 };
