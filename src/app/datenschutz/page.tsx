@@ -15,6 +15,8 @@ const copy = {
     languageText: "Die gewählte Sprache wird ausschließlich lokal in deinem Browser im Local Storage unter dem Schlüssel „frglass-language“ gespeichert. Dadurch merkt sich die Website deine Auswahl bei späteren Besuchen. Diese Information wird nicht für Werbung oder Profiling verwendet.",
     contact: "Kontakt per E-Mail",
     contactText: "Wenn du mich per E-Mail kontaktierst, werden die von dir übermittelten Daten zur Bearbeitung deiner Anfrage verarbeitet. Die Daten werden nur so lange gespeichert, wie sie für die Kommunikation oder zur Erfüllung gesetzlicher Aufbewahrungspflichten erforderlich sind.",
+    community: "Community-Beiträge und Bewertungen",
+    communityText: "Wenn du über den Community-Bereich eine Bewertung einsendest, werden der von dir angegebene Name, die Sternebewertung, dein Text und – falls ausgewählt – ein Foto verarbeitet. Der Beitrag wird zunächst nur zur Moderation gespeichert und erst nach manueller Freigabe öffentlich angezeigt. Die Veröffentlichung erfolgt auf Grundlage deiner Einwilligung gemäß Art. 6 Abs. 1 lit. a DSGVO. Du kannst diese Einwilligung für die Zukunft jederzeit per E-Mail widerrufen; der veröffentlichte Beitrag und das zugehörige Bild werden dann entfernt. Hochgeladene Bilder werden in Vercel Blob gespeichert. Zur Begrenzung automatisierter oder missbräuchlicher Einsendungen wird die IP-Adresse serverseitig nur zur Bildung eines pseudonymisierten Tageskennwerts verwendet und nicht als Klartext im Bewertungsdatensatz gespeichert.",
     external: "Externe Links",
     externalText: "Die Website enthält Links zu externen Diensten, insbesondere Instagram und deinem E-Mail-Programm. Erst wenn du einen solchen Link öffnest, gelten zusätzlich die Datenschutzbestimmungen des jeweiligen Anbieters.",
     tracking: "Cookies & Tracking",
@@ -35,6 +37,8 @@ const copy = {
     languageText: "Your selected language is stored only locally in your browser's Local Storage under the key “frglass-language”. This lets the website remember your choice on later visits. This information is not used for advertising or profiling.",
     contact: "Contact by email",
     contactText: "If you contact me by email, the information you provide is processed in order to respond to your inquiry. It is retained only as long as necessary for the communication or to comply with applicable legal retention requirements.",
+    community: "Community posts and reviews",
+    communityText: "If you submit a review through the Community area, the name you provide, star rating, text and, if selected, a photo are processed. The post is initially stored only for moderation and is displayed publicly only after manual approval. Publication is based on your consent under Art. 6(1)(a) GDPR. You can withdraw that consent for the future at any time by email; the published post and associated image will then be removed. Uploaded images are stored in Vercel Blob. To limit automated or abusive submissions, the IP address is used server-side only to create a pseudonymised daily identifier and is not stored in plain text in the review record.",
     external: "External links",
     externalText: "This website contains links to external services, in particular Instagram and your email application. Only when you open such a link do the respective provider's privacy terms also apply.",
     tracking: "Cookies & tracking",
@@ -66,6 +70,7 @@ export default function Page() {
           <div><h2 className="text-lg font-bold text-white sm:text-xl">{t.hosting}</h2><p className="mt-3 leading-7 sm:leading-8">{t.hostingText}</p></div>
           <div><h2 className="text-lg font-bold text-white sm:text-xl">{t.language}</h2><p className="mt-3 leading-7 sm:leading-8">{t.languageText}</p></div>
           <div><h2 className="text-lg font-bold text-white sm:text-xl">{t.contact}</h2><p className="mt-3 leading-7 sm:leading-8">{t.contactText}</p></div>
+          <div><h2 className="text-lg font-bold text-white sm:text-xl">{t.community}</h2><p className="mt-3 leading-7 sm:leading-8">{t.communityText}</p></div>
           <div><h2 className="text-lg font-bold text-white sm:text-xl">{t.external}</h2><p className="mt-3 leading-7 sm:leading-8">{t.externalText}</p></div>
           <div><h2 className="text-lg font-bold text-white sm:text-xl">{t.tracking}</h2><p className="mt-3 leading-7 sm:leading-8">{t.trackingText}</p></div>
           <div><h2 className="text-lg font-bold text-white sm:text-xl">{t.rights}</h2><p className="mt-3 leading-7 sm:leading-8">{t.rightsText}</p><p className="mt-3 leading-7 sm:leading-8">{t.authority}</p></div>
