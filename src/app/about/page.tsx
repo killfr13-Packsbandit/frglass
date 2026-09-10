@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useLanguage } from "../components/LanguageProvider";
 
 const copy = {
@@ -25,6 +26,8 @@ export default function Page() {
 
   return (
     <main className="min-h-screen bg-black px-6 py-32 text-white">
+      <h1 className="sr-only">{language === "de" ? "Über mich" : "About FRGLASS"}</h1>
+
       <section className="mx-auto grid max-w-7xl gap-16 md:grid-cols-2 md:items-center">
         <div>
           <p className="mb-8 text-sm font-bold uppercase tracking-[0.5em] text-orange-300">
@@ -37,11 +40,13 @@ export default function Page() {
           <p className="mt-6 text-lg leading-8 text-neutral-300">{t.p4}</p>
         </div>
 
-        <div className="overflow-hidden rounded-3xl border border-white/10 bg-white/5">
-          <img
+        <div className="relative h-[720px] overflow-hidden rounded-3xl border border-white/10 bg-white/5">
+          <Image
             src="/workshop/me1.png"
             alt={language === "de" ? "Arbeit am Glasbrenner" : "Working at the glass torch"}
-            className="h-[720px] w-full object-cover"
+            fill
+            sizes="(min-width: 768px) 50vw, 100vw"
+            className="object-cover"
           />
         </div>
       </section>
