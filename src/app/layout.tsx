@@ -18,8 +18,27 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: `${siteConfig.name}`,
-  description: "Handmade borosilicate glass and jewelry from Austria.",
+  metadataBase: new URL("https://frglass.at"),
+  title: {
+    default: siteConfig.name,
+    template: `%s | ${siteConfig.name}`,
+  },
+  description: "Handmade borosilicate glass, jewelry and objects by FRGLASS.",
+  applicationName: siteConfig.name,
+  openGraph: {
+    type: "website",
+    siteName: siteConfig.name,
+    title: siteConfig.name,
+    description: "Handmade borosilicate glass, jewelry and objects by FRGLASS.",
+    url: "/",
+    images: ["/workshop/me2.jpg"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: siteConfig.name,
+    description: "Handmade borosilicate glass, jewelry and objects by FRGLASS.",
+    images: ["/workshop/me2.jpg"],
+  },
   icons: {
     icon: "/favicon.png?v=5",
     shortcut: "/favicon.png?v=5",
@@ -35,9 +54,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} h-full bg-black antialiased`}
     >
-      <body className="min-h-full flex flex-col">
+      <body className="min-h-full bg-black flex flex-col">
         <LanguageProvider>
           <LanguageWelcome />
           <Navbar />
