@@ -29,13 +29,13 @@ export default function Hero() {
 
             <div className="mt-8 rounded-[2rem] border border-white/10 bg-white/[0.025] p-6 shadow-2xl shadow-black/30 backdrop-blur-sm sm:p-8">
               <div className="flex items-center gap-6 sm:gap-8">
-                <div className="flex h-32 w-24 shrink-0 items-center justify-center sm:h-40 sm:w-28">
+                <div className="flex h-40 w-30 shrink-0 items-center justify-center sm:h-48 sm:w-36">
                   <Image
                     src="/logo.png"
                     alt="FRGLASS Logo"
                     width={240}
                     height={320}
-                    sizes="112px"
+                    sizes="(min-width: 640px) 144px, 120px"
                     priority
                     className="max-h-full max-w-full object-contain drop-shadow-[0_0_22px_rgba(253,186,116,0.12)]"
                   />
