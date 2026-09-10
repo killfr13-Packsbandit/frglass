@@ -26,7 +26,7 @@ export const translations = {
     hero: {
       eyebrow: "Handmade on planet Earth",
       subtitle: "Borosilicate Glass",
-      text: "Handmade borosilicate glass, jewelry and small experiments.",
+      text: "Handmade borosilicate glass, jewelry and other experiments from my mind.",
       cta: "See the work",
     },
     jewelry: {
@@ -93,7 +93,7 @@ export const translations = {
     hero: {
       eyebrow: "Handgemacht auf dem Planeten Erde",
       subtitle: "Borosilikatglas",
-      text: "Handgemachtes Borosilikatglas, Schmuck und kleine Experimente.",
+      text: "Handgemachtes Borosilikatglas, Schmuck und andere Experimente aus meinem Kopf.",
       cta: "Arbeiten ansehen",
     },
     jewelry: {
