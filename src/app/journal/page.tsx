@@ -1,16 +1,12 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { products } from "../products";
 import { useLanguage } from "../components/LanguageProvider";
 
 const posts = {
   en: [
-    {
-      title: "New work",
-      category: "Pieces",
-      image: "/jewelry/leaf1.jpg",
-      excerpt: "A few recent pieces, colors and shapes from the workshop.",
-    },
     {
       title: "Behind the scenes",
       category: "Workshop",
@@ -23,15 +19,10 @@ const posts = {
       category: "Studio",
       image: "/workshop/me2.jpg",
       excerpt: "A bit about the space, what I am building and what I would like to do with it later.",
+      href: "/studio",
     },
   ],
   de: [
-    {
-      title: "Neue Arbeiten",
-      category: "Stücke",
-      image: "/jewelry/leaf1.jpg",
-      excerpt: "Ein paar neue Stücke, Farben und Formen aus der Werkstatt.",
-    },
     {
       title: "Hinter den Kulissen",
       category: "Werkstatt",
@@ -44,6 +35,7 @@ const posts = {
       category: "Studio",
       image: "/workshop/me2.jpg",
       excerpt: "Ein bisschen über den Raum, was gerade entsteht und was später daraus werden soll.",
+      href: "/studio",
     },
   ],
 } as const;
@@ -54,18 +46,38 @@ const copy = {
     title: "From the workshop",
     intro: "New pieces, process photos and small updates from the workshop.",
     readMore: "Read more",
+    newWork: "New work",
+    pieces: "Pieces",
+    viewPiece: "View piece",
   },
   de: {
     eyebrow: "Journal",
     title: "Aus der Werkstatt",
     intro: "Neue Stücke, Bilder vom Prozess und kleine Updates aus der Werkstatt.",
     readMore: "Mehr lesen",
+    newWork: "Neue Arbeiten",
+    pieces: "Stücke",
+    viewPiece: "Zum Stück",
   },
 } as const;
 
 export default function Page() {
   const { language } = useLanguage();
   const t = copy[language];
+  const availableProducts = products.filter((product) => product.status === "Available");
+  const [productIndex, setProductIndex] = useState(0);
+
+  useEffect(() => {
+    if (availableProducts.length <= 1) return;
+
+    const interval = window.setInterval(() => {
+      setProductIndex((current) => (current + 1) % availableProducts.length);
+    }, 4000);
+
+    return () => window.clearInterval(interval);
+  }, [availableProducts.length]);
+
+  const currentProduct = availableProducts[productIndex % Math.max(availableProducts.length, 1)];
 
   return (
     <main className="min-h-screen bg-black px-6 py-32 text-white">
@@ -74,7 +86,7 @@ export default function Page() {
           {t.eyebrow}
         </p>
 
-        <h1 className="text-center text-6xl font-black uppercase">
+        <h1 className="text-center text-5xl font-black uppercase md:text-6xl">
           {t.title}
         </h1>
 
@@ -83,8 +95,41 @@ export default function Page() {
         </p>
 
         <div className="grid gap-8 md:grid-cols-3">
-          {posts[language].map((post) => {
-            const Card = (
+          {currentProduct && (
+            <Link href={`/shop/${currentProduct.slug}`} className="block">
+              <article className="h-full overflow-hidden rounded-3xl border border-white/10 bg-white/5 transition duration-500 hover:-translate-y-2 hover:border-orange-300/60">
+                <div className="flex h-[360px] items-center justify-center bg-neutral-950 p-3">
+                  <img
+                    key={currentProduct.image}
+                    src={currentProduct.image}
+                    alt={language === "de" ? currentProduct.nameDe : currentProduct.name}
+                    className="h-full w-full object-contain transition-opacity duration-500"
+                  />
+                </div>
+
+                <div className="p-6">
+                  <p className="mb-3 text-xs font-bold uppercase tracking-[0.3em] text-orange-300">
+                    {t.pieces}
+                  </p>
+
+                  <h2 className="text-2xl font-black uppercase">
+                    {t.newWork}
+                  </h2>
+
+                  <p className="mt-4 text-neutral-300">
+                    {language === "de" ? currentProduct.nameDe : currentProduct.name} · {language === "de" ? currentProduct.priceDe : currentProduct.price}
+                  </p>
+
+                  <p className="mt-6 text-sm font-bold uppercase tracking-[0.25em] text-orange-300">
+                    {t.viewPiece}
+                  </p>
+                </div>
+              </article>
+            </Link>
+          )}
+
+          {posts[language].map((post) => (
+            <Link key={post.title} href={post.href} className="block">
               <article className="h-full overflow-hidden rounded-3xl border border-white/10 bg-white/5 transition duration-500 hover:-translate-y-2 hover:border-orange-300/60">
                 <img
                   src={post.image}
@@ -103,25 +148,13 @@ export default function Page() {
 
                   <p className="mt-4 text-neutral-300">{post.excerpt}</p>
 
-                  {"href" in post && post.href && (
-                    <p className="mt-6 text-sm font-bold uppercase tracking-[0.25em] text-orange-300">
-                      {t.readMore}
-                    </p>
-                  )}
+                  <p className="mt-6 text-sm font-bold uppercase tracking-[0.25em] text-orange-300">
+                    {t.readMore}
+                  </p>
                 </div>
               </article>
-            );
-
-            if ("href" in post && post.href) {
-              return (
-                <Link key={post.title} href={post.href}>
-                  {Card}
-                </Link>
-              );
-            }
-
-            return <div key={post.title}>{Card}</div>;
-          })}
+            </Link>
+          ))}
         </div>
       </section>
     </main>
