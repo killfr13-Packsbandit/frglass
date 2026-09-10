@@ -7,7 +7,7 @@ import {
   saveProductCatalog,
 } from "../../../lib/productCatalog";
 import type { ProductRecord } from "../../productTypes";
-import { productStatusDe } from "../../productTypes";
+import { categoryIdFromName, productStatusDe } from "../../productTypes";
 
 export const dynamic = "force-dynamic";
 
@@ -43,6 +43,9 @@ function normalizeProduct(value: unknown): ProductRecord | null {
   const slug = slugify(text(raw.slug, 120) || name);
   const price = normalizePrice(raw.price);
   const status = text(raw.status, 40) || "Available";
+  const category = text(raw.category, 80) || "Jewelry";
+  const categoryDe = text(raw.categoryDe, 80) || "Schmuck";
+  const categoryId = categoryIdFromName(text(raw.categoryId, 80) || category) || "jewelry";
   const suppliedImages = Array.isArray(raw.images) ? raw.images : [];
   const images = [...new Set(
     suppliedImages
@@ -67,8 +70,9 @@ function normalizeProduct(value: unknown): ProductRecord | null {
     slug,
     name,
     nameDe,
-    category: text(raw.category, 80) || "Jewelry",
-    categoryDe: text(raw.categoryDe, 80) || "Schmuck",
+    categoryId,
+    category,
+    categoryDe,
     price,
     priceDe: normalizePrice(raw.priceDe) || price,
     status,

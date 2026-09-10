@@ -1,10 +1,12 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useMemo, useState } from "react";
 import { siteConfig } from "../siteConfig";
-import { formatProductPrice } from "../productTypes";
+import { categoryIdFromName, formatProductPrice } from "../productTypes";
 import { useLanguage } from "./LanguageProvider";
 import ProductPicture from "./ProductPicture";
+import { useProductCategories } from "./useProductCategories";
 import { useProducts } from "./useProducts";
 
 const copy = {
@@ -14,6 +16,7 @@ const copy = {
     intro: "These pieces are currently available. If you are interested in one, send me a message and we can arrange payment and shipping directly.",
     request: "Ask about this piece",
     subject: "Request",
+    all: "All",
   },
   de: {
     eyebrow: "Shop",
@@ -21,24 +24,68 @@ const copy = {
     intro: "Diese Stücke sind aktuell verfügbar. Wenn dich eines interessiert, schreib mir einfach und wir klären Bezahlung und Versand direkt.",
     request: "Stück anfragen",
     subject: "Anfrage",
+    all: "Alle",
   },
 } as const;
 
 export default function InquiryShop() {
   const { language } = useLanguage();
   const { products } = useProducts();
+  const { categories } = useProductCategories();
+  const [activeCategory, setActiveCategory] = useState("all");
   const t = copy[language];
   const availableProducts = products.filter((product) => product.status === "Available");
+
+  const visibleCategories = useMemo(
+    () =>
+      categories.filter(
+        (category) =>
+          category.visible &&
+          availableProducts.some(
+            (product) =>
+              (product.categoryId || categoryIdFromName(product.category)) === category.id,
+          ),
+      ),
+    [categories, availableProducts],
+  );
+
+  useEffect(() => {
+    if (
+      activeCategory !== "all" &&
+      !visibleCategories.some((category) => category.id === activeCategory)
+    ) {
+      setActiveCategory("all");
+    }
+  }, [activeCategory, visibleCategories]);
+
+  const shownProducts =
+    activeCategory === "all"
+      ? availableProducts
+      : availableProducts.filter(
+          (product) =>
+            (product.categoryId || categoryIdFromName(product.category)) === activeCategory,
+        );
 
   return (
     <section className="bg-black px-4 py-24 text-white sm:px-6 sm:py-32">
       <div className="mx-auto max-w-7xl">
         <p className="mb-4 text-center text-xs font-bold uppercase tracking-[0.4em] text-orange-300 sm:text-sm sm:tracking-[0.5em]">{t.eyebrow}</p>
         <h1 className="break-words text-center text-4xl font-black uppercase sm:text-6xl">{t.title}</h1>
-        <p className="mx-auto mb-12 mt-6 max-w-2xl text-center leading-7 text-neutral-300 sm:mb-16">{t.intro}</p>
+        <p className="mx-auto mb-10 mt-6 max-w-2xl text-center leading-7 text-neutral-300 sm:mb-12">{t.intro}</p>
+
+        {visibleCategories.length > 1 && (
+          <div className="mx-auto mb-12 flex max-w-4xl flex-wrap justify-center gap-2 sm:mb-16">
+            <button type="button" onClick={() => setActiveCategory("all")} className={`rounded-full border px-4 py-2 text-xs font-bold uppercase tracking-wider transition ${activeCategory === "all" ? "border-orange-300 bg-orange-300 text-black" : "border-white/15 text-neutral-300 hover:border-orange-300 hover:text-orange-300"}`}>{t.all}</button>
+            {visibleCategories.map((category) => (
+              <button key={category.id} type="button" onClick={() => setActiveCategory(category.id)} className={`rounded-full border px-4 py-2 text-xs font-bold uppercase tracking-wider transition ${activeCategory === category.id ? "border-orange-300 bg-orange-300 text-black" : "border-white/15 text-neutral-300 hover:border-orange-300 hover:text-orange-300"}`}>
+                {language === "de" ? category.nameDe : category.name}
+              </button>
+            ))}
+          </div>
+        )}
 
         <div className="grid gap-6 sm:gap-8 md:grid-cols-3">
-          {availableProducts.map((product) => {
+          {shownProducts.map((product) => {
             const name = language === "de" ? product.nameDe : product.name;
             const status = language === "de" ? product.statusDe : product.status;
             const price = formatProductPrice(language === "de" ? product.priceDe : product.price);

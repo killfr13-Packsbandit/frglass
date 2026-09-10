@@ -2,6 +2,7 @@ export type ProductRecord = {
   slug: string;
   name: string;
   nameDe: string;
+  categoryId?: string;
   category: string;
   categoryDe: string;
   price: string;
@@ -23,6 +24,13 @@ export type ProductRecord = {
   storyDe: string;
 };
 
+export type ProductCategory = {
+  id: string;
+  name: string;
+  nameDe: string;
+  visible: boolean;
+};
+
 export const PRODUCT_STATUS = {
   Available: "Verfügbar",
   "Gallery only": "Nur Galerie",
@@ -31,6 +39,17 @@ export const PRODUCT_STATUS = {
 
 export function productStatusDe(status: string) {
   return PRODUCT_STATUS[status as keyof typeof PRODUCT_STATUS] ?? status;
+}
+
+export function categoryIdFromName(value: string) {
+  return value
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/ß/g, "ss")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 80);
 }
 
 export function formatProductPrice(value: string) {
