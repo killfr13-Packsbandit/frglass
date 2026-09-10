@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { siteConfig } from "../siteConfig";
 import { translations, useLanguage } from "./LanguageProvider";
 
@@ -31,12 +32,14 @@ export default function Studio() {
           {studioImages.map((src) => (
             <div
               key={src}
-              className="overflow-hidden rounded-3xl border border-white/10"
+              className="relative h-[520px] overflow-hidden rounded-3xl border border-white/10"
             >
-              <img
+              <Image
                 src={src}
                 alt={language === "de" ? "Arbeit mit Borosilikatglas" : "Working with borosilicate glass"}
-                className="h-[520px] w-full object-cover"
+                fill
+                sizes="(min-width: 768px) 50vw, 100vw"
+                className="object-cover"
               />
             </div>
           ))}
@@ -84,6 +87,8 @@ export default function Studio() {
 
           <a
             href={siteConfig.instagram}
+            target="_blank"
+            rel="noreferrer"
             className="rounded-full border border-white/20 px-8 py-4 font-bold uppercase tracking-widest text-white transition hover:border-orange-300 hover:text-orange-300"
           >
             {t.instagram}
