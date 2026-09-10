@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { products } from "../products";
@@ -98,12 +99,14 @@ export default function Page() {
           {currentProduct && (
             <Link href={`/shop/${currentProduct.slug}`} className="block">
               <article className="h-full overflow-hidden rounded-3xl border border-white/10 bg-white/5 transition duration-500 hover:-translate-y-2 hover:border-orange-300/60">
-                <div className="flex h-[360px] items-center justify-center bg-neutral-950 p-3">
-                  <img
+                <div className="relative h-[360px] bg-neutral-950">
+                  <Image
                     key={currentProduct.image}
                     src={currentProduct.image}
                     alt={language === "de" ? currentProduct.nameDe : currentProduct.name}
-                    className="h-full w-full object-contain transition-opacity duration-500"
+                    fill
+                    sizes="(min-width: 768px) 33vw, 100vw"
+                    className="object-contain p-3 transition-opacity duration-500"
                   />
                 </div>
 
@@ -131,11 +134,15 @@ export default function Page() {
           {posts[language].map((post) => (
             <Link key={post.title} href={post.href} className="block">
               <article className="h-full overflow-hidden rounded-3xl border border-white/10 bg-white/5 transition duration-500 hover:-translate-y-2 hover:border-orange-300/60">
-                <img
-                  src={post.image}
-                  alt={post.title}
-                  className="h-[360px] w-full object-cover"
-                />
+                <div className="relative h-[360px]">
+                  <Image
+                    src={post.image}
+                    alt={post.title}
+                    fill
+                    sizes="(min-width: 768px) 33vw, 100vw"
+                    className="object-cover"
+                  />
+                </div>
 
                 <div className="p-6">
                   <p className="mb-3 text-xs font-bold uppercase tracking-[0.3em] text-orange-300">
