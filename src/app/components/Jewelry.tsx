@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { products } from "../products";
 import { translations, useLanguage } from "./LanguageProvider";
@@ -7,7 +8,7 @@ import { translations, useLanguage } from "./LanguageProvider";
 export default function JewelryShowcase() {
   const { language } = useLanguage();
   const t = translations[language].jewelry;
-  const featuredProducts = products.slice(0, 5);
+  const featuredProducts = products.filter((product) => product.status === "Available").slice(0, 5);
 
   return (
     <section id="collections" className="bg-black px-6 py-28 text-white">
@@ -39,14 +40,16 @@ export default function JewelryShowcase() {
               <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/90 via-black/10 to-transparent" />
 
               <div
-                className={`flex w-full items-center justify-center p-4 ${
+                className={`relative flex w-full items-center justify-center p-4 ${
                   index === 0 || index === 3 ? "h-[620px]" : "h-[420px]"
                 }`}
               >
-                <img
+                <Image
                   src={product.image}
                   alt={productName}
-                  className="h-full w-full object-contain transition duration-700 group-hover:scale-105"
+                  fill
+                  sizes={index === 0 || index === 3 ? "(min-width: 768px) 50vw, 100vw" : "(min-width: 768px) 25vw, 100vw"}
+                  className="object-contain p-4 transition duration-700 group-hover:scale-105"
                 />
               </div>
 
