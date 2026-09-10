@@ -10,6 +10,7 @@ const footerLinks = [
   { href: "/studio", label: "studio" },
   { href: "/shop", label: "shop" },
   { href: "/journal", label: "journal" },
+  { href: "/community", label: "community" },
   { href: "/about", label: "about" },
   { href: "/contact", label: "contact" },
 ] as const;
@@ -27,7 +28,7 @@ export default function Footer() {
           </h2>
 
           <Link
-            href="/admin/behind-the-scenes"
+            href="/admin"
             aria-label="Admin"
             className="mt-5 inline-flex opacity-25 transition hover:opacity-70 focus:opacity-70"
           >
