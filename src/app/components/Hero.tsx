@@ -31,7 +31,7 @@ export default function Hero() {
               <div className="flex items-center gap-6 sm:gap-8">
                 <div className="flex h-32 w-24 shrink-0 items-center justify-center sm:h-40 sm:w-28">
                   <Image
-                    src="/favicon.png?v=5"
+                    src="/favicon.png"
                     alt="FRGLASS Logo"
                     width={128}
                     height={160}
