@@ -99,11 +99,11 @@ export const products = [
     priceDe: "€120",
     status: "Available",
     statusDe: "Verfügbar",
-    image: "/jewelry/MetaTerrania x Moonstone Leaf (1).JPG",
+    image: "/jewelry/MetaTerrania x Moonstone Leaf (3).JPG",
     images: [
+      "/jewelry/MetaTerrania x Moonstone Leaf (3).JPG",
       "/jewelry/MetaTerrania x Moonstone Leaf (1).JPG",
       "/jewelry/MetaTerrania x Moonstone Leaf (2).JPG",
-      "/jewelry/MetaTerrania x Moonstone Leaf (3).JPG",
       "/jewelry/MetaTerrania x Moonstone Leaf (4).JPG",
     ],
     material: "Borosilicate glass",
