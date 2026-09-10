@@ -27,13 +27,12 @@ export default function Hero() {
             </div>
 
             <div className="mt-8 rounded-[2rem] border border-white/10 bg-white/[0.025] p-6 shadow-2xl shadow-black/30 backdrop-blur-sm sm:p-8">
-              <div className="flex items-center gap-5 sm:gap-7">
-                <div className="relative flex h-28 w-24 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-black sm:h-36 sm:w-28">
-                  <div className="absolute inset-0 bg-orange-300/5" />
+              <div className="flex items-center gap-6 sm:gap-8">
+                <div className="flex h-32 w-24 shrink-0 items-center justify-center sm:h-40 sm:w-28">
                   <img
-                    src="/logo.png"
-                    alt="FRGLASS"
-                    className="relative h-full w-full scale-[1.45] object-cover object-center"
+                    src="/favicon.png?v=5"
+                    alt="FRGLASS Logo"
+                    className="max-h-full max-w-full object-contain drop-shadow-[0_0_22px_rgba(253,186,116,0.12)]"
                   />
                 </div>
 
