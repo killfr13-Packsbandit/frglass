@@ -69,15 +69,6 @@ export default function Hero() {
                 <span aria-hidden="true">↘</span>
               </a>
             </div>
-
-            <div className="mt-5 flex justify-center xl:justify-start">
-              <div className="inline-flex max-w-full items-center gap-3 rounded-full border border-orange-300/20 bg-orange-300/[0.04] px-4 py-2 opacity-75">
-                <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-orange-300" />
-                <p className="text-[9px] font-semibold uppercase tracking-[0.18em] text-orange-200 sm:text-[11px] sm:tracking-[0.22em]">
-                  {t.eyebrow}
-                </p>
-              </div>
-            </div>
           </div>
         </div>
 
