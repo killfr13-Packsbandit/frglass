@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import { products } from "../../products";
 import { siteConfig } from "../../siteConfig";
 import { useLanguage } from "../../components/LanguageProvider";
@@ -18,6 +19,8 @@ const copy = {
     subject: "Request",
     similar: "More pieces",
     alsoLike: "You might also like",
+    previousImage: "Previous image",
+    nextImage: "Next image",
   },
   de: {
     notFound: "Stück nicht gefunden",
@@ -30,6 +33,8 @@ const copy = {
     subject: "Anfrage",
     similar: "Weitere Stücke",
     alsoLike: "Vielleicht gefällt dir auch",
+    previousImage: "Vorheriges Bild",
+    nextImage: "Nächstes Bild",
   },
 } as const;
 
@@ -38,6 +43,11 @@ export default function Page() {
   const { language } = useLanguage();
   const t = copy[language];
   const product = products.find((item) => item.slug === params.slug);
+  const [activeImage, setActiveImage] = useState<string | null>(null);
+
+  useEffect(() => {
+    setActiveImage(product?.image ?? null);
+  }, [product?.slug, product?.image]);
 
   if (!product) {
     return (
@@ -46,6 +56,16 @@ export default function Page() {
       </main>
     );
   }
+
+  const currentImage = activeImage ?? product.image;
+  const currentIndex = Math.max(0, product.images.indexOf(currentImage));
+  const hasMultipleImages = product.images.length > 1;
+
+  const goToImage = (direction: number) => {
+    const nextIndex =
+      (currentIndex + direction + product.images.length) % product.images.length;
+    setActiveImage(product.images[nextIndex]);
+  };
 
   const similarProducts = products
     .filter((item) => item.slug !== product.slug)
@@ -65,26 +85,53 @@ export default function Page() {
     <main className="min-h-screen bg-black px-6 py-32 text-white">
       <section className="mx-auto grid max-w-7xl gap-12 md:grid-cols-2">
         <div>
-          <div className="flex h-[720px] items-center justify-center overflow-hidden rounded-3xl border border-white/10 bg-neutral-950 p-4">
+          <div className="relative flex h-[720px] items-center justify-center overflow-hidden rounded-3xl border border-white/10 bg-neutral-950 p-4">
             <img
-              src={product.image}
+              src={currentImage}
               alt={name}
               className="h-full w-full object-contain"
             />
+
+            {hasMultipleImages && (
+              <>
+                <button
+                  type="button"
+                  onClick={() => goToImage(-1)}
+                  aria-label={t.previousImage}
+                  className="absolute left-4 top-1/2 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/70 text-2xl text-white backdrop-blur transition hover:border-orange-300 hover:text-orange-300"
+                >
+                  ‹
+                </button>
+                <button
+                  type="button"
+                  onClick={() => goToImage(1)}
+                  aria-label={t.nextImage}
+                  className="absolute right-4 top-1/2 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/70 text-2xl text-white backdrop-blur transition hover:border-orange-300 hover:text-orange-300"
+                >
+                  ›
+                </button>
+              </>
+            )}
           </div>
 
           <div className="mt-6 grid grid-cols-3 gap-4">
             {product.images.map((image) => (
-              <div
+              <button
+                type="button"
                 key={image}
-                className="flex h-40 items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-neutral-950 p-2"
+                onClick={() => setActiveImage(image)}
+                className={`flex h-40 items-center justify-center overflow-hidden rounded-2xl border bg-neutral-950 p-2 transition hover:border-orange-300 ${
+                  currentImage === image
+                    ? "border-orange-300"
+                    : "border-white/10"
+                }`}
               >
                 <img
                   src={image}
                   alt={name}
                   className="h-full w-full object-contain"
                 />
-              </div>
+              </button>
             ))}
           </div>
         </div>
