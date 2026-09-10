@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -68,7 +69,7 @@ export default function Page() {
   };
 
   const similarProducts = products
-    .filter((item) => item.slug !== product.slug)
+    .filter((item) => item.slug !== product.slug && item.status === "Available")
     .slice(0, 3);
 
   const name = language === "de" ? product.nameDe : product.name;
@@ -86,10 +87,12 @@ export default function Page() {
       <section className="mx-auto grid max-w-7xl gap-12 md:grid-cols-2">
         <div>
           <div className="relative flex h-[720px] items-center justify-center overflow-hidden rounded-3xl border border-white/10 bg-neutral-950 p-4">
-            <img
+            <Image
               src={currentImage}
               alt={name}
-              className="h-full w-full object-contain"
+              fill
+              sizes="(min-width: 768px) 50vw, 100vw"
+              className="object-contain p-4"
             />
 
             {hasMultipleImages && (
@@ -98,7 +101,7 @@ export default function Page() {
                   type="button"
                   onClick={() => goToImage(-1)}
                   aria-label={t.previousImage}
-                  className="absolute left-4 top-1/2 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/70 text-2xl text-white backdrop-blur transition hover:border-orange-300 hover:text-orange-300"
+                  className="absolute left-4 top-1/2 z-10 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/70 text-2xl text-white backdrop-blur transition hover:border-orange-300 hover:text-orange-300"
                 >
                   ‹
                 </button>
@@ -106,7 +109,7 @@ export default function Page() {
                   type="button"
                   onClick={() => goToImage(1)}
                   aria-label={t.nextImage}
-                  className="absolute right-4 top-1/2 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/70 text-2xl text-white backdrop-blur transition hover:border-orange-300 hover:text-orange-300"
+                  className="absolute right-4 top-1/2 z-10 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/70 text-2xl text-white backdrop-blur transition hover:border-orange-300 hover:text-orange-300"
                 >
                   ›
                 </button>
@@ -120,16 +123,18 @@ export default function Page() {
                 type="button"
                 key={image}
                 onClick={() => setActiveImage(image)}
-                className={`flex h-40 items-center justify-center overflow-hidden rounded-2xl border bg-neutral-950 p-2 transition hover:border-orange-300 ${
+                className={`relative flex h-40 items-center justify-center overflow-hidden rounded-2xl border bg-neutral-950 p-2 transition hover:border-orange-300 ${
                   currentImage === image
                     ? "border-orange-300"
                     : "border-white/10"
                 }`}
               >
-                <img
+                <Image
                   src={image}
                   alt={name}
-                  className="h-full w-full object-contain"
+                  fill
+                  sizes="(min-width: 768px) 16vw, 33vw"
+                  className="object-contain p-2"
                 />
               </button>
             ))}
@@ -141,7 +146,7 @@ export default function Page() {
             {status}
           </p>
 
-          <h1 className="text-6xl font-black uppercase leading-tight">
+          <h1 className="text-5xl font-black uppercase leading-tight sm:text-6xl">
             {name}
           </h1>
 
@@ -216,11 +221,13 @@ export default function Page() {
                   href={`/shop/${item.slug}`}
                   className="group overflow-hidden rounded-3xl border border-white/10 bg-white/5 transition duration-500 hover:-translate-y-2 hover:border-orange-300 hover:shadow-2xl hover:shadow-orange-500/20"
                 >
-                  <div className="flex h-[360px] items-center justify-center bg-neutral-950 p-3">
-                    <img
+                  <div className="relative h-[360px] bg-neutral-950">
+                    <Image
                       src={item.image}
                       alt={itemName}
-                      className="h-full w-full object-contain transition duration-700 group-hover:scale-[1.03]"
+                      fill
+                      sizes="(min-width: 768px) 33vw, 100vw"
+                      className="object-contain p-3 transition duration-700 group-hover:scale-[1.03]"
                     />
                   </div>
 
