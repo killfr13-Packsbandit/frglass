@@ -20,14 +20,7 @@ export default function Hero() {
           <div className="pointer-events-none absolute bottom-16 right-0 h-48 w-48 rounded-full bg-fuchsia-500/5 blur-[100px]" />
 
           <div className="relative z-10 mx-auto w-full min-w-0 max-w-xl xl:mx-0">
-            <div className="inline-flex max-w-full items-center gap-3 rounded-full border border-orange-300/25 bg-orange-300/[0.06] px-4 py-2">
-              <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-orange-300 shadow-[0_0_18px_rgba(253,186,116,0.9)]" />
-              <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-orange-200 sm:text-xs sm:tracking-[0.24em]">
-                {t.eyebrow}
-              </p>
-            </div>
-
-            <div className="mt-6 w-full min-w-0 rounded-[1.75rem] border border-white/10 bg-white/[0.025] p-5 shadow-2xl shadow-black/30 backdrop-blur-sm sm:mt-8 sm:rounded-[2rem] sm:p-8">
+            <div className="w-full min-w-0 rounded-[1.75rem] border border-white/10 bg-white/[0.025] p-5 shadow-2xl shadow-black/30 backdrop-blur-sm sm:rounded-[2rem] sm:p-8">
               <div className="flex min-w-0 flex-col items-center gap-5 text-center sm:flex-row sm:gap-8 sm:text-left">
                 <div className="relative h-36 w-24 shrink-0 overflow-hidden sm:h-48 sm:w-32">
                   <Image
@@ -75,6 +68,15 @@ export default function Hero() {
                 {t.cta}
                 <span aria-hidden="true">↘</span>
               </a>
+            </div>
+
+            <div className="mt-5 flex justify-center xl:justify-start">
+              <div className="inline-flex max-w-full items-center gap-3 rounded-full border border-orange-300/20 bg-orange-300/[0.04] px-4 py-2 opacity-75">
+                <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-orange-300" />
+                <p className="text-[9px] font-semibold uppercase tracking-[0.18em] text-orange-200 sm:text-[11px] sm:tracking-[0.22em]">
+                  {t.eyebrow}
+                </p>
+              </div>
             </div>
           </div>
         </div>
