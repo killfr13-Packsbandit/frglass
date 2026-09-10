@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useLanguage } from "../../components/LanguageProvider";
+import BehindScenesUpdates from "./BehindScenesUpdates";
 
 const copy = {
   en: {
@@ -70,6 +71,8 @@ export default function Page() {
             />
           </div>
         </div>
+
+        <BehindScenesUpdates />
 
         <div className="mx-auto mt-14 max-w-3xl sm:mt-20">
           <h2 className="text-3xl font-black uppercase sm:text-4xl">
