@@ -17,7 +17,6 @@ const galleryImages = [
 const copy = {
   en: {
     eyebrow: "Gallery",
-    title: "Selected work",
     intro: "A selection of jewelry, objects and experiments made in the workshop.",
     imageAlt: "FRGLASS glass piece",
     enlargedAlt: "FRGLASS glass piece enlarged",
@@ -25,7 +24,6 @@ const copy = {
   },
   de: {
     eyebrow: "Galerie",
-    title: "Ausgewählte Arbeiten",
     intro: "Eine Auswahl an Schmuck, Objekten und Experimenten aus der Werkstatt.",
     imageAlt: "FRGLASS Glasstück",
     enlargedAlt: "FRGLASS Glasstück vergrößert",
@@ -41,15 +39,11 @@ export default function Page() {
   return (
     <main className="min-h-screen bg-black px-6 py-32 text-white">
       <section className="mx-auto max-w-7xl">
-        <p className="mb-4 text-center text-sm font-bold uppercase tracking-[0.5em] text-orange-300">
+        <p className="mb-6 text-center text-sm font-bold uppercase tracking-[0.5em] text-orange-300">
           {t.eyebrow}
         </p>
 
-        <h1 className="text-center text-6xl font-black uppercase">
-          {t.title}
-        </h1>
-
-        <p className="mx-auto mb-16 mt-6 max-w-2xl text-center text-neutral-300">
+        <p className="mx-auto mb-16 max-w-2xl text-center text-lg leading-8 text-neutral-300">
           {t.intro}
         </p>
 
