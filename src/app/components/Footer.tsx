@@ -24,10 +24,6 @@ export default function Footer() {
           <h2 className="text-2xl font-black uppercase tracking-[0.3em]">
             {siteConfig.name}
           </h2>
-
-          <p className="mt-4 max-w-sm text-neutral-400">
-            {t.footer.intro}
-          </p>
         </div>
 
         <div>
