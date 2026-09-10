@@ -34,7 +34,8 @@ export default function Hero() {
                     src="/logo.png"
                     alt="FRGLASS Logo"
                     fill
-                    sizes="(min-width: 640px) 128px, 112px"
+                    sizes="512px"
+                    quality={100}
                     priority
                     className="scale-110 object-cover object-center drop-shadow-[0_0_22px_rgba(253,186,116,0.12)]"
                   />
