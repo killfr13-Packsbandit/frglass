@@ -10,16 +10,12 @@ export default function Hero() {
     <section className="bg-black pt-24 text-white">
       <div className="mx-auto grid min-h-[calc(100vh-6rem)] max-w-[1600px] lg:grid-cols-[0.85fr_1.15fr]">
         <div className="flex items-center px-6 py-16 sm:px-10 lg:px-16 xl:px-24">
-          <div className="max-w-xl">
+          <div className="w-full max-w-xl">
             <img
               src="/logo.png"
               alt="FRGLASS"
-              className="mb-10 h-auto w-full max-w-[320px] object-contain sm:max-w-[420px]"
+              className="mb-10 h-auto w-full max-w-[390px] object-contain sm:max-w-[520px]"
             />
-
-            <p className="mb-5 text-xs font-semibold uppercase tracking-[0.42em] text-orange-300 sm:text-sm">
-              {t.eyebrow}
-            </p>
 
             <p className="text-xl font-semibold uppercase tracking-[0.2em] text-neutral-100 sm:text-2xl">
               {t.subtitle}
