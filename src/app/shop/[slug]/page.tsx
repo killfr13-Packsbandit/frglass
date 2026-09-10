@@ -7,7 +7,6 @@ import ProductPicture from "../../components/ProductPicture";
 import { useLanguage } from "../../components/LanguageProvider";
 import { useProducts } from "../../components/useProducts";
 import { formatProductPrice } from "../../productTypes";
-import { siteConfig } from "../../siteConfig";
 
 const copy = {
   en: {
@@ -18,7 +17,6 @@ const copy = {
     colors: "Colors",
     year: "Year",
     request: "Ask about this piece",
-    subject: "Request",
     similar: "More pieces",
     alsoLike: "You might also like",
     previousImage: "Previous image",
@@ -32,7 +30,6 @@ const copy = {
     colors: "Farben",
     year: "Jahr",
     request: "Stück anfragen",
-    subject: "Anfrage",
     similar: "Weitere Stücke",
     alsoLike: "Vielleicht gefällt dir auch",
     previousImage: "Vorheriges Bild",
@@ -108,7 +105,7 @@ export default function Page() {
             <div><p className="text-xs uppercase tracking-[0.25em] text-neutral-500 sm:text-sm sm:tracking-[0.3em]">{t.year}</p><p className="mt-2">{product.year}</p></div>
           </div>
 
-          <a href={`mailto:${siteConfig.email}?subject=${encodeURIComponent(`${t.subject} ${name}`)}`} className="mt-8 inline-block w-full rounded-full border border-orange-300 px-6 py-4 text-center text-sm font-bold uppercase tracking-widest text-orange-300 transition hover:bg-orange-300 hover:text-black sm:mt-10 sm:w-fit sm:px-8">{t.request}</a>
+          <Link href={`/contact?product=${encodeURIComponent(name)}&slug=${encodeURIComponent(product.slug)}`} className="mt-8 inline-block w-full rounded-full border border-orange-300 px-6 py-4 text-center text-sm font-bold uppercase tracking-widest text-orange-300 transition hover:bg-orange-300 hover:text-black sm:mt-10 sm:w-fit sm:px-8">{t.request}</Link>
         </div>
       </section>
 
