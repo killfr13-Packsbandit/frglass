@@ -42,7 +42,7 @@ export default function Navbar() {
           </span>
         </Link>
 
-        <div className="hidden items-center gap-6 md:flex">
+        <div className="hidden items-center gap-6 lg:flex">
           <div className="flex gap-6 text-sm uppercase tracking-widest">
             {navItems.map((item) => (
               <Link key={item.href} href={item.href} className="transition hover:text-orange-300">
@@ -73,7 +73,7 @@ export default function Navbar() {
 
         <button
           type="button"
-          className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-white/5 md:hidden"
+          className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-white/5 lg:hidden"
           onClick={() => setMenuOpen((open) => !open)}
           aria-label={menuOpen ? t.nav.close : t.nav.menu}
           aria-expanded={menuOpen}
@@ -87,7 +87,7 @@ export default function Navbar() {
       </div>
 
       {menuOpen && (
-        <div className="border-t border-white/10 bg-black/95 px-5 pb-6 pt-4 backdrop-blur-xl md:hidden">
+        <div className="border-t border-white/10 bg-black/95 px-5 pb-6 pt-4 backdrop-blur-xl lg:hidden">
           <div className="flex flex-col">
             {navItems.map((item) => (
               <Link
