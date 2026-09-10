@@ -33,24 +33,24 @@ export default function Page() {
   const t = copy[language];
 
   return (
-    <main className="min-h-screen bg-black px-6 py-32 text-white">
+    <main className="min-h-screen bg-black px-4 py-24 text-white sm:px-6 sm:py-32">
       <section className="mx-auto max-w-7xl">
-        <p className="mb-4 text-sm font-bold uppercase tracking-[0.5em] text-orange-300">
+        <p className="mb-4 text-xs font-bold uppercase tracking-[0.4em] text-orange-300 sm:text-sm sm:tracking-[0.5em]">
           {t.eyebrow}
         </p>
 
-        <h1 className="max-w-4xl text-5xl font-black uppercase leading-tight sm:text-6xl">
+        <h1 className="max-w-4xl break-words text-4xl font-black uppercase leading-tight sm:text-6xl">
           {t.title1}
           <br />
           {t.title2}
         </h1>
 
-        <p className="mt-8 max-w-3xl text-lg leading-8 text-neutral-300">
+        <p className="mt-6 max-w-3xl text-base leading-7 text-neutral-300 sm:mt-8 sm:text-lg sm:leading-8">
           {t.intro}
         </p>
 
-        <div className="mt-16 grid gap-8 md:grid-cols-2">
-          <div className="relative h-[560px] overflow-hidden rounded-3xl border border-white/10 bg-white/5">
+        <div className="mt-10 grid gap-4 sm:mt-16 sm:gap-8 md:grid-cols-2">
+          <div className="relative h-[400px] overflow-hidden rounded-2xl border border-white/10 bg-white/5 sm:h-[560px] sm:rounded-3xl">
             <Image
               src="/workshop/me1.png"
               alt={t.alt1}
@@ -60,7 +60,7 @@ export default function Page() {
             />
           </div>
 
-          <div className="relative h-[560px] overflow-hidden rounded-3xl border border-white/10 bg-white/5">
+          <div className="relative h-[400px] overflow-hidden rounded-2xl border border-white/10 bg-white/5 sm:h-[560px] sm:rounded-3xl">
             <Image
               src="/workshop/me2.jpg"
               alt={t.alt2}
@@ -71,16 +71,16 @@ export default function Page() {
           </div>
         </div>
 
-        <div className="mx-auto mt-20 max-w-3xl">
-          <h2 className="text-4xl font-black uppercase">
+        <div className="mx-auto mt-14 max-w-3xl sm:mt-20">
+          <h2 className="text-3xl font-black uppercase sm:text-4xl">
             {t.sectionTitle}
           </h2>
 
-          <p className="mt-6 text-lg leading-8 text-neutral-300">
+          <p className="mt-6 text-base leading-7 text-neutral-300 sm:text-lg sm:leading-8">
             {t.p1}
           </p>
 
-          <p className="mt-6 text-lg leading-8 text-neutral-300">
+          <p className="mt-5 text-base leading-7 text-neutral-300 sm:mt-6 sm:text-lg sm:leading-8">
             {t.p2}
           </p>
         </div>
