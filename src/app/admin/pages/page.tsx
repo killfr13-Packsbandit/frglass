@@ -30,7 +30,7 @@ type PageDefinition = {
   label: string;
   description: string;
   fields: Field[];
-  studioMedia?: boolean;
+  mediaManager?: "studio" | "gallery";
 };
 
 const localized = (
@@ -48,10 +48,6 @@ const media = (base: string, label: string): MediaField => ({
   typeKey: `${base}.type`,
   label,
 });
-
-const galleryMedia: Field[] = Array.from({ length: 10 }, (_, index) =>
-  media(`gallery.media${index + 1}`, `Galerie Medium ${index + 1}`),
-);
 
 const pages: PageDefinition[] = [
   {
@@ -87,8 +83,8 @@ const pages: PageDefinition[] = [
     id: "studio",
     label: "Studio",
     description:
-      "Alle Texte der Studio-Seite. Die sortierbare Foto-/Video-Galerie bleibt direkt daneben im Studio-Medieneditor.",
-    studioMedia: true,
+      "Texte der Studio-Seite. Bilder und Videos verwaltest du flexibel im Studio-Medieneditor.",
+    mediaManager: "studio",
     fields: [
       ...localized("studio.eyebrow", "Kleine Überschrift"),
       ...localized("studio.title", "Hauptüberschrift"),
@@ -136,11 +132,11 @@ const pages: PageDefinition[] = [
     id: "gallery",
     label: "Galerie",
     description:
-      "Galerie-Text und die zehn Medienplätze. Jeder Platz kann Bild oder Video sein.",
+      "Überschrift und Einleitung der Galerie. Bilder und Videos kannst du im Galerie-Editor beliebig hinzufügen, sortieren und löschen.",
+    mediaManager: "gallery",
     fields: [
       ...localized("gallery.eyebrow", "Kleine Überschrift"),
       ...localized("gallery.intro", "Einleitung", "textarea"),
-      ...galleryMedia,
     ],
   },
 ];
@@ -315,6 +311,19 @@ export default function Page() {
     );
   }
 
+  const managerHref =
+    definition.mediaManager === "studio"
+      ? "/admin/studio"
+      : definition.mediaManager === "gallery"
+        ? "/admin/gallery"
+        : "";
+  const managerLabel =
+    definition.mediaManager === "studio"
+      ? "Studio Fotos & Videos sortieren →"
+      : definition.mediaManager === "gallery"
+        ? "Galerie Bilder & Videos verwalten →"
+        : "";
+
   return (
     <main className="min-h-screen bg-black px-4 py-24 text-white sm:px-6 sm:py-28">
       <form onSubmit={save} className="mx-auto max-w-6xl">
@@ -328,7 +337,7 @@ export default function Page() {
           <div>
             <h1 className="text-4xl font-black uppercase sm:text-6xl">Seiten bearbeiten</h1>
             <p className="mt-4 max-w-3xl leading-7 text-neutral-400">
-              Texte und normale Seitenmedien ändern, ohne GitHub oder neuen Deploy.
+              Texte und feste Seitenmedien ändern, ohne GitHub oder neuen Deploy.
               Layout, Navigation und rechtlich wichtige Formulartexte bleiben geschützt.
             </p>
           </div>
@@ -375,12 +384,12 @@ export default function Page() {
             {definition.description}
           </p>
 
-          {definition.studioMedia && (
+          {managerHref && (
             <Link
-              href="/admin/studio"
+              href={managerHref}
               className="mt-5 inline-flex rounded-full border border-orange-300 px-4 py-2 text-xs font-bold uppercase tracking-wider text-orange-300"
             >
-              Studio Fotos & Videos sortieren →
+              {managerLabel}
             </Link>
           )}
 

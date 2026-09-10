@@ -1,8 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLanguage } from "../components/LanguageProvider";
 import { useSiteContent } from "../components/SiteContentProvider";
+import {
+  DEFAULT_GALLERY_MEDIA,
+  type GalleryMediaItem,
+} from "../galleryMediaTypes";
 
 const copy = {
   en: {
@@ -19,40 +23,22 @@ const copy = {
   },
 } as const;
 
-type GalleryMedia = {
-  url: string;
-  type: string;
-};
-
 export default function Page() {
-  const [activeMedia, setActiveMedia] = useState<GalleryMedia | null>(null);
+  const [activeMedia, setActiveMedia] = useState<GalleryMediaItem | null>(null);
+  const [galleryMedia, setGalleryMedia] = useState<GalleryMediaItem[]>(DEFAULT_GALLERY_MEDIA);
   const { language } = useLanguage();
   const { get } = useSiteContent();
   const t = copy[language];
   const lang = language === "de" ? "de" : "en";
 
-  const defaults = [
-    "/jewelry/Cobald5 x Opaldust Leaf.jpg",
-    "/jewelry/leaf2.jpg",
-    "/jewelry/AmberPurple Leaf STube (2).JPG",
-    "/jewelry/leaf4.jpg",
-    "/jewelry/leaf5.jpg",
-    "/jewelry/implo.jpg",
-    "/jewelry/Barkylett.JPG",
-    "/jewelry/Customer.JPG",
-    "/jewelry/IMG_2173 4.JPG",
-    "/jewelry/Mini Heart.JPG",
-  ];
-
-  const galleryMedia: GalleryMedia[] = defaults
-    .map((fallback, index) => {
-      const number = index + 1;
-      return {
-        url: get(`gallery.media${number}.url`, fallback),
-        type: get(`gallery.media${number}.type`, "image"),
-      };
-    })
-    .filter((item) => item.url);
+  useEffect(() => {
+    fetch("/api/gallery-media", { cache: "no-store" })
+      .then((response) => (response.ok ? response.json() : null))
+      .then((data: { items?: GalleryMediaItem[] } | null) => {
+        if (Array.isArray(data?.items)) setGalleryMedia(data.items);
+      })
+      .catch(() => {});
+  }, []);
 
   return (
     <main className="min-h-screen bg-black px-4 py-24 text-white sm:px-6 sm:py-32">
@@ -68,46 +54,66 @@ export default function Page() {
         </p>
 
         <div className="grid gap-4 sm:gap-6 md:grid-cols-3">
-          {galleryMedia.map((item, index) => (
-            <button
-              key={`${item.url}-${index}`}
-              type="button"
-              onClick={() => setActiveMedia(item)}
-              className="group relative flex h-[360px] items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-neutral-950 p-2 text-left sm:h-[460px] sm:rounded-3xl sm:p-3"
-            >
-              {item.type === "video" ? (
-                <video
-                  src={item.url}
-                  muted
-                  playsInline
-                  preload="metadata"
-                  className="h-full w-full object-contain"
-                />
-              ) : (
-                <img
-                  src={item.url}
-                  alt={t.imageAlt}
-                  loading="lazy"
-                  className="h-full w-full object-contain p-2 transition duration-700 group-hover:scale-[1.03] sm:p-3"
-                />
-              )}
-            </button>
-          ))}
+          {galleryMedia.map((item) => {
+            const caption =
+              language === "de"
+                ? item.description || item.descriptionEn
+                : item.descriptionEn || item.description;
+
+            return (
+              <button
+                key={item.id}
+                type="button"
+                onClick={() => setActiveMedia(item)}
+                className="group overflow-hidden rounded-2xl border border-white/10 bg-neutral-950 text-left sm:rounded-3xl"
+              >
+                <div className="relative flex h-[360px] items-center justify-center p-2 sm:h-[460px] sm:p-3">
+                  {item.mediaType === "video" ? (
+                    <>
+                      <video
+                        src={item.mediaUrl}
+                        muted
+                        playsInline
+                        preload="metadata"
+                        className="h-full w-full object-contain"
+                      />
+                      <span className="pointer-events-none absolute bottom-4 right-4 rounded-full bg-black/70 px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-white">
+                        Video
+                      </span>
+                    </>
+                  ) : (
+                    <img
+                      src={item.mediaUrl}
+                      alt={caption || t.imageAlt}
+                      loading="lazy"
+                      className="h-full w-full object-contain p-2 transition duration-700 group-hover:scale-[1.03] sm:p-3"
+                    />
+                  )}
+                </div>
+
+                {caption && (
+                  <p className="border-t border-white/10 px-5 py-4 text-sm leading-6 text-neutral-400">
+                    {caption}
+                  </p>
+                )}
+              </button>
+            );
+          })}
         </div>
       </section>
 
       {activeMedia && (
         <div
           onClick={() => setActiveMedia(null)}
-          className="fixed inset-0 z-[999] flex items-center justify-center bg-black/90 p-3 sm:p-6"
+          className="fixed inset-0 z-[999] flex flex-col items-center justify-center bg-black/90 p-3 sm:p-6"
         >
           <div
-            className="relative flex h-[86vh] w-[94vw] items-center justify-center sm:h-[90vh] sm:w-[90vw]"
+            className="relative flex max-h-[82vh] w-[94vw] flex-1 items-center justify-center sm:w-[90vw]"
             onClick={(event) => event.stopPropagation()}
           >
-            {activeMedia.type === "video" ? (
+            {activeMedia.mediaType === "video" ? (
               <video
-                src={activeMedia.url}
+                src={activeMedia.mediaUrl}
                 controls
                 autoPlay
                 playsInline
@@ -115,12 +121,29 @@ export default function Page() {
               />
             ) : (
               <img
-                src={activeMedia.url}
-                alt={t.imageAlt}
+                src={activeMedia.mediaUrl}
+                alt={
+                  (language === "de"
+                    ? activeMedia.description || activeMedia.descriptionEn
+                    : activeMedia.descriptionEn || activeMedia.description) || t.imageAlt
+                }
                 className="max-h-full max-w-full object-contain"
               />
             )}
           </div>
+
+          {(language === "de"
+            ? activeMedia.description || activeMedia.descriptionEn
+            : activeMedia.descriptionEn || activeMedia.description) && (
+            <p
+              className="mt-4 max-w-2xl text-center text-sm leading-6 text-neutral-300 sm:text-base"
+              onClick={(event) => event.stopPropagation()}
+            >
+              {language === "de"
+                ? activeMedia.description || activeMedia.descriptionEn
+                : activeMedia.descriptionEn || activeMedia.description}
+            </p>
+          )}
 
           <button
             type="button"
