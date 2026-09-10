@@ -32,7 +32,7 @@ export const translations = {
     jewelry: {
       eyebrow: "Jewelry",
       title: "Glass to wear",
-      intro: "Handmade pendants from borosilicate glass. Every piece is one of a kind.",
+      intro: "Handmade pendants from borosilicate glass. Each piece is one of a kind.",
       itemTitle: "Handmade glass",
       itemSubtitle: "Borosilicate jewelry",
     },
@@ -99,7 +99,7 @@ export const translations = {
     jewelry: {
       eyebrow: "Schmuck",
       title: "Glas zum Tragen",
-      intro: "Handgemachte Anhänger aus Borosilikatglas. Jedes Stück ist ein Unikat.",
+      intro: "Handgemachte Anhänger aus Borosilikatglas. Jedes Stück ein Unikat.",
       itemTitle: "Handgemachtes Glas",
       itemSubtitle: "Borosilikat-Schmuck",
     },
