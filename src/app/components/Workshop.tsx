@@ -32,7 +32,7 @@ export default function Workshop() {
 
         <div className="space-y-6">
           <video
-            src="/workshop/hero.MOV"
+            src="/workshop/hero.mov"
             autoPlay
             muted
             loop
