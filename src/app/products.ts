@@ -63,7 +63,7 @@ export const products = [
     nameDe: "Facetted Suncatcher",
     category: "Jewelry",
     categoryDe: "Schmuck",
-    price: "150",
+    price: "€150",
     priceDe: "€150",
     status: "Available",
     statusDe: "Verfügbar",
