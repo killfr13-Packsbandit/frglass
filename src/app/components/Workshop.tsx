@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { translations, useLanguage } from "./LanguageProvider";
 
 const workshopImages = [
@@ -37,17 +38,24 @@ export default function Workshop() {
             muted
             loop
             playsInline
+            preload="metadata"
             className="rounded-3xl border border-white/10 shadow-2xl"
           />
 
           <div className="grid grid-cols-2 gap-6">
             {workshopImages.map((src) => (
-              <img
+              <div
                 key={src}
-                src={src}
-                alt="FRGLASS workshop"
-                className="rounded-2xl border border-white/10 object-cover"
-              />
+                className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-white/10"
+              >
+                <Image
+                  src={src}
+                  alt="FRGLASS workshop"
+                  fill
+                  sizes="(min-width: 1024px) 25vw, 50vw"
+                  className="object-cover"
+                />
+              </div>
             ))}
           </div>
         </div>
