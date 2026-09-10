@@ -5,18 +5,25 @@ import { formatProductPrice } from "../productTypes";
 import { translations, useLanguage } from "./LanguageProvider";
 import ProductPicture from "./ProductPicture";
 import { useProducts } from "./useProducts";
+import { useSiteContent } from "./SiteContentProvider";
 
 export default function JewelryShowcase() {
   const { language } = useLanguage();
   const { products } = useProducts();
+  const { get } = useSiteContent();
   const t = translations[language].jewelry;
+  const lang = language === "de" ? "de" : "en";
   const featuredProducts = products.filter((product) => product.status === "Available").slice(0, 5);
+
+  const eyebrow = get(`home.jewelry.eyebrow.${lang}`, t.eyebrow);
+  const title = get(`home.jewelry.title.${lang}`, t.title);
+  const intro = get(`home.jewelry.intro.${lang}`, t.intro);
 
   return (
     <section id="collections" className="bg-black px-4 py-20 text-white sm:px-6 sm:py-28">
-      <p className="mb-4 text-center text-xs font-bold uppercase tracking-[0.4em] text-orange-300 sm:text-sm sm:tracking-[0.5em]">{t.eyebrow}</p>
-      <h2 className="mb-6 text-center text-3xl font-black uppercase tracking-[0.14em] sm:text-4xl sm:tracking-[0.2em]">{t.title}</h2>
-      <p className="mx-auto mb-10 max-w-2xl text-center leading-7 text-neutral-400 sm:mb-14">{t.intro}</p>
+      <p className="mb-4 text-center text-xs font-bold uppercase tracking-[0.4em] text-orange-300 sm:text-sm sm:tracking-[0.5em]">{eyebrow}</p>
+      <h2 className="mb-6 text-center text-3xl font-black uppercase tracking-[0.14em] sm:text-4xl sm:tracking-[0.2em]">{title}</h2>
+      <p className="mx-auto mb-10 max-w-2xl text-center leading-7 text-neutral-400 sm:mb-14">{intro}</p>
 
       <div className="mx-auto grid max-w-7xl gap-4 sm:gap-6 md:grid-cols-4">
         {featuredProducts.map((product, index) => {

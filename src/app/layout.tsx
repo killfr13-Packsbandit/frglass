@@ -5,6 +5,7 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import { LanguageProvider } from "./components/LanguageProvider";
 import LanguageWelcome from "./components/LanguageWelcome";
+import { SiteContentProvider } from "./components/SiteContentProvider";
 import { siteConfig } from "./siteConfig";
 
 const geistSans = Geist({
@@ -61,10 +62,12 @@ export default function RootLayout({
     >
       <body className="min-h-full bg-black flex flex-col">
         <LanguageProvider>
-          <LanguageWelcome />
-          <Navbar />
-          {children}
-          <Footer />
+          <SiteContentProvider>
+            <LanguageWelcome />
+            <Navbar />
+            {children}
+            <Footer />
+          </SiteContentProvider>
         </LanguageProvider>
       </body>
     </html>

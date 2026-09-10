@@ -8,6 +8,7 @@ import { useLanguage } from "./LanguageProvider";
 import ProductPicture from "./ProductPicture";
 import { useProductCategories } from "./useProductCategories";
 import { useProducts } from "./useProducts";
+import { useSiteContent } from "./SiteContentProvider";
 
 const copy = {
   en: {
@@ -30,10 +31,12 @@ const copy = {
 
 export default function InquiryShop() {
   const { language } = useLanguage();
+  const { get } = useSiteContent();
   const { products } = useProducts();
   const { categories } = useProductCategories();
   const [activeCategory, setActiveCategory] = useState("all");
   const t = copy[language];
+  const lang = language === "de" ? "de" : "en";
   const availableProducts = products.filter((product) => product.status === "Available");
 
   const visibleCategories = useMemo(
@@ -69,9 +72,15 @@ export default function InquiryShop() {
   return (
     <section className="bg-black px-4 py-24 text-white sm:px-6 sm:py-32">
       <div className="mx-auto max-w-7xl">
-        <p className="mb-4 text-center text-xs font-bold uppercase tracking-[0.4em] text-orange-300 sm:text-sm sm:tracking-[0.5em]">{t.eyebrow}</p>
-        <h1 className="break-words text-center text-4xl font-black uppercase sm:text-6xl">{t.title}</h1>
-        <p className="mx-auto mb-10 mt-6 max-w-2xl text-center leading-7 text-neutral-300 sm:mb-12">{t.intro}</p>
+        <p className="mb-4 text-center text-xs font-bold uppercase tracking-[0.4em] text-orange-300 sm:text-sm sm:tracking-[0.5em]">
+          {get(`shop.eyebrow.${lang}`, t.eyebrow)}
+        </p>
+        <h1 className="break-words text-center text-4xl font-black uppercase sm:text-6xl">
+          {get(`shop.title.${lang}`, t.title)}
+        </h1>
+        <p className="mx-auto mb-10 mt-6 max-w-2xl text-center leading-7 text-neutral-300 sm:mb-12">
+          {get(`shop.intro.${lang}`, t.intro)}
+        </p>
 
         {visibleCategories.length > 1 && (
           <div className="mx-auto mb-12 flex max-w-4xl flex-wrap justify-center gap-2 sm:mb-16">

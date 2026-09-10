@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { useLanguage } from "./LanguageProvider";
+import { useSiteContent } from "./SiteContentProvider";
 
 type Review = {
   id: string;
@@ -19,7 +20,9 @@ function stars(rating: number) {
 
 export default function HomeCommunityReviews() {
   const { language } = useLanguage();
+  const { get } = useSiteContent();
   const [reviews, setReviews] = useState<Review[]>([]);
+  const lang = language === "de" ? "de" : "en";
 
   useEffect(() => {
     fetch("/api/community/reviews", { cache: "no-store" })
@@ -36,16 +39,26 @@ export default function HomeCommunityReviews() {
 
   if (!visibleReviews.length) return null;
 
+  const eyebrow = get(`home.reviews.eyebrow.${lang}`, "Community");
+  const title = get(
+    `home.reviews.title.${lang}`,
+    language === "de" ? "Was andere sagen" : "What others say",
+  );
+  const button = get(
+    `home.reviews.button.${lang}`,
+    language === "de" ? "Alle ansehen" : "View all",
+  );
+
   return (
     <section className="bg-black px-4 py-20 text-white sm:px-6 sm:py-24">
       <div className="mx-auto max-w-7xl">
         <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.4em] text-orange-300 sm:text-sm">
-              {language === "de" ? "Community" : "Community"}
+              {eyebrow}
             </p>
             <h2 className="mt-4 text-3xl font-black uppercase sm:text-5xl">
-              {language === "de" ? "Was andere sagen" : "What others say"}
+              {title}
             </h2>
             {average !== null && (
               <p className="mt-4 text-sm text-neutral-400">
@@ -60,7 +73,7 @@ export default function HomeCommunityReviews() {
             href="/community"
             className="inline-flex w-fit rounded-full border border-white/15 px-5 py-3 text-xs font-bold uppercase tracking-widest transition hover:border-orange-300 hover:text-orange-300"
           >
-            {language === "de" ? "Alle ansehen" : "View all"}
+            {button}
           </Link>
         </div>
 

@@ -1,16 +1,58 @@
 "use client";
 
-import Image from "next/image";
 import { translations, useLanguage } from "./LanguageProvider";
+import { useSiteContent } from "./SiteContentProvider";
 
-const workshopImages = [
-  "/workshop/me1.png",
-  "/workshop/me2.jpg",
-];
+function Media({
+  url,
+  type,
+  className,
+  auto = false,
+}: {
+  url: string;
+  type: string;
+  className: string;
+  auto?: boolean;
+}) {
+  if (!url) return null;
+  if (type === "video") {
+    return (
+      <video
+        src={url}
+        autoPlay={auto}
+        muted={auto}
+        loop={auto}
+        controls={!auto}
+        playsInline
+        preload="metadata"
+        className={className}
+      />
+    );
+  }
+  return <img src={url} alt="FRGLASS workshop" className={className} />;
+}
 
 export default function Workshop() {
   const { language } = useLanguage();
+  const { get } = useSiteContent();
   const t = translations[language].workshop;
+  const lang = language === "de" ? "de" : "en";
+
+  const eyebrow = get(`home.workshop.eyebrow.${lang}`, t.eyebrow);
+  const title = get(`home.workshop.title.${lang}`, t.title);
+  const text = get(`home.workshop.text.${lang}`, t.text);
+
+  const mainUrl = get("home.workshop.main.url", "/workshop/hero.mp4");
+  const mainType = get("home.workshop.main.type", "video");
+  const media1Url = get("home.workshop.media1.url", "/workshop/me1.png");
+  const media1Type = get("home.workshop.media1.type", "image");
+  const media2Url = get("home.workshop.media2.url", "/workshop/me2.jpg");
+  const media2Type = get("home.workshop.media2.type", "image");
+
+  const smallMedia = [
+    { url: media1Url, type: media1Type },
+    { url: media2Url, type: media2Type },
+  ].filter((item) => item.url);
 
   return (
     <section className="relative overflow-hidden bg-black px-4 py-20 text-white sm:px-6 sm:py-32">
@@ -19,46 +61,44 @@ export default function Workshop() {
       <div className="relative mx-auto grid max-w-7xl items-center gap-10 sm:gap-16 lg:grid-cols-2">
         <div>
           <p className="mb-4 text-xs font-bold uppercase tracking-[0.4em] text-orange-300 sm:text-sm sm:tracking-[0.5em]">
-            {t.eyebrow}
+            {eyebrow}
           </p>
 
           <h2 className="text-4xl font-black uppercase leading-tight sm:text-5xl">
-            {t.title}
+            {title}
           </h2>
 
           <p className="mt-6 text-base leading-7 text-neutral-300 sm:mt-8 sm:text-lg sm:leading-8">
-            {t.text}
+            {text}
           </p>
         </div>
 
         <div className="min-w-0 space-y-4 sm:space-y-6">
-          <video
-            src="/workshop/hero.mp4"
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="metadata"
-            poster="/workshop/me2.jpg"
-            className="aspect-video w-full rounded-2xl border border-white/10 object-cover shadow-2xl sm:rounded-3xl"
-          />
+          {mainUrl && (
+            <Media
+              url={mainUrl}
+              type={mainType}
+              auto={mainType === "video"}
+              className="aspect-video w-full rounded-2xl border border-white/10 object-cover shadow-2xl sm:rounded-3xl"
+            />
+          )}
 
-          <div className="grid grid-cols-2 gap-3 sm:gap-6">
-            {workshopImages.map((src) => (
-              <div
-                key={src}
-                className="relative aspect-[4/3] overflow-hidden rounded-xl border border-white/10 sm:rounded-2xl"
-              >
-                <Image
-                  src={src}
-                  alt="FRGLASS workshop"
-                  fill
-                  sizes="(min-width: 1024px) 25vw, 50vw"
-                  className="object-cover object-[center_20%]"
-                />
-              </div>
-            ))}
-          </div>
+          {smallMedia.length > 0 && (
+            <div className={`grid gap-3 sm:gap-6 ${smallMedia.length > 1 ? "grid-cols-2" : "grid-cols-1"}`}>
+              {smallMedia.map((item, index) => (
+                <div
+                  key={`${item.url}-${index}`}
+                  className="relative aspect-[4/3] overflow-hidden rounded-xl border border-white/10 bg-neutral-950 sm:rounded-2xl"
+                >
+                  <Media
+                    url={item.url}
+                    type={item.type}
+                    className="h-full w-full object-cover object-[center_20%]"
+                  />
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </section>

@@ -2,15 +2,24 @@
 
 import Image from "next/image";
 import { translations, useLanguage } from "./LanguageProvider";
+import { useSiteContent } from "./SiteContentProvider";
 
 export default function Hero() {
   const { language } = useLanguage();
+  const { get } = useSiteContent();
   const t = translations[language].hero;
+  const lang = language === "de" ? "de" : "en";
 
   const tags =
     language === "de"
       ? ["Lampworking", "Schmuck", "Objekte"]
       : ["Lampworking", "Jewelry", "Objects"];
+
+  const subtitle = get(`home.hero.subtitle.${lang}`, t.subtitle);
+  const text = get(`home.hero.text.${lang}`, t.text);
+  const cta = get(`home.hero.cta.${lang}`, t.cta);
+  const mediaUrl = get("home.hero.media.url", "/hero/hero.mp4");
+  const mediaType = get("home.hero.media.type", "video");
 
   return (
     <section className="overflow-x-hidden bg-black pt-24 text-white">
@@ -39,7 +48,7 @@ export default function Hero() {
                     FRGLASS
                   </h1>
                   <p className="mt-3 break-words text-xs font-semibold uppercase tracking-[0.16em] text-neutral-400 sm:text-base sm:tracking-[0.2em]">
-                    {t.subtitle}
+                    {subtitle}
                   </p>
                 </div>
               </div>
@@ -47,7 +56,7 @@ export default function Hero() {
               <div className="my-6 h-px bg-gradient-to-r from-orange-300/60 via-white/15 to-transparent sm:my-7" />
 
               <p className="max-w-lg text-base leading-7 text-neutral-300 sm:text-lg sm:leading-8">
-                {t.text}
+                {text}
               </p>
 
               <div className="mt-6 flex flex-wrap gap-2 sm:mt-7">
@@ -65,23 +74,32 @@ export default function Hero() {
                 href="#collections"
                 className="mt-7 inline-flex max-w-full items-center gap-3 rounded-full bg-orange-300 px-5 py-3 text-xs font-bold uppercase tracking-[0.13em] text-black transition hover:bg-orange-200 sm:mt-8 sm:px-6 sm:text-sm sm:tracking-[0.16em]"
               >
-                {t.cta}
+                {cta}
                 <span aria-hidden="true">↘</span>
               </a>
             </div>
           </div>
         </div>
 
-        <div className="relative min-h-[55vh] min-w-0 overflow-hidden sm:min-h-[62vh] xl:min-h-full">
-          <video
-            src="/hero/hero.mp4"
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="metadata"
-            className="absolute inset-0 h-full w-full object-cover"
-          />
+        <div className="relative min-h-[55vh] min-w-0 overflow-hidden bg-neutral-950 sm:min-h-[62vh] xl:min-h-full">
+          {mediaUrl &&
+            (mediaType === "image" ? (
+              <img
+                src={mediaUrl}
+                alt=""
+                className="absolute inset-0 h-full w-full object-cover"
+              />
+            ) : (
+              <video
+                src={mediaUrl}
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="metadata"
+                className="absolute inset-0 h-full w-full object-cover"
+              />
+            ))}
           <div className="absolute inset-0 bg-gradient-to-r from-black/25 via-transparent to-black/10" />
           <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-black/45 to-transparent xl:hidden" />
         </div>

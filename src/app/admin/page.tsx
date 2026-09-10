@@ -63,7 +63,7 @@ export default function Page() {
         {session && !session.authenticated && (
           <form onSubmit={login} className="mt-10 max-w-lg rounded-3xl border border-white/10 bg-white/[0.04] p-6 sm:p-8">
             <h2 className="text-xl font-black">Login</h2>
-            <p className="mt-2 text-sm leading-6 text-neutral-400">Dein FRGLASS-Adminbereich für Produkte, Kategorien, Studio und Community-Bewertungen.</p>
+            <p className="mt-2 text-sm leading-6 text-neutral-400">Dein FRGLASS-Adminbereich für Seiten, Produkte, Kategorien, Studio und Community-Bewertungen.</p>
             <input type="password" value={password} onChange={(event) => setPassword(event.target.value)} placeholder="Passwort" required className="mt-6 w-full rounded-2xl border border-white/10 bg-black/50 px-4 py-3 outline-none focus:border-orange-300/60" />
             {error && <p className="mt-3 text-sm text-red-300">{error}</p>}
             <button type="submit" disabled={loading} className="mt-5 w-full rounded-full bg-white px-5 py-3 font-black uppercase tracking-wider text-black disabled:opacity-50">{loading ? "Login …" : "Einloggen"}</button>
@@ -72,10 +72,11 @@ export default function Page() {
 
         {session?.authenticated && (
           <div className="mt-10">
-            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-              <Link href="/admin/products" className="rounded-3xl border border-orange-300/20 bg-orange-300/[0.05] p-6 transition hover:border-orange-300/50 hover:bg-orange-300/[0.08]"><span className="text-3xl">◆</span><h2 className="mt-5 text-xl font-black uppercase">Produkte</h2><p className="mt-2 text-sm leading-6 text-neutral-400">Produkte anlegen, Preise, Texte, Bilder und Status verwalten.</p></Link>
+            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              <Link href="/admin/pages" className="rounded-3xl border border-orange-300/25 bg-orange-300/[0.06] p-6 transition hover:border-orange-300/55 hover:bg-orange-300/[0.1]"><span className="text-3xl">✎</span><h2 className="mt-5 text-xl font-black uppercase">Seiten</h2><p className="mt-2 text-sm leading-6 text-neutral-400">Überschriften, Texte sowie Bilder und Videos auf Startseite, Studio, Über mich, Shop und Galerie bearbeiten.</p></Link>
+              <Link href="/admin/products" className="rounded-3xl border border-white/10 bg-white/[0.04] p-6 transition hover:border-orange-300/40 hover:bg-white/[0.06]"><span className="text-3xl">◆</span><h2 className="mt-5 text-xl font-black uppercase">Produkte</h2><p className="mt-2 text-sm leading-6 text-neutral-400">Produkte anlegen, Preise, Texte, Bilder und Status verwalten.</p></Link>
               <Link href="/admin/categories" className="rounded-3xl border border-white/10 bg-white/[0.04] p-6 transition hover:border-orange-300/40 hover:bg-white/[0.06]"><span className="text-3xl">▦</span><h2 className="mt-5 text-xl font-black uppercase">Kategorien</h2><p className="mt-2 text-sm leading-6 text-neutral-400">Shop-Unterteilungen wie Schmuck, Vasen oder Skulpturen anlegen und sortieren.</p></Link>
-              <Link href="/admin/studio" className="rounded-3xl border border-white/10 bg-white/[0.04] p-6 transition hover:border-orange-300/40 hover:bg-white/[0.06]"><span className="text-3xl">🔥</span><h2 className="mt-5 text-xl font-black uppercase">Studio</h2><p className="mt-2 text-sm leading-6 text-neutral-400">Studiobilder und Videos hochladen, sortieren, beschreiben oder entfernen.</p></Link>
+              <Link href="/admin/studio" className="rounded-3xl border border-white/10 bg-white/[0.04] p-6 transition hover:border-orange-300/40 hover:bg-white/[0.06]"><span className="text-3xl">🔥</span><h2 className="mt-5 text-xl font-black uppercase">Studio-Medien</h2><p className="mt-2 text-sm leading-6 text-neutral-400">Die Foto-/Video-Galerie auf der Studio-Seite hochladen, sortieren und kurz beschreiben.</p></Link>
               <Link href="/admin/community" className="rounded-3xl border border-white/10 bg-white/[0.04] p-6 transition hover:border-orange-300/40 hover:bg-white/[0.06]"><span className="text-3xl">★</span><h2 className="mt-5 text-xl font-black uppercase">Community</h2><p className="mt-2 text-sm leading-6 text-neutral-400">Neue Bewertungen ansehen, freigeben oder löschen.</p></Link>
             </div>
             <button onClick={logout} className="mt-8 text-sm text-neutral-500 transition hover:text-white">Ausloggen</button>
