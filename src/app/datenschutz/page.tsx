@@ -51,24 +51,24 @@ export default function Page() {
   const t = copy[language];
 
   return (
-    <main className="min-h-screen bg-black px-6 py-32 text-white">
+    <main className="min-h-screen bg-black px-4 py-24 text-white sm:px-6 sm:py-32">
       <section className="mx-auto max-w-4xl">
-        <p className="mb-4 text-sm font-bold uppercase tracking-[0.5em] text-orange-300">{t.eyebrow}</p>
-        <h1 className="text-5xl font-black uppercase sm:text-6xl">{t.title}</h1>
-        <p className="mt-8 max-w-3xl text-lg leading-8 text-neutral-300">{t.intro}</p>
+        <p className="mb-4 text-xs font-bold uppercase tracking-[0.4em] text-orange-300 sm:text-sm sm:tracking-[0.5em]">{t.eyebrow}</p>
+        <h1 className="break-words text-4xl font-black uppercase sm:text-6xl">{t.title}</h1>
+        <p className="mt-6 max-w-3xl text-base leading-7 text-neutral-300 sm:mt-8 sm:text-lg sm:leading-8">{t.intro}</p>
 
-        <div className="mt-14 space-y-10 text-neutral-300">
+        <div className="mt-10 space-y-8 text-neutral-300 sm:mt-14 sm:space-y-10">
           <div>
-            <h2 className="text-xl font-bold text-white">{t.controller}</h2>
-            <p className="mt-3 leading-8">Florian Mario Robatsch<br />Muschker Straße 9/5<br />9321 Kappel/Krappfeld<br />Austria<br /><a className="text-orange-300 hover:text-orange-200" href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a></p>
+            <h2 className="text-lg font-bold text-white sm:text-xl">{t.controller}</h2>
+            <p className="mt-3 leading-7 sm:leading-8">Florian Mario Robatsch<br />Muschker Straße 9/5<br />9321 Kappel/Krappfeld<br />Austria<br /><a className="break-all text-orange-300 hover:text-orange-200" href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a></p>
           </div>
 
-          <div><h2 className="text-xl font-bold text-white">{t.hosting}</h2><p className="mt-3 leading-8">{t.hostingText}</p></div>
-          <div><h2 className="text-xl font-bold text-white">{t.language}</h2><p className="mt-3 leading-8">{t.languageText}</p></div>
-          <div><h2 className="text-xl font-bold text-white">{t.contact}</h2><p className="mt-3 leading-8">{t.contactText}</p></div>
-          <div><h2 className="text-xl font-bold text-white">{t.external}</h2><p className="mt-3 leading-8">{t.externalText}</p></div>
-          <div><h2 className="text-xl font-bold text-white">{t.tracking}</h2><p className="mt-3 leading-8">{t.trackingText}</p></div>
-          <div><h2 className="text-xl font-bold text-white">{t.rights}</h2><p className="mt-3 leading-8">{t.rightsText}</p><p className="mt-3 leading-8">{t.authority}</p></div>
+          <div><h2 className="text-lg font-bold text-white sm:text-xl">{t.hosting}</h2><p className="mt-3 leading-7 sm:leading-8">{t.hostingText}</p></div>
+          <div><h2 className="text-lg font-bold text-white sm:text-xl">{t.language}</h2><p className="mt-3 leading-7 sm:leading-8">{t.languageText}</p></div>
+          <div><h2 className="text-lg font-bold text-white sm:text-xl">{t.contact}</h2><p className="mt-3 leading-7 sm:leading-8">{t.contactText}</p></div>
+          <div><h2 className="text-lg font-bold text-white sm:text-xl">{t.external}</h2><p className="mt-3 leading-7 sm:leading-8">{t.externalText}</p></div>
+          <div><h2 className="text-lg font-bold text-white sm:text-xl">{t.tracking}</h2><p className="mt-3 leading-7 sm:leading-8">{t.trackingText}</p></div>
+          <div><h2 className="text-lg font-bold text-white sm:text-xl">{t.rights}</h2><p className="mt-3 leading-7 sm:leading-8">{t.rightsText}</p><p className="mt-3 leading-7 sm:leading-8">{t.authority}</p></div>
 
           <p className="pt-4 text-sm text-neutral-500">{t.updated}</p>
         </div>
