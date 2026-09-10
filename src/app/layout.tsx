@@ -25,6 +25,9 @@ export const metadata: Metadata = {
   },
   description: "Handmade borosilicate glass, jewelry and objects by FRGLASS.",
   applicationName: siteConfig.name,
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
     type: "website",
     siteName: siteConfig.name,
