@@ -7,17 +7,19 @@ const copy = {
     eyebrow: "About",
     title1: "Florian Robatsch",
     title2: "Carinthia, Austria.",
-    p1: "I'm Florian Robatsch from Carinthia, Austria. I enjoy working with my hands and I like processes where material, tools and heat come together directly.",
-    p2: "That is exactly what drew me to borosilicate glass. At the torch I make jewelry, marbles, small objects and all kinds of experiments. Some pieces are planned in advance, while others develop during the process.",
-    p3: "FRGLASS is the name I use to show this work online. I am continuously building up my workshop and, over time, I would like to create more space for exchange, shared sessions and maybe small workshops.",
+    p1: "Hey, my name is Florian Robatsch. Since 2019, I have been working intensively with borosilicate glass and discovered my passion for lampworking – a special form of glasswork at the flame.",
+    p2: "What continues to fascinate me about it is the combination of precision and creativity. With a steady hand and a lot of heat, a hard and robust material can become something light, playful and often completely unexpected.",
+    p3: "My work usually develops from a mixture of intuition, ideas and the joy of experimenting. I try not to plan every detail in advance, but instead leave some space for the glass and the process itself. I especially enjoy working with organic shapes, colors and details that give my pieces a natural and sometimes dreamlike character.",
+    p4: "Not every piece develops exactly the way I originally imagined – and that is part of the process for me. I still find it fascinating to create something individual from glass that feels delicate and alive at the same time.",
   },
   de: {
-    eyebrow: "Über mich",
+    eyebrow: "Biografie",
     title1: "Florian Robatsch",
     title2: "Kärnten, Österreich.",
-    p1: "Ich bin Florian Robatsch aus Kärnten in Österreich. Ich arbeite gerne mit den Händen und mag Prozesse, bei denen Material, Werkzeug und Hitze direkt zusammenspielen.",
-    p2: "Genau deshalb hat mich Borosilikatglas schnell gepackt. Am Brenner entstehen Schmuck, Murmeln, kleine Objekte und immer wieder neue Versuche. Manche Stücke sind vorher geplant, andere entwickeln sich erst während der Arbeit.",
-    p3: "FRGLASS ist der Name, unter dem ich diese Arbeiten online zeige. Meine Werkstatt baue ich laufend weiter aus. Langfristig möchte ich dort auch Raum für Austausch, gemeinsame Sessions und vielleicht kleine Workshops schaffen.",
+    p1: "Hey, mein Name ist Florian Robatsch. Seit 2019 beschäftige ich mich intensiv mit Borosilikatglas und habe dabei meine Leidenschaft für das Lampworking entdeckt – eine besondere Form der Glasbearbeitung an der Flamme.",
+    p2: "Was mich daran bis heute fasziniert, ist die Verbindung aus Präzision und Kreativität. Mit ruhiger Hand und viel Hitze entsteht aus einem eigentlich harten und robusten Material etwas Leichtes, Verspieltes und oft ganz Unerwartetes.",
+    p3: "Meine Arbeiten entstehen meist aus einer Mischung aus Intuition, Ideen und der Freude am Experimentieren. Ich versuche dabei nicht, jedes Detail im Voraus festzulegen, sondern lasse dem Glas und dem Entstehungsprozess auch etwas Raum. Besonders gerne arbeite ich mit organischen Formen, Farben und Details, die meinen Stücken einen natürlichen und manchmal verträumten Charakter geben.",
+    p4: "Nicht jedes Stück entwickelt sich genau so, wie ich es ursprünglich geplant habe – und gerade das gehört für mich dazu. Es begeistert mich immer wieder, aus Glas etwas Eigenständiges zu erschaffen, das filigran und gleichzeitig lebendig wirkt.",
   },
 } as const;
 
@@ -42,6 +44,7 @@ export default function Page() {
           <p className="mt-8 text-lg leading-8 text-neutral-300">{t.p1}</p>
           <p className="mt-6 text-lg leading-8 text-neutral-300">{t.p2}</p>
           <p className="mt-6 text-lg leading-8 text-neutral-300">{t.p3}</p>
+          <p className="mt-6 text-lg leading-8 text-neutral-300">{t.p4}</p>
         </div>
 
         <div className="overflow-hidden rounded-3xl border border-white/10 bg-white/5">
