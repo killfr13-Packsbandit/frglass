@@ -10,6 +10,7 @@ const navItems = [
   { href: "/studio", label: "studio" },
   { href: "/shop", label: "shop" },
   { href: "/journal", label: "journal" },
+  { href: "/community", label: "community" },
   { href: "/about", label: "about" },
   { href: "/contact", label: "contact" },
 ] as const;
@@ -41,8 +42,8 @@ export default function Navbar() {
           </span>
         </Link>
 
-        <div className="hidden items-center gap-7 md:flex">
-          <div className="flex gap-7 text-sm uppercase tracking-widest">
+        <div className="hidden items-center gap-6 md:flex">
+          <div className="flex gap-6 text-sm uppercase tracking-widest">
             {navItems.map((item) => (
               <Link key={item.href} href={item.href} className="transition hover:text-orange-300">
                 {t.nav[item.label]}
