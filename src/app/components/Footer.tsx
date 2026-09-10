@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { siteConfig } from "../siteConfig";
 import { translations, useLanguage } from "./LanguageProvider";
@@ -24,6 +25,22 @@ export default function Footer() {
           <h2 className="text-2xl font-black uppercase tracking-[0.3em]">
             {siteConfig.name}
           </h2>
+
+          <Link
+            href="/admin/behind-the-scenes"
+            aria-label="Admin"
+            className="mt-5 inline-flex opacity-25 transition hover:opacity-70 focus:opacity-70"
+          >
+            <span className="relative block h-8 w-8 overflow-hidden rounded-full">
+              <Image
+                src="/logo.png"
+                alt=""
+                fill
+                sizes="32px"
+                className="scale-125 object-cover object-center"
+              />
+            </span>
+          </Link>
         </div>
 
         <div>
