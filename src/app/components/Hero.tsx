@@ -11,6 +11,10 @@ export default function Hero() {
       <div className="mx-auto grid min-h-[calc(100vh-6rem)] max-w-[1600px] lg:grid-cols-[0.85fr_1.15fr]">
         <div className="flex items-center px-6 py-16 sm:px-10 lg:px-16 xl:px-24">
           <div className="w-full max-w-xl">
+            <p className="mb-6 text-xs font-semibold uppercase tracking-[0.32em] text-orange-300 sm:text-sm">
+              {t.eyebrow}
+            </p>
+
             <img
               src="/logo.png"
               alt="FRGLASS"
