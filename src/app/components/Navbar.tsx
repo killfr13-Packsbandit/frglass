@@ -28,12 +28,14 @@ export default function Navbar() {
           className="flex items-center gap-3"
           onClick={() => setMenuOpen(false)}
         >
-          <img
-            src="/logo.png"
-            alt=""
-            aria-hidden="true"
-            className="h-8 w-6 object-contain sm:h-9 sm:w-7"
-          />
+          <span className="relative h-8 w-7 shrink-0 overflow-hidden sm:h-9 sm:w-8">
+            <img
+              src="/logo.png"
+              alt=""
+              aria-hidden="true"
+              className="absolute inset-0 h-full w-full scale-125 object-cover object-center"
+            />
+          </span>
           <span className="text-lg font-black tracking-[0.28em] sm:text-xl sm:tracking-[0.3em]">
             {siteConfig.name}
           </span>
