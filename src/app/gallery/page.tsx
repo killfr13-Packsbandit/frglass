@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
 import { useLanguage } from "../components/LanguageProvider";
 
@@ -41,6 +42,8 @@ export default function Page() {
   return (
     <main className="min-h-screen bg-black px-6 py-32 text-white">
       <section className="mx-auto max-w-7xl">
+        <h1 className="sr-only">{t.eyebrow}</h1>
+
         <p className="mb-6 text-center text-sm font-bold uppercase tracking-[0.5em] text-orange-300">
           {t.eyebrow}
         </p>
@@ -53,13 +56,16 @@ export default function Page() {
           {galleryImages.map((src) => (
             <button
               key={src}
+              type="button"
               onClick={() => setActiveImage(src)}
-              className="group flex h-[460px] items-center justify-center overflow-hidden rounded-3xl border border-white/10 bg-neutral-950 p-3 text-left"
+              className="group relative flex h-[460px] items-center justify-center overflow-hidden rounded-3xl border border-white/10 bg-neutral-950 p-3 text-left"
             >
-              <img
+              <Image
                 src={src}
                 alt={t.imageAlt}
-                className="h-full w-full object-contain transition duration-700 group-hover:scale-[1.03]"
+                fill
+                sizes="(min-width: 768px) 33vw, 100vw"
+                className="object-contain p-3 transition duration-700 group-hover:scale-[1.03]"
               />
             </button>
           ))}
@@ -71,15 +77,20 @@ export default function Page() {
           onClick={() => setActiveImage(null)}
           className="fixed inset-0 z-[999] flex items-center justify-center bg-black/90 p-6"
         >
-          <img
-            src={activeImage}
-            alt={t.enlargedAlt}
-            className="max-h-[90vh] max-w-[90vw] rounded-3xl object-contain"
-          />
+          <div className="relative h-[90vh] w-[90vw]">
+            <Image
+              src={activeImage}
+              alt={t.enlargedAlt}
+              fill
+              sizes="90vw"
+              className="object-contain"
+            />
+          </div>
 
           <button
+            type="button"
             onClick={() => setActiveImage(null)}
-            className="absolute right-8 top-8 text-4xl text-white"
+            className="absolute right-8 top-8 z-10 text-4xl text-white"
             aria-label={t.close}
           >
             ×
