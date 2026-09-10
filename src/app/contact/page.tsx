@@ -39,25 +39,25 @@ export default function Page() {
   const t = copy[language];
 
   return (
-    <main className="min-h-screen bg-black px-6 py-32 text-white">
-      <section className="mx-auto grid max-w-7xl gap-16 md:grid-cols-2 md:items-center">
+    <main className="min-h-screen bg-black px-4 py-24 text-white sm:px-6 sm:py-32">
+      <section className="mx-auto grid max-w-7xl gap-10 sm:gap-16 md:grid-cols-2 md:items-center">
         <div>
-          <p className="mb-4 text-sm font-bold uppercase tracking-[0.5em] text-orange-300">
+          <p className="mb-4 text-xs font-bold uppercase tracking-[0.4em] text-orange-300 sm:text-sm sm:tracking-[0.5em]">
             {t.eyebrow}
           </p>
 
-          <h1 className="text-6xl font-black uppercase leading-tight">
+          <h1 className="text-4xl font-black uppercase leading-tight sm:text-6xl">
             {t.title}
           </h1>
 
-          <p className="mt-8 text-lg leading-8 text-neutral-300">
+          <p className="mt-6 text-base leading-7 text-neutral-300 sm:mt-8 sm:text-lg sm:leading-8">
             {t.intro}
           </p>
 
-          <div className="mt-10 flex flex-col gap-4">
+          <div className="mt-8 flex flex-col gap-3 sm:mt-10 sm:gap-4">
             <a
               href={`mailto:${siteConfig.email}?subject=${encodeURIComponent(t.subject)}`}
-              className="inline-block w-fit rounded-full bg-orange-300 px-8 py-4 font-bold uppercase tracking-widest text-black transition hover:bg-white"
+              className="inline-block w-full rounded-full bg-orange-300 px-6 py-4 text-center text-sm font-bold uppercase tracking-widest text-black transition hover:bg-white sm:w-fit sm:px-8"
             >
               {t.email}
             </a>
@@ -66,19 +66,19 @@ export default function Page() {
               href={siteConfig.instagram}
               target="_blank"
               rel="noreferrer"
-              className="inline-block w-fit rounded-full border border-white/20 px-8 py-4 font-bold uppercase tracking-widest text-white transition hover:border-orange-300 hover:text-orange-300"
+              className="inline-block w-full rounded-full border border-white/20 px-6 py-4 text-center text-sm font-bold uppercase tracking-widest text-white transition hover:border-orange-300 hover:text-orange-300 sm:w-fit sm:px-8"
             >
               Instagram
             </a>
           </div>
         </div>
 
-        <div className="rounded-3xl border border-white/10 bg-white/5 p-10">
-          <h2 className="text-3xl font-black uppercase">
+        <div className="rounded-2xl border border-white/10 bg-white/5 p-6 sm:rounded-3xl sm:p-10">
+          <h2 className="text-2xl font-black uppercase sm:text-3xl">
             {t.vision}
           </h2>
 
-          <div className="mt-8 grid gap-5 text-neutral-300">
+          <div className="mt-6 grid gap-4 text-neutral-300 sm:mt-8 sm:gap-5">
             {t.items.map((item) => (
               <p key={item}>— {item}</p>
             ))}
