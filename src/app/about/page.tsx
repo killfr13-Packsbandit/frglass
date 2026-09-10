@@ -25,22 +25,22 @@ export default function Page() {
   const t = copy[language];
 
   return (
-    <main className="min-h-screen bg-black px-6 py-32 text-white">
+    <main className="min-h-screen bg-black px-4 py-24 text-white sm:px-6 sm:py-32">
       <h1 className="sr-only">{language === "de" ? "Über mich" : "About FRGLASS"}</h1>
 
-      <section className="mx-auto grid max-w-7xl gap-16 md:grid-cols-2 md:items-center">
+      <section className="mx-auto grid max-w-7xl gap-10 sm:gap-16 md:grid-cols-2 md:items-center">
         <div>
-          <p className="mb-8 text-sm font-bold uppercase tracking-[0.5em] text-orange-300">
+          <p className="mb-6 text-xs font-bold uppercase tracking-[0.4em] text-orange-300 sm:mb-8 sm:text-sm sm:tracking-[0.5em]">
             {t.eyebrow}
           </p>
 
-          <p className="text-lg leading-8 text-neutral-300">{t.p1}</p>
-          <p className="mt-6 text-lg leading-8 text-neutral-300">{t.p2}</p>
-          <p className="mt-6 text-lg leading-8 text-neutral-300">{t.p3}</p>
-          <p className="mt-6 text-lg leading-8 text-neutral-300">{t.p4}</p>
+          <p className="text-base leading-7 text-neutral-300 sm:text-lg sm:leading-8">{t.p1}</p>
+          <p className="mt-5 text-base leading-7 text-neutral-300 sm:mt-6 sm:text-lg sm:leading-8">{t.p2}</p>
+          <p className="mt-5 text-base leading-7 text-neutral-300 sm:mt-6 sm:text-lg sm:leading-8">{t.p3}</p>
+          <p className="mt-5 text-base leading-7 text-neutral-300 sm:mt-6 sm:text-lg sm:leading-8">{t.p4}</p>
         </div>
 
-        <div className="relative h-[720px] overflow-hidden rounded-3xl border border-white/10 bg-white/5">
+        <div className="relative h-[460px] overflow-hidden rounded-2xl border border-white/10 bg-white/5 sm:h-[600px] sm:rounded-3xl md:h-[720px]">
           <Image
             src="/workshop/me1.png"
             alt={language === "de" ? "Arbeit am Glasbrenner" : "Working at the glass torch"}
