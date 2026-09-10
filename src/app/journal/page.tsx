@@ -62,6 +62,11 @@ const copy = {
   },
 } as const;
 
+function formatPrice(value: string) {
+  const price = value.trim();
+  return price.startsWith("€") ? price : `€${price}`;
+}
+
 export default function Page() {
   const { language } = useLanguage();
   const t = copy[language];
@@ -81,25 +86,25 @@ export default function Page() {
   const currentProduct = availableProducts[productIndex % Math.max(availableProducts.length, 1)];
 
   return (
-    <main className="min-h-screen bg-black px-6 py-32 text-white">
+    <main className="min-h-screen bg-black px-4 py-24 text-white sm:px-6 sm:py-32">
       <section className="mx-auto max-w-7xl">
-        <p className="mb-4 text-center text-sm font-bold uppercase tracking-[0.5em] text-orange-300">
+        <p className="mb-4 text-center text-xs font-bold uppercase tracking-[0.4em] text-orange-300 sm:text-sm sm:tracking-[0.5em]">
           {t.eyebrow}
         </p>
 
-        <h1 className="text-center text-5xl font-black uppercase md:text-6xl">
+        <h1 className="break-words text-center text-4xl font-black uppercase sm:text-5xl md:text-6xl">
           {t.title}
         </h1>
 
-        <p className="mx-auto mb-16 mt-6 max-w-2xl text-center text-neutral-300">
+        <p className="mx-auto mb-12 mt-6 max-w-2xl text-center leading-7 text-neutral-300 sm:mb-16">
           {t.intro}
         </p>
 
-        <div className="grid gap-8 md:grid-cols-3">
+        <div className="grid gap-6 sm:gap-8 md:grid-cols-3">
           {currentProduct && (
             <Link href={`/shop/${currentProduct.slug}`} className="block">
-              <article className="h-full overflow-hidden rounded-3xl border border-white/10 bg-white/5 transition duration-500 hover:-translate-y-2 hover:border-orange-300/60">
-                <div className="relative h-[360px] bg-neutral-950">
+              <article className="h-full overflow-hidden rounded-2xl border border-white/10 bg-white/5 transition duration-500 hover:-translate-y-2 hover:border-orange-300/60 sm:rounded-3xl">
+                <div className="relative h-[300px] bg-neutral-950 sm:h-[360px]">
                   <Image
                     key={currentProduct.image}
                     src={currentProduct.image}
@@ -110,17 +115,17 @@ export default function Page() {
                   />
                 </div>
 
-                <div className="p-6">
+                <div className="p-5 sm:p-6">
                   <p className="mb-3 text-xs font-bold uppercase tracking-[0.3em] text-orange-300">
                     {t.pieces}
                   </p>
 
-                  <h2 className="text-2xl font-black uppercase">
+                  <h2 className="text-xl font-black uppercase sm:text-2xl">
                     {t.newWork}
                   </h2>
 
                   <p className="mt-4 text-neutral-300">
-                    {language === "de" ? currentProduct.nameDe : currentProduct.name} · {language === "de" ? currentProduct.priceDe : currentProduct.price}
+                    {language === "de" ? currentProduct.nameDe : currentProduct.name} · {formatPrice(language === "de" ? currentProduct.priceDe : currentProduct.price)}
                   </p>
 
                   <p className="mt-6 text-sm font-bold uppercase tracking-[0.25em] text-orange-300">
@@ -133,8 +138,8 @@ export default function Page() {
 
           {posts[language].map((post) => (
             <Link key={post.title} href={post.href} className="block">
-              <article className="h-full overflow-hidden rounded-3xl border border-white/10 bg-white/5 transition duration-500 hover:-translate-y-2 hover:border-orange-300/60">
-                <div className="relative h-[360px]">
+              <article className="h-full overflow-hidden rounded-2xl border border-white/10 bg-white/5 transition duration-500 hover:-translate-y-2 hover:border-orange-300/60 sm:rounded-3xl">
+                <div className="relative h-[300px] sm:h-[360px]">
                   <Image
                     src={post.image}
                     alt={post.title}
@@ -144,16 +149,16 @@ export default function Page() {
                   />
                 </div>
 
-                <div className="p-6">
+                <div className="p-5 sm:p-6">
                   <p className="mb-3 text-xs font-bold uppercase tracking-[0.3em] text-orange-300">
                     {post.category}
                   </p>
 
-                  <h2 className="text-2xl font-black uppercase">
+                  <h2 className="break-words text-xl font-black uppercase sm:text-2xl">
                     {post.title}
                   </h2>
 
-                  <p className="mt-4 text-neutral-300">{post.excerpt}</p>
+                  <p className="mt-4 leading-7 text-neutral-300">{post.excerpt}</p>
 
                   <p className="mt-6 text-sm font-bold uppercase tracking-[0.25em] text-orange-300">
                     {t.readMore}
