@@ -44,11 +44,11 @@ export const translations = {
     studio: {
       eyebrow: "Workspace",
       title: "The workshop",
-      intro: "I work with borosilicate glass in a small workshop in Austria. Right now I mainly use the space for my own pieces. Later I would like to make some bench time available to experienced glassworkers and maybe offer small sessions.",
+      intro: "I work with borosilicate glass in a small workshop in Austria. Right now I mainly use the space for my own pieces. Later I would like to make the space available to people interested in glass, whether they are just starting out or already have experience, and maybe offer small sessions.",
       cards: [
         {
           title: "Torch rental",
-          text: "A properly equipped workstation for experienced glassworkers is something I would like to offer later.",
+          text: "A properly equipped workstation for people with different levels of experience is something I would like to offer later.",
         },
         {
           title: "Small workshops",
@@ -111,11 +111,11 @@ export const translations = {
     studio: {
       eyebrow: "Werkstatt",
       title: "Der Arbeitsplatz",
-      intro: "Ich arbeite in einer kleinen Werkstatt in Österreich mit Borosilikatglas. Im Moment nutze ich den Platz hauptsächlich für meine eigenen Arbeiten. Später möchte ich eventuell Arbeitsplätze für erfahrene Glasbläser anbieten und kleine Sessions machen.",
+      intro: "Ich arbeite in einer kleinen Werkstatt in Österreich mit Borosilikatglas. Im Moment nutze ich den Platz hauptsächlich für meine eigenen Arbeiten. Später möchte ich den Raum auch für Menschen öffnen, die sich für Glas interessieren – egal ob Einsteiger oder mit Erfahrung – und kleine Sessions anbieten.",
       cards: [
         {
           title: "Brennervermietung",
-          text: "Einen gut ausgestatteten Arbeitsplatz für erfahrene Glasbläser würde ich später gerne anbieten.",
+          text: "Einen gut ausgestatteten Arbeitsplatz für Menschen mit unterschiedlichen Erfahrungsstufen würde ich später gerne anbieten.",
         },
         {
           title: "Kleine Workshops",
