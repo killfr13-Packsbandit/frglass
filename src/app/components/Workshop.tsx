@@ -53,7 +53,7 @@ export default function Workshop() {
                   alt="FRGLASS workshop"
                   fill
                   sizes="(min-width: 1024px) 25vw, 50vw"
-                  className="object-cover"
+                  className="object-cover object-[center_20%]"
                 />
               </div>
             ))}
