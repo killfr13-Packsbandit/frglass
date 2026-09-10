@@ -25,10 +25,18 @@ export default function Navbar() {
       <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 sm:px-8 sm:py-5">
         <Link
           href="/"
-          className="text-lg font-black tracking-[0.28em] sm:text-xl sm:tracking-[0.3em]"
+          className="flex items-center gap-3"
           onClick={() => setMenuOpen(false)}
         >
-          {siteConfig.name}
+          <img
+            src="/favicon.png?v=5"
+            alt=""
+            aria-hidden="true"
+            className="h-8 w-6 object-contain sm:h-9 sm:w-7"
+          />
+          <span className="text-lg font-black tracking-[0.28em] sm:text-xl sm:tracking-[0.3em]">
+            {siteConfig.name}
+          </span>
         </Link>
 
         <div className="hidden items-center gap-7 md:flex">
