@@ -7,47 +7,47 @@ export default function Hero() {
   const t = translations[language].hero;
 
   return (
-    <section className="relative flex min-h-screen items-center justify-center overflow-hidden px-6 pt-24">
-      <video
-        src="/hero/hero.mp4"
-        autoPlay
-        muted
-        loop
-        playsInline
-        className="absolute inset-0 h-full w-full object-cover"
-      />
+    <section className="bg-black pt-24 text-white">
+      <div className="mx-auto grid min-h-[calc(100vh-6rem)] max-w-[1600px] lg:grid-cols-[0.85fr_1.15fr]">
+        <div className="flex items-center px-6 py-20 sm:px-10 lg:px-16 xl:px-24">
+          <div className="max-w-xl">
+            <p className="mb-6 text-xs font-semibold uppercase tracking-[0.42em] text-orange-300 sm:text-sm">
+              {t.eyebrow}
+            </p>
 
-      <div className="absolute inset-0 bg-black/60" />
+            <h1 className="text-5xl font-semibold uppercase leading-none tracking-[0.2em] sm:text-6xl md:text-7xl">
+              FRGLASS
+            </h1>
 
-      <div className="relative z-10 mx-auto w-full max-w-5xl px-4 text-center">
-        <img
-          src="/logo.png"
-          alt="FRGLASS logo"
-          className="mx-auto mb-8 h-20 w-auto"
-        />
+            <p className="mt-6 text-lg font-medium uppercase tracking-[0.2em] text-neutral-200 sm:text-xl">
+              {t.subtitle}
+            </p>
 
-        <p className="mb-6 text-sm font-bold uppercase tracking-[0.5em] text-orange-300">
-          {t.eyebrow}
-        </p>
+            <p className="mt-8 max-w-lg text-base leading-8 text-neutral-400 sm:text-lg">
+              {t.text}
+            </p>
 
-        <h1 className="text-center text-5xl font-black uppercase tracking-[0.18em] sm:text-7xl sm:tracking-[0.28em] md:text-8xl">
-          FRGLASS
-        </h1>
+            <a
+              href="#collections"
+              className="mt-10 inline-flex items-center rounded-full border border-white/20 px-7 py-3 text-sm font-semibold uppercase tracking-[0.18em] transition hover:border-orange-300 hover:text-orange-300"
+            >
+              {t.cta}
+            </a>
+          </div>
+        </div>
 
-        <p className="mt-4 text-center text-lg font-bold uppercase tracking-[0.22em] text-neutral-100 sm:text-2xl sm:tracking-[0.3em]">
-          {t.subtitle}
-        </p>
-
-        <p className="mx-auto mt-6 max-w-xs text-center text-base text-neutral-200 sm:max-w-xl sm:text-lg">
-          {t.text}
-        </p>
-
-        <a
-          href="#collections"
-          className="mt-10 inline-block border border-white bg-white/10 px-8 py-3 text-sm font-bold uppercase tracking-[0.22em] backdrop-blur transition hover:bg-white hover:text-black"
-        >
-          {t.cta}
-        </a>
+        <div className="relative min-h-[52vh] overflow-hidden lg:min-h-full">
+          <video
+            src="/hero/hero.mp4"
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/35 via-transparent to-black/10 lg:from-black/20" />
+          <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-black/45 to-transparent lg:hidden" />
+        </div>
       </div>
     </section>
   );
