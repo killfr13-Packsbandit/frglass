@@ -1,0 +1,40 @@
+export type ProductRecord = {
+  slug: string;
+  name: string;
+  nameDe: string;
+  category: string;
+  categoryDe: string;
+  price: string;
+  priceDe: string;
+  status: string;
+  statusDe: string;
+  image: string;
+  images: string[];
+  material: string;
+  materialDe: string;
+  colors: string;
+  colorsDe: string;
+  size: string;
+  sizeDe: string;
+  year: string;
+  description: string;
+  descriptionDe: string;
+  story: string;
+  storyDe: string;
+};
+
+export const PRODUCT_STATUS = {
+  Available: "Verfügbar",
+  "Gallery only": "Nur Galerie",
+  Sold: "Verkauft",
+} as const;
+
+export function productStatusDe(status: string) {
+  return PRODUCT_STATUS[status as keyof typeof PRODUCT_STATUS] ?? status;
+}
+
+export function formatProductPrice(value: string) {
+  const price = value.trim();
+  if (!price) return "";
+  return price.startsWith("€") ? price : `€${price}`;
+}
