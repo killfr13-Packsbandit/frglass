@@ -4,12 +4,16 @@ import { useState } from "react";
 import { useLanguage } from "../components/LanguageProvider";
 
 const galleryImages = [
-  "/jewelry/leaf1.jpg",
+  "/jewelry/Cobald5 x Opaldust Leaf.jpg",
   "/jewelry/leaf2.jpg",
-  "/jewelry/leaf3.jpg",
+  "/jewelry/AmberPurple Leaf STube (2).JPG",
   "/jewelry/leaf4.jpg",
   "/jewelry/leaf5.jpg",
   "/jewelry/implo.jpg",
+  "/jewelry/Barkylett.JPG",
+  "/jewelry/Customer.JPG",
+  "/jewelry/IMG_2173 4.JPG",
+  "/jewelry/Mini Heart.JPG",
 ];
 
 const copy = {
