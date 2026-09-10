@@ -57,10 +57,11 @@ async function fallbackCatalog(): Promise<GalleryMediaItem[]> {
       const number = index + 1;
       const mediaUrl = siteContent[`gallery.media${number}.url`] || item.mediaUrl;
       const rawType = siteContent[`gallery.media${number}.type`] || item.mediaType;
+      const mediaType: "image" | "video" = rawType === "video" ? "video" : "image";
       return {
         ...item,
         mediaUrl,
-        mediaType: rawType === "video" ? "video" : "image",
+        mediaType,
       };
     }).filter((item) => item.mediaUrl);
   } catch {
