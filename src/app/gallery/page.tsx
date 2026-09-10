@@ -40,32 +40,32 @@ export default function Page() {
   const t = copy[language];
 
   return (
-    <main className="min-h-screen bg-black px-6 py-32 text-white">
+    <main className="min-h-screen bg-black px-4 py-24 text-white sm:px-6 sm:py-32">
       <section className="mx-auto max-w-7xl">
         <h1 className="sr-only">{t.eyebrow}</h1>
 
-        <p className="mb-6 text-center text-sm font-bold uppercase tracking-[0.5em] text-orange-300">
+        <p className="mb-5 text-center text-xs font-bold uppercase tracking-[0.4em] text-orange-300 sm:mb-6 sm:text-sm sm:tracking-[0.5em]">
           {t.eyebrow}
         </p>
 
-        <p className="mx-auto mb-16 max-w-2xl text-center text-lg leading-8 text-neutral-300">
+        <p className="mx-auto mb-10 max-w-2xl text-center text-base leading-7 text-neutral-300 sm:mb-16 sm:text-lg sm:leading-8">
           {t.intro}
         </p>
 
-        <div className="grid gap-6 md:grid-cols-3">
+        <div className="grid gap-4 sm:gap-6 md:grid-cols-3">
           {galleryImages.map((src) => (
             <button
               key={src}
               type="button"
               onClick={() => setActiveImage(src)}
-              className="group relative flex h-[460px] items-center justify-center overflow-hidden rounded-3xl border border-white/10 bg-neutral-950 p-3 text-left"
+              className="group relative flex h-[360px] items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-neutral-950 p-2 text-left sm:h-[460px] sm:rounded-3xl sm:p-3"
             >
               <Image
                 src={src}
                 alt={t.imageAlt}
                 fill
                 sizes="(min-width: 768px) 33vw, 100vw"
-                className="object-contain p-3 transition duration-700 group-hover:scale-[1.03]"
+                className="object-contain p-2 transition duration-700 group-hover:scale-[1.03] sm:p-3"
               />
             </button>
           ))}
@@ -75,14 +75,14 @@ export default function Page() {
       {activeImage && (
         <div
           onClick={() => setActiveImage(null)}
-          className="fixed inset-0 z-[999] flex items-center justify-center bg-black/90 p-6"
+          className="fixed inset-0 z-[999] flex items-center justify-center bg-black/90 p-3 sm:p-6"
         >
-          <div className="relative h-[90vh] w-[90vw]">
+          <div className="relative h-[86vh] w-[94vw] sm:h-[90vh] sm:w-[90vw]">
             <Image
               src={activeImage}
               alt={t.enlargedAlt}
               fill
-              sizes="90vw"
+              sizes="94vw"
               className="object-contain"
             />
           </div>
@@ -90,7 +90,7 @@ export default function Page() {
           <button
             type="button"
             onClick={() => setActiveImage(null)}
-            className="absolute right-8 top-8 z-10 text-4xl text-white"
+            className="absolute right-4 top-4 z-10 flex h-11 w-11 items-center justify-center rounded-full bg-black/70 text-3xl text-white sm:right-8 sm:top-8 sm:h-auto sm:w-auto sm:bg-transparent sm:text-4xl"
             aria-label={t.close}
           >
             ×
