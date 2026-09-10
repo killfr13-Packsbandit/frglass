@@ -9,21 +9,23 @@ export default function Hero() {
   return (
     <section className="bg-black pt-24 text-white">
       <div className="mx-auto grid min-h-[calc(100vh-6rem)] max-w-[1600px] lg:grid-cols-[0.85fr_1.15fr]">
-        <div className="flex items-center px-6 py-20 sm:px-10 lg:px-16 xl:px-24">
+        <div className="flex items-center px-6 py-16 sm:px-10 lg:px-16 xl:px-24">
           <div className="max-w-xl">
-            <p className="mb-6 text-xs font-semibold uppercase tracking-[0.42em] text-orange-300 sm:text-sm">
+            <img
+              src="/logo.png"
+              alt="FRGLASS"
+              className="mb-10 h-auto w-full max-w-[320px] object-contain sm:max-w-[420px]"
+            />
+
+            <p className="mb-5 text-xs font-semibold uppercase tracking-[0.42em] text-orange-300 sm:text-sm">
               {t.eyebrow}
             </p>
 
-            <h1 className="text-5xl font-semibold uppercase leading-none tracking-[0.2em] sm:text-6xl md:text-7xl">
-              FRGLASS
-            </h1>
-
-            <p className="mt-6 text-lg font-medium uppercase tracking-[0.2em] text-neutral-200 sm:text-xl">
+            <p className="text-xl font-semibold uppercase tracking-[0.2em] text-neutral-100 sm:text-2xl">
               {t.subtitle}
             </p>
 
-            <p className="mt-8 max-w-lg text-base leading-8 text-neutral-400 sm:text-lg">
+            <p className="mt-7 max-w-lg text-base leading-8 text-neutral-400 sm:text-lg">
               {t.text}
             </p>
 
