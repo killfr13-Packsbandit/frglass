@@ -45,27 +45,27 @@ export default function Page() {
   const t = copy[language];
 
   return (
-    <main className="min-h-screen bg-black px-6 py-32 text-white">
+    <main className="min-h-screen bg-black px-4 py-24 text-white sm:px-6 sm:py-32">
       <section className="mx-auto max-w-4xl">
-        <p className="mb-4 text-sm font-bold uppercase tracking-[0.5em] text-orange-300">{t.eyebrow}</p>
-        <h1 className="text-5xl font-black uppercase sm:text-6xl">{t.title}</h1>
+        <p className="mb-4 text-xs font-bold uppercase tracking-[0.4em] text-orange-300 sm:text-sm sm:tracking-[0.5em]">{t.eyebrow}</p>
+        <h1 className="break-words text-4xl font-black uppercase sm:text-6xl">{t.title}</h1>
 
-        <div className="mt-14 space-y-10 text-neutral-300">
+        <div className="mt-10 space-y-8 text-neutral-300 sm:mt-14 sm:space-y-10">
           <div>
-            <h2 className="text-xl font-bold text-white">{t.provider}</h2>
-            <p className="mt-3 leading-8">Florian Mario Robatsch<br />Muschker Straße 9/5<br />9321 Kappel/Krappfeld<br />Austria</p>
-            <p className="mt-3"><a className="text-orange-300 hover:text-orange-200" href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a></p>
+            <h2 className="text-lg font-bold text-white sm:text-xl">{t.provider}</h2>
+            <p className="mt-3 leading-7 sm:leading-8">Florian Mario Robatsch<br />Muschker Straße 9/5<br />9321 Kappel/Krappfeld<br />Austria</p>
+            <p className="mt-3 break-all"><a className="text-orange-300 hover:text-orange-200" href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a></p>
           </div>
 
-          <div className="grid gap-8 sm:grid-cols-2">
+          <div className="grid gap-6 sm:grid-cols-2 sm:gap-8">
             <div><h2 className="font-bold text-white">{t.trade}</h2><p className="mt-2 leading-7">{t.tradeValue}</p></div>
             <div><h2 className="font-bold text-white">{t.chamber}</h2><p className="mt-2 leading-7">{t.chamberValue}</p></div>
             <div><h2 className="font-bold text-white">{t.authority}</h2><p className="mt-2 leading-7">{t.authorityValue}</p></div>
             <div><h2 className="font-bold text-white">{t.law}</h2><p className="mt-2 leading-7">{t.lawValue}</p></div>
           </div>
 
-          <div><h2 className="text-xl font-bold text-white">{t.direction}</h2><p className="mt-3 leading-8">{t.directionValue}</p></div>
-          <div><h2 className="text-xl font-bold text-white">{t.liability}</h2><p className="mt-3 leading-8">{t.liabilityText}</p></div>
+          <div><h2 className="text-lg font-bold text-white sm:text-xl">{t.direction}</h2><p className="mt-3 leading-7 sm:leading-8">{t.directionValue}</p></div>
+          <div><h2 className="text-lg font-bold text-white sm:text-xl">{t.liability}</h2><p className="mt-3 leading-7 sm:leading-8">{t.liabilityText}</p></div>
         </div>
       </section>
     </main>
