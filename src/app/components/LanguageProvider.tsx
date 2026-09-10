@@ -26,13 +26,13 @@ export const translations = {
     hero: {
       eyebrow: "Handmade on planet Earth",
       subtitle: "Borosilicate Glass",
-      text: "Handmade borosilicate glass, jewelry and small experiments.",
+      text: "Handmade borosilicate glass, jewelry and other experiments from my mind.",
       cta: "See the work",
     },
     jewelry: {
       eyebrow: "Jewelry",
       title: "Glass to wear",
-      intro: "Handmade pendants from borosilicate glass. Each piece is made individually at the torch.",
+      intro: "Handmade pendants from borosilicate glass. Each piece is one of a kind.",
       itemTitle: "Handmade glass",
       itemSubtitle: "Borosilicate jewelry",
     },
@@ -93,13 +93,13 @@ export const translations = {
     hero: {
       eyebrow: "Handgemacht auf dem Planeten Erde",
       subtitle: "Borosilikatglas",
-      text: "Handgemachtes Borosilikatglas, Schmuck und kleine Experimente.",
+      text: "Handgemachtes Borosilikatglas, Schmuck und andere Experimente aus meinem Kopf.",
       cta: "Arbeiten ansehen",
     },
     jewelry: {
       eyebrow: "Schmuck",
       title: "Glas zum Tragen",
-      intro: "Handgemachte Anhänger aus Borosilikatglas. Jedes Stück entsteht einzeln am Brenner.",
+      intro: "Handgemachte Anhänger aus Borosilikatglas. Jedes Stück ein Unikat.",
       itemTitle: "Handgemachtes Glas",
       itemSubtitle: "Borosilikat-Schmuck",
     },

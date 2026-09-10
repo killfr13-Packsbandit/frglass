@@ -54,8 +54,18 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="mx-auto mt-12 flex max-w-7xl flex-col justify-between gap-4 border-t border-white/10 pt-8 text-sm text-neutral-500 md:flex-row">
-        <p>© 2026 FRGLASS. {t.footer.rights}</p>
+      <div className="mx-auto mt-12 flex max-w-7xl flex-col justify-between gap-5 border-t border-white/10 pt-8 text-sm text-neutral-500 md:flex-row md:items-center">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-5">
+          <p>© 2026 FRGLASS. {t.footer.rights}</p>
+          <div className="flex gap-4">
+            <Link className="transition hover:text-orange-300" href="/impressum">
+              {language === "de" ? "Impressum" : "Legal notice"}
+            </Link>
+            <Link className="transition hover:text-orange-300" href="/datenschutz">
+              {language === "de" ? "Datenschutz" : "Privacy"}
+            </Link>
+          </div>
+        </div>
         <p>{t.footer.tagline}</p>
       </div>
     </footer>

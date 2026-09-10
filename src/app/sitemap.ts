@@ -13,6 +13,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/journal/behind-the-scenes",
     "/about",
     "/contact",
+    "/impressum",
+    "/datenschutz",
   ];
 
   return [
@@ -20,7 +22,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${baseUrl}${route}`,
       lastModified: new Date(),
       changeFrequency: route === "" || route === "/shop" ? ("weekly" as const) : ("monthly" as const),
-      priority: route === "" ? 1 : route === "/shop" ? 0.9 : 0.7,
+      priority: route === "" ? 1 : route === "/shop" ? 0.9 : route === "/impressum" || route === "/datenschutz" ? 0.3 : 0.7,
     })),
     ...products.map((product) => ({
       url: `${baseUrl}/shop/${product.slug}`,

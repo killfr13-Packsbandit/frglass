@@ -23,6 +23,11 @@ const copy = {
   },
 } as const;
 
+function formatPrice(value: string) {
+  const price = value.trim();
+  return price.startsWith("€") ? price : `€${price}`;
+}
+
 export default function InquiryShop() {
   const { language } = useLanguage();
   const t = copy[language];
@@ -47,7 +52,7 @@ export default function InquiryShop() {
           {availableProducts.map((product) => {
             const name = language === "de" ? product.nameDe : product.name;
             const status = language === "de" ? product.statusDe : product.status;
-            const price = language === "de" ? product.priceDe : product.price;
+            const price = formatPrice(language === "de" ? product.priceDe : product.price);
 
             return (
               <div

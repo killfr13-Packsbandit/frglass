@@ -14,7 +14,6 @@ const copy = {
     story: "About this piece",
     material: "Material",
     colors: "Colors",
-    size: "Size",
     year: "Year",
     request: "Ask about this piece",
     subject: "Request",
@@ -28,7 +27,6 @@ const copy = {
     story: "Zum Stück",
     material: "Material",
     colors: "Farben",
-    size: "Größe",
     year: "Jahr",
     request: "Stück anfragen",
     subject: "Anfrage",
@@ -38,6 +36,11 @@ const copy = {
     nextImage: "Nächstes Bild",
   },
 } as const;
+
+function formatPrice(value: string) {
+  const price = value.trim();
+  return price.startsWith("€") ? price : `€${price}`;
+}
 
 export default function Page() {
   const params = useParams<{ slug: string }>();
@@ -74,11 +77,10 @@ export default function Page() {
 
   const name = language === "de" ? product.nameDe : product.name;
   const category = language === "de" ? product.categoryDe : product.category;
-  const price = language === "de" ? product.priceDe : product.price;
+  const price = formatPrice(language === "de" ? product.priceDe : product.price);
   const status = language === "de" ? product.statusDe : product.status;
   const material = language === "de" ? product.materialDe : product.material;
   const colors = language === "de" ? product.colorsDe : product.colors;
-  const size = language === "de" ? product.sizeDe : product.size;
   const description = language === "de" ? product.descriptionDe : product.description;
   const story = language === "de" ? product.storyDe : product.story;
 
@@ -168,7 +170,7 @@ export default function Page() {
             <p className="leading-8 text-neutral-300">{story}</p>
           </div>
 
-          <div className="mt-8 grid gap-4 text-neutral-300 sm:grid-cols-2">
+          <div className="mt-8 grid gap-4 text-neutral-300 sm:grid-cols-3">
             <div>
               <p className="text-sm uppercase tracking-[0.3em] text-neutral-500">{t.material}</p>
               <p className="mt-2">{material}</p>
@@ -177,11 +179,6 @@ export default function Page() {
             <div>
               <p className="text-sm uppercase tracking-[0.3em] text-neutral-500">{t.colors}</p>
               <p className="mt-2">{colors}</p>
-            </div>
-
-            <div>
-              <p className="text-sm uppercase tracking-[0.3em] text-neutral-500">{t.size}</p>
-              <p className="mt-2">{size}</p>
             </div>
 
             <div>
@@ -213,7 +210,7 @@ export default function Page() {
             {similarProducts.map((item) => {
               const itemName = language === "de" ? item.nameDe : item.name;
               const itemStatus = language === "de" ? item.statusDe : item.status;
-              const itemPrice = language === "de" ? item.priceDe : item.price;
+              const itemPrice = formatPrice(language === "de" ? item.priceDe : item.price);
 
               return (
                 <Link
