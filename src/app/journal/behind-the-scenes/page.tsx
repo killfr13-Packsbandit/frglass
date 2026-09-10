@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useLanguage } from "../../components/LanguageProvider";
 
 const copy = {
@@ -38,7 +39,7 @@ export default function Page() {
           {t.eyebrow}
         </p>
 
-        <h1 className="max-w-4xl text-6xl font-black uppercase leading-tight">
+        <h1 className="max-w-4xl text-5xl font-black uppercase leading-tight sm:text-6xl">
           {t.title1}
           <br />
           {t.title2}
@@ -49,19 +50,23 @@ export default function Page() {
         </p>
 
         <div className="mt-16 grid gap-8 md:grid-cols-2">
-          <div className="overflow-hidden rounded-3xl border border-white/10 bg-white/5">
-            <img
+          <div className="relative h-[560px] overflow-hidden rounded-3xl border border-white/10 bg-white/5">
+            <Image
               src="/workshop/me1.png"
               alt={t.alt1}
-              className="h-[560px] w-full object-cover"
+              fill
+              sizes="(min-width: 768px) 50vw, 100vw"
+              className="object-cover"
             />
           </div>
 
-          <div className="overflow-hidden rounded-3xl border border-white/10 bg-white/5">
-            <img
+          <div className="relative h-[560px] overflow-hidden rounded-3xl border border-white/10 bg-white/5">
+            <Image
               src="/workshop/me2.jpg"
               alt={t.alt2}
-              className="h-[560px] w-full object-cover"
+              fill
+              sizes="(min-width: 768px) 50vw, 100vw"
+              className="object-cover"
             />
           </div>
         </div>
