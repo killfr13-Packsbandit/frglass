@@ -41,7 +41,7 @@ export default function Page() {
   }, []);
 
   return (
-    <main className="min-h-screen bg-black px-4 py-24 text-white sm:px-6 sm:py-32">
+    <main className="min-h-screen bg-black px-4 py-20 text-white sm:px-6 sm:py-28 lg:py-32">
       <section className="mx-auto max-w-7xl">
         <h1 className="sr-only">{get(`gallery.eyebrow.${lang}`, t.eyebrow)}</h1>
 
@@ -49,11 +49,11 @@ export default function Page() {
           {get(`gallery.eyebrow.${lang}`, t.eyebrow)}
         </p>
 
-        <p className="mx-auto mb-10 max-w-2xl text-center text-base leading-7 text-neutral-300 sm:mb-16 sm:text-lg sm:leading-8">
+        <p className="mx-auto mb-10 max-w-2xl text-center text-base leading-7 text-neutral-300 sm:mb-14 sm:text-lg sm:leading-8 lg:mb-16">
           {get(`gallery.intro.${lang}`, t.intro)}
         </p>
 
-        <div className="grid gap-4 sm:gap-6 md:grid-cols-3">
+        <div className="grid gap-4 sm:grid-cols-2 sm:gap-6 xl:grid-cols-3">
           {galleryMedia.map((item) => {
             const caption =
               language === "de"
@@ -67,7 +67,7 @@ export default function Page() {
                 onClick={() => setActiveMedia(item)}
                 className="group overflow-hidden rounded-2xl border border-white/10 bg-neutral-950 text-left sm:rounded-3xl"
               >
-                <div className="relative flex h-[360px] items-center justify-center p-2 sm:h-[460px] sm:p-3">
+                <div className="relative flex h-[330px] items-center justify-center p-2 sm:h-[400px] sm:p-3 lg:h-[430px] xl:h-[460px]">
                   {item.mediaType === "video" ? (
                     <>
                       <video
