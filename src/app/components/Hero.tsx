@@ -72,10 +72,9 @@ export default function Hero() {
 
               <a
                 href="#collections"
-                className="mt-6 inline-flex max-w-full items-center gap-3 rounded-full bg-orange-300 px-5 py-3 text-xs font-bold uppercase tracking-[0.1em] text-black transition hover:bg-orange-200 sm:mt-8 sm:px-6 sm:text-sm sm:tracking-[0.14em]"
+                className="mt-6 inline-flex max-w-full items-center rounded-full bg-orange-300 px-5 py-3 text-xs font-bold uppercase tracking-[0.1em] text-black transition hover:bg-orange-200 sm:mt-8 sm:px-6 sm:text-sm sm:tracking-[0.14em]"
               >
                 {cta}
-                <span aria-hidden="true">↘</span>
               </a>
             </div>
           </div>
