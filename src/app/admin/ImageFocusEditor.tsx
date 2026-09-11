@@ -37,7 +37,7 @@ export default function ImageFocusEditor({
     if (event.currentTarget.hasPointerCapture(event.pointerId)) place(event);
   }
 
-  const minZoom = mediaType === "image" ? 0.5 : 1;
+  const minZoom = 0.5;
   const mediaStyle = {
     objectPosition: `${focusX}% ${focusY}%`,
     transform: `scale(${zoom})`,
