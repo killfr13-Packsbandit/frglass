@@ -11,6 +11,9 @@ export type GalleryMediaItem = {
   createdAt: string;
   fit?: MediaFit;
   position?: MediaPosition;
+  zoom?: number;
+  focusX?: number;
+  focusY?: number;
 };
 
 const DEFAULT_GALLERY_URLS = [
@@ -37,5 +40,8 @@ export const DEFAULT_GALLERY_MEDIA: GalleryMediaItem[] = DEFAULT_GALLERY_URLS.ma
     createdAt: new Date(Date.UTC(2026, 0, 1, 0, 0, index)).toISOString(),
     fit: "contain",
     position: "center",
+    zoom: 1,
+    focusX: 50,
+    focusY: 50,
   }),
 );
