@@ -6,6 +6,12 @@ import { products as legacyProducts } from "../app/products";
 import type { ProductRecord } from "../app/productTypes";
 
 const CATALOG_PREFIX = "cms/products/catalog/";
+const DEFAULT_SIZE = "30 × 30 mm";
+const LEGACY_SIZE_VALUES = new Set([
+  "",
+  "Size details coming soon",
+  "Größenangaben folgen",
+]);
 
 export function isProductStorageConfigured() {
   return Boolean(process.env.BLOB_READ_WRITE_TOKEN);
@@ -25,11 +31,30 @@ export function isProductMediaUrl(value: string) {
   }
 }
 
-function fallbackCatalog(): ProductRecord[] {
-  return (legacyProducts as unknown as ProductRecord[]).map((product) => ({
+function withProductDefaults(product: ProductRecord): ProductRecord {
+  const genericJewelry = product.category === "Jewelry" || product.categoryDe === "Schmuck";
+  const isSuncatcher = /suncatcher/i.test(product.name) || /suncatcher/i.test(product.nameDe);
+
+  return {
     ...product,
     images: [...product.images],
-  }));
+    size: LEGACY_SIZE_VALUES.has(product.size?.trim?.() ?? "") ? DEFAULT_SIZE : product.size,
+    sizeDe: LEGACY_SIZE_VALUES.has(product.sizeDe?.trim?.() ?? "") ? DEFAULT_SIZE : product.sizeDe,
+    category: genericJewelry
+      ? isSuncatcher
+        ? "Borosilicate Glass Suncatcher"
+        : "Borosilicate Glass Jewelry"
+      : product.category,
+    categoryDe: genericJewelry
+      ? isSuncatcher
+        ? "Borosilikatglas-Suncatcher"
+        : "Borosilikatglas-Schmuck"
+      : product.categoryDe,
+  };
+}
+
+function fallbackCatalog(): ProductRecord[] {
+  return (legacyProducts as unknown as ProductRecord[]).map(withProductDefaults);
 }
 
 async function catalogBlobs() {
@@ -48,7 +73,9 @@ export async function getProductCatalog(): Promise<ProductRecord[]> {
     const response = await fetch(latest.url, { cache: "no-store" });
     if (!response.ok) return fallbackCatalog();
     const data = (await response.json()) as unknown;
-    return Array.isArray(data) ? (data as ProductRecord[]) : fallbackCatalog();
+    return Array.isArray(data)
+      ? (data as ProductRecord[]).map(withProductDefaults)
+      : fallbackCatalog();
   } catch (error) {
     console.error("Could not load product catalog", error);
     return fallbackCatalog();
@@ -68,12 +95,13 @@ export async function saveProductCatalog(products: ProductRecord[]) {
 
   const previousProducts = await getProductCatalog();
   const previousMedia = mediaUrls(previousProducts);
-  const nextMedia = mediaUrls(products);
+  const nextProducts = products.map(withProductDefaults);
+  const nextMedia = mediaUrls(nextProducts);
   const previousCatalogBlobs = await catalogBlobs();
 
   await put(
     `${CATALOG_PREFIX}${Date.now()}-${randomUUID()}.json`,
-    JSON.stringify(products),
+    JSON.stringify(nextProducts),
     {
       access: "public",
       addRandomSuffix: false,
@@ -90,5 +118,5 @@ export async function saveProductCatalog(products: ProductRecord[]) {
     await del(removedMedia);
   }
 
-  return products;
+  return nextProducts;
 }
