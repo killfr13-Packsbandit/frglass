@@ -15,6 +15,7 @@ const copy = {
     story: "About this piece",
     material: "Material",
     colors: "Colors",
+    size: "Size",
     year: "Year",
     request: "Ask about this piece",
     similar: "More pieces",
@@ -28,6 +29,7 @@ const copy = {
     story: "Zum Stück",
     material: "Material",
     colors: "Farben",
+    size: "Maße",
     year: "Jahr",
     request: "Stück anfragen",
     similar: "Weitere Stücke",
@@ -73,6 +75,7 @@ export default function Page() {
   const status = language === "de" ? product.statusDe : product.status;
   const material = language === "de" ? product.materialDe : product.material;
   const colors = language === "de" ? product.colorsDe : product.colors;
+  const size = language === "de" ? product.sizeDe : product.size;
   const description = language === "de" ? product.descriptionDe : product.description;
   const story = language === "de" ? product.storyDe : product.story;
 
@@ -99,9 +102,10 @@ export default function Page() {
 
           {story && <div className="mt-8 border-y border-white/10 py-6 sm:mt-10 sm:py-8"><h2 className="mb-4 text-xs font-bold uppercase tracking-[0.32em] text-orange-300 sm:text-sm sm:tracking-[0.4em]">{t.story}</h2><p className="leading-7 text-neutral-300 sm:leading-8">{story}</p></div>}
 
-          <div className="mt-6 grid gap-5 text-neutral-300 sm:mt-8 sm:grid-cols-3 sm:gap-4">
+          <div className="mt-6 grid gap-5 text-neutral-300 sm:mt-8 sm:grid-cols-2 lg:grid-cols-4 sm:gap-4">
             <div><p className="text-xs uppercase tracking-[0.25em] text-neutral-500 sm:text-sm sm:tracking-[0.3em]">{t.material}</p><p className="mt-2">{material}</p></div>
             <div><p className="text-xs uppercase tracking-[0.25em] text-neutral-500 sm:text-sm sm:tracking-[0.3em]">{t.colors}</p><p className="mt-2">{colors}</p></div>
+            <div><p className="text-xs uppercase tracking-[0.25em] text-neutral-500 sm:text-sm sm:tracking-[0.3em]">{t.size}</p><p className="mt-2">{size}</p></div>
             <div><p className="text-xs uppercase tracking-[0.25em] text-neutral-500 sm:text-sm sm:tracking-[0.3em]">{t.year}</p><p className="mt-2">{product.year}</p></div>
           </div>
 
