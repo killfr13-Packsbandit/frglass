@@ -15,7 +15,7 @@ const copy = {
     story: "About this piece",
     material: "Material",
     colors: "Colors",
-    size: "Size",
+    size: "Dimensions",
     year: "Year",
     request: "Ask about this piece",
     similar: "More pieces",
@@ -29,7 +29,7 @@ const copy = {
     story: "Zum Stück",
     material: "Material",
     colors: "Farben",
-    size: "Maße",
+    size: "Größe",
     year: "Jahr",
     request: "Stück anfragen",
     similar: "Weitere Stücke",
@@ -95,7 +95,7 @@ export default function Page() {
 
         <div className="flex min-w-0 flex-col justify-center">
           <p className="mb-3 text-xs font-bold uppercase tracking-[0.4em] text-orange-300 sm:mb-4 sm:text-sm sm:tracking-[0.5em]">{status}</p>
-          <h1 className="break-words text-3xl font-black uppercase leading-tight sm:text-5xl lg:text-6xl">{name}</h1>
+          <h1 className="break-normal hyphens-none text-3xl font-black uppercase leading-tight sm:text-5xl md:text-4xl lg:text-5xl xl:text-6xl">{name}</h1>
           <p className="mt-4 text-xs font-bold uppercase tracking-[0.25em] text-neutral-500 sm:text-sm sm:tracking-[0.3em]">{category}</p>
           {price && <p className="mt-6 text-3xl text-neutral-100 sm:mt-8">{price}</p>}
           {description && <p className="mt-6 max-w-xl text-base leading-7 text-neutral-300 sm:mt-8 sm:text-lg sm:leading-8">{description}</p>}
