@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import { siteConfig } from "../siteConfig";
 import { categoryIdFromName, formatProductPrice } from "../productTypes";
 import { useLanguage } from "./LanguageProvider";
 import ProductPicture from "./ProductPicture";
@@ -14,17 +13,15 @@ const copy = {
   en: {
     eyebrow: "Shop",
     title: "Available pieces",
-    intro: "These pieces are currently available. If you are interested in one, send me a message and we can arrange payment and shipping directly.",
-    request: "Ask about this piece",
-    subject: "Request",
+    intro: "These pieces are currently available. Open a piece to see all details and send an inquiry from there.",
+    details: "View piece",
     all: "All",
   },
   de: {
     eyebrow: "Shop",
     title: "Verfügbare Stücke",
-    intro: "Diese Stücke sind aktuell verfügbar. Wenn dich eines interessiert, schreib mir einfach und wir klären Bezahlung und Versand direkt.",
-    request: "Stück anfragen",
-    subject: "Anfrage",
+    intro: "Diese Stücke sind aktuell verfügbar. Öffne ein Stück für alle Details und stelle deine Anfrage direkt auf der Produktseite.",
+    details: "Stück ansehen",
     all: "Alle",
   },
 } as const;
@@ -100,7 +97,7 @@ export default function InquiryShop() {
             const price = formatProductPrice(language === "de" ? product.priceDe : product.price);
 
             return (
-              <div key={product.slug} className="overflow-hidden rounded-2xl border border-white/10 bg-white/5 transition duration-500 hover:-translate-y-2 hover:border-orange-300 hover:shadow-2xl hover:shadow-orange-500/20 sm:rounded-3xl">
+              <article key={product.slug} className="overflow-hidden rounded-2xl border border-white/10 bg-white/5 transition duration-500 hover:-translate-y-2 hover:border-orange-300 hover:shadow-2xl hover:shadow-orange-500/20 sm:rounded-3xl">
                 <Link href={`/shop/${product.slug}`} className="relative flex h-[330px] items-center justify-center bg-neutral-950 p-3 sm:h-[400px] lg:h-[430px] xl:h-[460px]">
                   <ProductPicture src={product.image} alt={name} sizes="(min-width: 1280px) 33vw, (min-width: 640px) 50vw, 100vw" className="object-contain p-3" />
                 </Link>
@@ -109,9 +106,11 @@ export default function InquiryShop() {
                   <p className="mb-2 text-xs font-bold uppercase tracking-[0.3em] text-orange-300">{status}</p>
                   <Link href={`/shop/${product.slug}`}><h2 className="break-normal text-xl font-black uppercase leading-tight sm:text-2xl">{name}</h2></Link>
                   {price && <p className="mt-3 text-neutral-300">{price}</p>}
-                  <a href={`mailto:${siteConfig.email}?subject=${encodeURIComponent(`${t.subject} ${name}`)}`} className="mt-6 inline-block w-full rounded-full border border-orange-300 px-5 py-3 text-center text-xs font-bold uppercase tracking-widest text-orange-300 transition hover:bg-orange-300 hover:text-black sm:w-auto sm:px-6 sm:text-sm">{t.request}</a>
+                  <Link href={`/shop/${product.slug}`} className="mt-6 inline-block w-full rounded-full border border-white/15 px-5 py-3 text-center text-xs font-bold uppercase tracking-widest text-neutral-200 transition hover:border-orange-300 hover:text-orange-300 sm:w-auto sm:px-6 sm:text-sm">
+                    {t.details}
+                  </Link>
                 </div>
-              </div>
+              </article>
             );
           })}
         </div>
