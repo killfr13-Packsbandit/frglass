@@ -5,7 +5,7 @@ import { useSiteContent } from "./SiteContentProvider";
 
 function Media({ url, type, className, auto = false, style }: { url: string; type: string; className: string; auto?: boolean; style?: React.CSSProperties }) {
   if (!url) return null;
-  if (type === "video") return <video src={url} autoPlay={auto} muted={auto} loop={auto} controls={!auto} playsInline preload="metadata" className={className} />;
+  if (type === "video") return <video src={url} autoPlay={auto} muted={auto} loop={auto} controls={!auto} playsInline preload="metadata" className={className} style={style} />;
   return <img src={url} alt="FRGLASS workshop" className={className} style={style} />;
 }
 
