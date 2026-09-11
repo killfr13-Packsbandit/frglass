@@ -95,11 +95,15 @@ export default function InquiryShop() {
             const name = language === "de" ? product.nameDe : product.name;
             const status = language === "de" ? product.statusDe : product.status;
             const price = formatProductPrice(language === "de" ? product.priceDe : product.price);
+            const category = language === "de" ? product.categoryDe : product.category;
+            const imageAlt = language === "de"
+              ? `${name} – ${category} aus Borosilikatglas von FRGLASS`
+              : `${name} – ${category} in borosilicate glass by FRGLASS`;
 
             return (
               <article key={product.slug} className="overflow-hidden rounded-2xl border border-white/10 bg-white/5 transition duration-500 hover:-translate-y-2 hover:border-orange-300 hover:shadow-2xl hover:shadow-orange-500/20 sm:rounded-3xl">
                 <Link href={`/shop/${product.slug}`} className="relative flex h-[330px] items-center justify-center bg-neutral-950 p-3 sm:h-[400px] lg:h-[430px] xl:h-[460px]">
-                  <ProductPicture src={product.image} alt={name} sizes="(min-width: 1280px) 33vw, (min-width: 640px) 50vw, 100vw" className="object-contain p-3" />
+                  <ProductPicture src={product.image} alt={imageAlt} sizes="(min-width: 1280px) 33vw, (min-width: 640px) 50vw, 100vw" className="object-contain p-3" />
                 </Link>
 
                 <div className="p-5 sm:p-6">
