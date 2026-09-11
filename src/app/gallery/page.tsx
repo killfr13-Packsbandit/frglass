@@ -23,6 +23,18 @@ const copy = {
   },
 } as const;
 
+function imageStyle(item: GalleryMediaItem) {
+  const zoom = item.zoom ?? 1;
+  const focusX = item.focusX ?? 50;
+  const focusY = item.focusY ?? 50;
+  return {
+    objectFit: item.fit ?? "contain",
+    objectPosition: `${focusX}% ${focusY}%`,
+    transform: `scale(${zoom})`,
+    transformOrigin: `${focusX}% ${focusY}%`,
+  } as const;
+}
+
 export default function Page() {
   const [activeMedia, setActiveMedia] = useState<GalleryMediaItem | null>(null);
   const [galleryMedia, setGalleryMedia] = useState<GalleryMediaItem[]>(DEFAULT_GALLERY_MEDIA);
@@ -55,10 +67,9 @@ export default function Page() {
 
         <div className="grid gap-4 sm:grid-cols-2 sm:gap-6 xl:grid-cols-3">
           {galleryMedia.map((item) => {
-            const caption =
-              language === "de"
-                ? item.description || item.descriptionEn
-                : item.descriptionEn || item.description;
+            const caption = language === "de"
+              ? item.description || item.descriptionEn
+              : item.descriptionEn || item.description;
 
             return (
               <button
@@ -67,36 +78,24 @@ export default function Page() {
                 onClick={() => setActiveMedia(item)}
                 className="group overflow-hidden rounded-2xl border border-white/10 bg-neutral-950 text-left sm:rounded-3xl"
               >
-                <div className="relative flex h-[330px] items-center justify-center p-2 sm:h-[400px] sm:p-3 lg:h-[430px] xl:h-[460px]">
+                <div className="relative flex h-[330px] items-center justify-center overflow-hidden p-2 sm:h-[400px] sm:p-3 lg:h-[430px] xl:h-[460px]">
                   {item.mediaType === "video" ? (
                     <>
-                      <video
-                        src={item.mediaUrl}
-                        muted
-                        playsInline
-                        preload="metadata"
-                        className="h-full w-full object-contain"
-                      />
-                      <span className="pointer-events-none absolute bottom-4 right-4 rounded-full bg-black/70 px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-white">
-                        Video
-                      </span>
+                      <video src={item.mediaUrl} muted playsInline preload="metadata" className="h-full w-full object-contain" />
+                      <span className="pointer-events-none absolute bottom-4 right-4 rounded-full bg-black/70 px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-white">Video</span>
                     </>
                   ) : (
                     <img
                       src={item.mediaUrl}
                       alt={caption || t.imageAlt}
                       loading="lazy"
-                      className="h-full w-full p-2 transition duration-700 group-hover:scale-[1.03] sm:p-3"
-                      style={{ objectFit: item.fit ?? "contain", objectPosition: item.position ?? "center" }}
+                      className="h-full w-full transition duration-700"
+                      style={imageStyle(item)}
                     />
                   )}
                 </div>
 
-                {caption && (
-                  <p className="border-t border-white/10 px-5 py-4 text-sm leading-6 text-neutral-400">
-                    {caption}
-                  </p>
-                )}
+                {caption && <p className="border-t border-white/10 px-5 py-4 text-sm leading-6 text-neutral-400">{caption}</p>}
               </button>
             );
           })}
@@ -104,56 +103,26 @@ export default function Page() {
       </section>
 
       {activeMedia && (
-        <div
-          onClick={() => setActiveMedia(null)}
-          className="fixed inset-0 z-[999] flex flex-col items-center justify-center bg-black/90 p-3 sm:p-6"
-        >
-          <div
-            className="relative flex max-h-[82vh] w-[94vw] flex-1 items-center justify-center sm:w-[90vw]"
-            onClick={(event) => event.stopPropagation()}
-          >
+        <div onClick={() => setActiveMedia(null)} className="fixed inset-0 z-[999] flex flex-col items-center justify-center bg-black/90 p-3 sm:p-6">
+          <div className="relative flex max-h-[82vh] w-[94vw] flex-1 items-center justify-center sm:w-[90vw]" onClick={(event) => event.stopPropagation()}>
             {activeMedia.mediaType === "video" ? (
-              <video
-                src={activeMedia.mediaUrl}
-                controls
-                autoPlay
-                playsInline
-                className="max-h-full max-w-full"
-              />
+              <video src={activeMedia.mediaUrl} controls autoPlay playsInline className="max-h-full max-w-full" />
             ) : (
               <img
                 src={activeMedia.mediaUrl}
-                alt={
-                  (language === "de"
-                    ? activeMedia.description || activeMedia.descriptionEn
-                    : activeMedia.descriptionEn || activeMedia.description) || t.imageAlt
-                }
+                alt={(language === "de" ? activeMedia.description || activeMedia.descriptionEn : activeMedia.descriptionEn || activeMedia.description) || t.imageAlt}
                 className="max-h-full max-w-full object-contain"
               />
             )}
           </div>
 
-          {(language === "de"
-            ? activeMedia.description || activeMedia.descriptionEn
-            : activeMedia.descriptionEn || activeMedia.description) && (
-            <p
-              className="mt-4 max-w-2xl text-center text-sm leading-6 text-neutral-300 sm:text-base"
-              onClick={(event) => event.stopPropagation()}
-            >
-              {language === "de"
-                ? activeMedia.description || activeMedia.descriptionEn
-                : activeMedia.descriptionEn || activeMedia.description}
+          {(language === "de" ? activeMedia.description || activeMedia.descriptionEn : activeMedia.descriptionEn || activeMedia.description) && (
+            <p className="mt-4 max-w-2xl text-center text-sm leading-6 text-neutral-300 sm:text-base" onClick={(event) => event.stopPropagation()}>
+              {language === "de" ? activeMedia.description || activeMedia.descriptionEn : activeMedia.descriptionEn || activeMedia.description}
             </p>
           )}
 
-          <button
-            type="button"
-            onClick={() => setActiveMedia(null)}
-            className="absolute right-4 top-4 z-10 flex h-11 w-11 items-center justify-center rounded-full bg-black/70 text-3xl text-white sm:right-8 sm:top-8 sm:h-auto sm:w-auto sm:bg-transparent sm:text-4xl"
-            aria-label={t.close}
-          >
-            ×
-          </button>
+          <button type="button" onClick={() => setActiveMedia(null)} className="absolute right-4 top-4 z-10 flex h-11 w-11 items-center justify-center rounded-full bg-black/70 text-3xl text-white sm:right-8 sm:top-8 sm:h-auto sm:w-auto sm:bg-transparent sm:text-4xl" aria-label={t.close}>×</button>
         </div>
       )}
     </main>
