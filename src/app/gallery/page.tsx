@@ -28,7 +28,7 @@ function mediaStyle(item: GalleryMediaItem) {
   const focusX = item.focusX ?? 50;
   const focusY = item.focusY ?? 50;
   return {
-    objectFit: item.fit ?? (zoom < 1 ? "contain" : "cover"),
+    objectFit: zoom < 1 ? "contain" : (item.fit ?? "cover"),
     objectPosition: `${focusX}% ${focusY}%`,
     transform: `scale(${zoom})`,
     transformOrigin: `${focusX}% ${focusY}%`,
