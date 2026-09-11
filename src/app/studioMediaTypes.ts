@@ -1,3 +1,6 @@
+export type MediaFit = "cover" | "contain";
+export type MediaPosition = "center" | "top" | "bottom" | "left" | "right";
+
 export type StudioMediaItem = {
   id: string;
   mediaUrl: string;
@@ -6,6 +9,8 @@ export type StudioMediaItem = {
   description: string;
   descriptionEn: string;
   createdAt: string;
+  fit?: MediaFit;
+  position?: MediaPosition;
 };
 
 export const DEFAULT_STUDIO_MEDIA: StudioMediaItem[] = [
@@ -17,6 +22,8 @@ export const DEFAULT_STUDIO_MEDIA: StudioMediaItem[] = [
     description: "",
     descriptionEn: "",
     createdAt: "2026-01-01T00:00:00.000Z",
+    fit: "cover",
+    position: "center",
   },
   {
     id: "studio-me2",
@@ -26,5 +33,7 @@ export const DEFAULT_STUDIO_MEDIA: StudioMediaItem[] = [
     description: "",
     descriptionEn: "",
     createdAt: "2026-01-01T00:00:01.000Z",
+    fit: "cover",
+    position: "center",
   },
 ];
