@@ -14,7 +14,7 @@ function mediaStyle(item: StudioMediaItem) {
   const focusX = item.focusX ?? 50;
   const focusY = item.focusY ?? 50;
   return {
-    objectFit: item.fit ?? "cover",
+    objectFit: zoom < 1 ? "contain" : (item.fit ?? "cover"),
     objectPosition: `${focusX}% ${focusY}%`,
     transform: `scale(${zoom})`,
     transformOrigin: `${focusX}% ${focusY}%`,
