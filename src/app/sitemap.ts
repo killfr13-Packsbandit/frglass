@@ -1,9 +1,11 @@
 import type { MetadataRoute } from "next";
-import { products } from "./products";
+import { getProductCatalog } from "../lib/productCatalog";
 
 const baseUrl = "https://frglass.at";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const products = await getProductCatalog();
+  const now = new Date();
   const staticRoutes = [
     "",
     "/gallery",
@@ -21,7 +23,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     ...staticRoutes.map((route) => ({
       url: `${baseUrl}${route}`,
-      lastModified: new Date(),
+      lastModified: now,
       changeFrequency:
         route === "" || route === "/shop" || route === "/community"
           ? ("weekly" as const)
@@ -39,9 +41,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     })),
     ...products.map((product) => ({
       url: `${baseUrl}/shop/${product.slug}`,
-      lastModified: new Date(),
-      changeFrequency: "monthly" as const,
-      priority: 0.8,
+      lastModified: now,
+      changeFrequency: product.status === "Available" ? ("weekly" as const) : ("monthly" as const),
+      priority: product.status === "Available" ? 0.85 : 0.7,
     })),
   ];
 }
