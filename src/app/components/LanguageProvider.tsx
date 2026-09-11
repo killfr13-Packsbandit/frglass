@@ -26,21 +26,21 @@ export const translations = {
     },
     hero: {
       eyebrow: "Handmade on planet Earth",
-      subtitle: "Borosilicate Glass",
-      text: "Handmade borosilicate glass, jewelry and other experiments from my mind.",
+      subtitle: "Borosilicate glass · Carinthia, Austria",
+      text: "I’m Florian Robatsch, a glass artist from Carinthia. At the torch I turn borosilicate glass into one-of-a-kind jewelry, objects and whatever ideas happen to stick in my head.",
       cta: "See the work",
     },
     jewelry: {
       eyebrow: "Jewelry",
       title: "Glass to wear",
-      intro: "Handmade pendants from borosilicate glass. Each piece is one of a kind.",
+      intro: "Handmade borosilicate glass pendants from Austria. Every piece is made individually at the torch and is one of a kind.",
       itemTitle: "Handmade glass",
       itemSubtitle: "Borosilicate jewelry",
     },
     workshop: {
       eyebrow: "Workshop",
       title: "At the torch",
-      text: "I make each piece by hand from borosilicate glass at the torch. Some start with a clear idea, others develop while I work.",
+      text: "I make each piece by hand from borosilicate glass in my workshop in Carinthia. Some start with a clear idea, others develop while I work.",
     },
     studio: {
       eyebrow: "Workspace",
@@ -94,21 +94,21 @@ export const translations = {
     },
     hero: {
       eyebrow: "Handgemacht auf dem Planeten Erde",
-      subtitle: "Borosilikatglas",
-      text: "Handgemachtes Borosilikatglas, Schmuck und andere Experimente aus meinem Kopf.",
+      subtitle: "Borosilikatglas · Kärnten, Österreich",
+      text: "Ich bin Florian Robatsch, Glaskünstler aus Kärnten. Am Brenner entstehen aus Borosilikatglas handgemachte Unikate – Schmuck, Objekte und alles, was mir sonst noch durch den Kopf geht.",
       cta: "Arbeiten ansehen",
     },
     jewelry: {
       eyebrow: "Schmuck",
       title: "Glas zum Tragen",
-      intro: "Handgemachte Anhänger aus Borosilikatglas. Jedes Stück ein Unikat.",
+      intro: "Handgemachte Anhänger aus Borosilikatglas aus Österreich. Jedes Stück entsteht einzeln am Brenner und ist ein Unikat.",
       itemTitle: "Handgemachtes Glas",
       itemSubtitle: "Borosilikat-Schmuck",
     },
     workshop: {
       eyebrow: "Werkstatt",
       title: "Am Brenner",
-      text: "Ich fertige jedes Stück von Hand aus Borosilikatglas am Brenner. Manche Arbeiten sind vorher geplant, andere entwickeln sich erst beim Machen.",
+      text: "In meiner Werkstatt in Kärnten fertige ich jedes Stück von Hand aus Borosilikatglas am Brenner. Manche Arbeiten sind vorher geplant, andere entwickeln sich erst beim Machen.",
     },
     studio: {
       eyebrow: "Werkstatt",
@@ -129,10 +129,10 @@ export const translations = {
         },
         {
           title: "Einzel-Sessions",
-          text: "Je nach Zeit und Ausstattung könnten später auch einzelne persönliche Sessions möglich sein.",
+          text: "Je nach Zeit und Ausstattung könnten später auch individuelle Sessions möglich sein.",
         },
       ],
-      vision: "Die Werkstatt ist noch im Aufbau. Im Moment nutze ich sie für meine eigenen Arbeiten und verbessere die Ausstattung Schritt für Schritt.",
+      vision: "Die Werkstatt entwickelt sich noch. Im Moment nutze ich sie für meine eigenen Arbeiten und verbessere die Ausstattung Schritt für Schritt.",
       contactEyebrow: "Werkstatt",
       contactTitle: "Interesse am Platz?",
       contactText: "Wenn dich spätere Brennervermietung, Werkstattzeit oder eine kleine Session interessiert, schreib mir einfach.",
@@ -141,7 +141,7 @@ export const translations = {
       emailSubject: "Werkstatt-Anfrage",
     },
     footer: {
-      intro: "FRGLASS ist der Name, unter dem ich meine handgemachten Glasarbeiten online zeige.",
+      intro: "FRGLASS ist der Name, unter dem ich meine handgemachten Arbeiten aus Borosilikatglas zeige.",
       explore: "Entdecken",
       contact: "Kontakt",
       rights: "Alle Rechte vorbehalten.",
@@ -154,40 +154,32 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [language, setLanguageState] = useState<Language>("en");
 
   useEffect(() => {
-    const stored = window.localStorage.getItem("frglass-language");
-    const browserLanguage = window.navigator.language.toLowerCase();
-    const nextLanguage: Language =
-      stored === "de" || stored === "en"
-        ? stored
-        : browserLanguage.startsWith("de")
-          ? "de"
-          : "en";
+    const saved = window.localStorage.getItem("frglass-language");
+    if (saved === "de" || saved === "en") {
+      setLanguageState(saved);
+      return;
+    }
 
-    setLanguageState(nextLanguage);
+    const browserLanguage = window.navigator.language.toLowerCase();
+    if (browserLanguage.startsWith("de")) {
+      setLanguageState("de");
+    }
   }, []);
 
-  useEffect(() => {
-    document.documentElement.lang = language;
-    window.localStorage.setItem("frglass-language", language);
-  }, [language]);
+  const setLanguage = (nextLanguage: Language) => {
+    setLanguageState(nextLanguage);
+    window.localStorage.setItem("frglass-language", nextLanguage);
+  };
 
-  const value = useMemo<LanguageContextValue>(
-    () => ({
-      language,
-      setLanguage: setLanguageState,
-    }),
-    [language]
-  );
+  const value = useMemo(() => ({ language, setLanguage }), [language]);
 
   return <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>;
 }
 
 export function useLanguage() {
   const context = useContext(LanguageContext);
-
   if (!context) {
-    throw new Error("useLanguage must be used inside LanguageProvider");
+    throw new Error("useLanguage must be used within LanguageProvider");
   }
-
   return context;
 }
