@@ -88,7 +88,8 @@ export default function Studio() {
                             : "FRGLASS studio and borosilicate glasswork")
                         }
                         loading="lazy"
-                        className="h-full w-full object-cover"
+                        className="h-full w-full"
+                        style={{ objectFit: item.fit ?? "cover", objectPosition: item.position ?? "center" }}
                       />
                     )}
                   </div>
