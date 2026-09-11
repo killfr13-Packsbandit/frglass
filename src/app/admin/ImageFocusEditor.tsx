@@ -9,9 +9,18 @@ type Props = {
   focusY: number;
   onChange: (next: { zoom?: number; focusX?: number; focusY?: number }) => void;
   aspectClass?: string;
+  mediaType?: "image" | "video";
 };
 
-export default function ImageFocusEditor({ src, zoom, focusX, focusY, onChange, aspectClass = "aspect-[4/3]" }: Props) {
+export default function ImageFocusEditor({
+  src,
+  zoom,
+  focusX,
+  focusY,
+  onChange,
+  aspectClass = "aspect-[4/3]",
+  mediaType = "image",
+}: Props) {
   function place(event: PointerEvent<HTMLDivElement>) {
     const rect = event.currentTarget.getBoundingClientRect();
     const x = Math.max(0, Math.min(100, ((event.clientX - rect.left) / rect.width) * 100));
@@ -28,6 +37,12 @@ export default function ImageFocusEditor({ src, zoom, focusX, focusY, onChange, 
     if (event.currentTarget.hasPointerCapture(event.pointerId)) place(event);
   }
 
+  const mediaStyle = {
+    objectPosition: `${focusX}% ${focusY}%`,
+    transform: `scale(${zoom})`,
+    transformOrigin: `${focusX}% ${focusY}%`,
+  } as const;
+
   return (
     <div>
       <div
@@ -35,17 +50,26 @@ export default function ImageFocusEditor({ src, zoom, focusX, focusY, onChange, 
         onPointerMove={pointerMove}
         className={`relative ${aspectClass} touch-none cursor-crosshair overflow-hidden rounded-2xl border border-white/15 bg-neutral-950 select-none`}
       >
-        <img
-          src={src}
-          alt="Bildvorschau"
-          draggable={false}
-          className="pointer-events-none h-full w-full object-cover"
-          style={{
-            objectPosition: `${focusX}% ${focusY}%`,
-            transform: `scale(${zoom})`,
-            transformOrigin: `${focusX}% ${focusY}%`,
-          }}
-        />
+        {mediaType === "video" ? (
+          <video
+            src={src}
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            className="pointer-events-none h-full w-full object-cover"
+            style={mediaStyle}
+          />
+        ) : (
+          <img
+            src={src}
+            alt="Bildvorschau"
+            draggable={false}
+            className="pointer-events-none h-full w-full object-cover"
+            style={mediaStyle}
+          />
+        )}
         <div
           className="pointer-events-none absolute h-6 w-6 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white bg-black/30 shadow-[0_0_0_1px_rgba(0,0,0,.8)]"
           style={{ left: `${focusX}%`, top: `${focusY}%` }}
@@ -54,7 +78,7 @@ export default function ImageFocusEditor({ src, zoom, focusX, focusY, onChange, 
           <span className="absolute left-[-7px] top-1/2 h-px w-[36px] -translate-y-1/2 bg-white/90" />
         </div>
         <div className="pointer-events-none absolute inset-x-3 bottom-3 rounded-full bg-black/65 px-3 py-1.5 text-center text-[11px] font-bold text-white backdrop-blur">
-          Antippen oder ziehen = Bildausschnitt verschieben
+          Antippen oder ziehen = Ausschnitt verschieben
         </div>
       </div>
 
