@@ -227,11 +227,12 @@ export default function Page() {
                   <ImageFocusEditor
                     src={item.mediaUrl}
                     mediaType={item.mediaType}
+                    fit={fit}
                     zoom={zoom}
                     focusX={focusX}
                     focusY={focusY}
                     aspectClass="aspect-[4/5]"
-                    onChange={(patch) => updateItem(item.id, { ...patch, fit: "cover", position: "center" })}
+                    onChange={(patch) => updateItem(item.id, { ...patch, position: "center" })}
                   />
 
                   <div className="mt-4 grid grid-cols-2 gap-2">
@@ -239,7 +240,7 @@ export default function Page() {
                       {replacingId === item.id ? "Lädt …" : "Medium ersetzen"}
                       <input type="file" accept="image/jpeg,image/png,image/webp,video/mp4,video/quicktime,video/webm" onChange={(event) => replaceMedia(item, event)} disabled={saving || replacingId !== null} className="hidden" />
                     </label>
-                    <button type="button" onClick={() => updateItem(item.id, { fit: fit === "contain" ? "cover" : "contain", zoom: fit === "cover" ? 1 : zoom })} className="rounded-xl border border-white/15 px-3 py-3 text-xs font-bold text-neutral-300">
+                    <button type="button" onClick={() => updateItem(item.id, { fit: fit === "contain" ? "cover" : "contain", position: "center" })} className="rounded-xl border border-white/15 px-3 py-3 text-xs font-bold text-neutral-300">
                       {fit === "contain" ? "Rahmen füllen" : "Ganzes Medium"}
                     </button>
                   </div>
