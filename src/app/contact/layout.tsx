@@ -1,9 +1,16 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Contact",
-  description: "Contact FRGLASS about available pieces, custom ideas and future workshop sessions.",
+  title: "Kontakt – FRGLASS Borosilikatglas aus Österreich",
+  description:
+    "Kontakt zu FRGLASS für verfügbare Borosilikatglas-Einzelstücke, individuelle Ideen, Anfragen und zukünftige Workshop-Angebote in Österreich.",
   alternates: { canonical: "/contact" },
+  openGraph: {
+    title: "Kontakt – FRGLASS",
+    description:
+      "Anfragen zu handgemachtem Borosilikatglas, Einzelstücken und zukünftigen Workshops.",
+    url: "/contact",
+  },
 };
 
 export default function ContactLayout({ children }: { children: React.ReactNode }) {
