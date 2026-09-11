@@ -2,13 +2,19 @@
 
 import { useEffect } from "react";
 
-const MEDIA_ACCEPT = "image/*,video/*";
+const MIXED_MEDIA_ACCEPT = "image/*,video/*";
+const IMAGE_ACCEPT = "image/*";
 
 function widenMediaPicker(root: ParentNode = document) {
   root.querySelectorAll<HTMLInputElement>('input[type="file"]').forEach((input) => {
     const accept = input.getAttribute("accept") ?? "";
-    if (accept.includes("image/") || accept.includes("video/")) {
-      input.setAttribute("accept", MEDIA_ACCEPT);
+    const allowsImages = accept.includes("image/");
+    const allowsVideos = accept.includes("video/");
+
+    if (allowsImages && allowsVideos) {
+      input.setAttribute("accept", MIXED_MEDIA_ACCEPT);
+    } else if (allowsImages) {
+      input.setAttribute("accept", IMAGE_ACCEPT);
     }
   });
 }
