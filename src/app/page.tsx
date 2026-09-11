@@ -10,8 +10,8 @@ export default function Home() {
       <Hero />
       <JewelryShowcase />
       <Workshop />
-      <HomeCommunityReviews />
       <HomeStudioTeaser />
+      <HomeCommunityReviews />
     </main>
   );
 }
