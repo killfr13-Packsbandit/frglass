@@ -32,24 +32,21 @@ export function isProductMediaUrl(value: string) {
 }
 
 function withProductDefaults(product: ProductRecord): ProductRecord {
-  const genericJewelry = product.category === "Jewelry" || product.categoryDe === "Schmuck";
-  const isSuncatcher = /suncatcher/i.test(product.name) || /suncatcher/i.test(product.nameDe);
+  const genericJewelry =
+    product.category === "Jewelry" ||
+    product.categoryDe === "Schmuck" ||
+    product.category === "Borosilicate Glass Jewelry" ||
+    product.categoryDe === "Borosilikatglas-Schmuck" ||
+    product.category === "Borosilicate Glass Suncatcher" ||
+    product.categoryDe === "Borosilikatglas-Suncatcher";
 
   return {
     ...product,
     images: [...product.images],
     size: LEGACY_SIZE_VALUES.has(product.size?.trim?.() ?? "") ? DEFAULT_SIZE : product.size,
     sizeDe: LEGACY_SIZE_VALUES.has(product.sizeDe?.trim?.() ?? "") ? DEFAULT_SIZE : product.sizeDe,
-    category: genericJewelry
-      ? isSuncatcher
-        ? "Borosilicate Glass Suncatcher"
-        : "Borosilicate Glass Jewelry"
-      : product.category,
-    categoryDe: genericJewelry
-      ? isSuncatcher
-        ? "Borosilikatglas-Suncatcher"
-        : "Borosilikatglas-Schmuck"
-      : product.categoryDe,
+    category: genericJewelry ? "Borosilicate Glass Pendant" : product.category,
+    categoryDe: genericJewelry ? "Borosilikatglas-Anhänger" : product.categoryDe,
   };
 }
 
