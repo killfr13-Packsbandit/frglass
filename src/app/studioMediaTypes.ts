@@ -11,6 +11,9 @@ export type StudioMediaItem = {
   createdAt: string;
   fit?: MediaFit;
   position?: MediaPosition;
+  zoom?: number;
+  focusX?: number;
+  focusY?: number;
 };
 
 export const DEFAULT_STUDIO_MEDIA: StudioMediaItem[] = [
@@ -24,6 +27,9 @@ export const DEFAULT_STUDIO_MEDIA: StudioMediaItem[] = [
     createdAt: "2026-01-01T00:00:00.000Z",
     fit: "cover",
     position: "center",
+    zoom: 1,
+    focusX: 50,
+    focusY: 50,
   },
   {
     id: "studio-me2",
@@ -35,5 +41,8 @@ export const DEFAULT_STUDIO_MEDIA: StudioMediaItem[] = [
     createdAt: "2026-01-01T00:00:01.000Z",
     fit: "cover",
     position: "center",
+    zoom: 1,
+    focusX: 50,
+    focusY: 50,
   },
 ];
