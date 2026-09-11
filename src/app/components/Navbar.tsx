@@ -21,7 +21,7 @@ export default function Navbar() {
 
   return (
     <nav className="fixed left-0 top-0 z-50 w-full border-b border-white/10 bg-black/60 backdrop-blur-xl">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3.5 sm:px-6 sm:py-4 xl:px-8 xl:py-5">
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3.5 sm:px-6 sm:py-4 lg:px-6 xl:px-8 xl:py-5">
         <Link
           href="/"
           className="flex min-w-0 items-center gap-2.5 sm:gap-3"
@@ -40,8 +40,8 @@ export default function Navbar() {
           </span>
         </Link>
 
-        <div className="hidden items-center gap-6 xl:flex">
-          <div className="flex gap-6 text-sm uppercase tracking-widest">
+        <div className="hidden items-center gap-4 lg:flex xl:gap-6">
+          <div className="flex gap-4 text-xs uppercase tracking-widest xl:gap-6 xl:text-sm">
             {navItems.map((item) => (
               <Link key={item.href} href={item.href} className="transition hover:text-orange-300">
                 {t.nav[item.label]}
@@ -53,7 +53,7 @@ export default function Navbar() {
             <button
               type="button"
               onClick={() => setLanguage("de")}
-              className={`rounded-full px-3 py-1.5 transition ${language === "de" ? "bg-white text-black" : "text-neutral-300 hover:text-white"}`}
+              className={`rounded-full px-2.5 py-1.5 transition xl:px-3 ${language === "de" ? "bg-white text-black" : "text-neutral-300 hover:text-white"}`}
               aria-pressed={language === "de"}
             >
               DE
@@ -61,7 +61,7 @@ export default function Navbar() {
             <button
               type="button"
               onClick={() => setLanguage("en")}
-              className={`rounded-full px-3 py-1.5 transition ${language === "en" ? "bg-white text-black" : "text-neutral-300 hover:text-white"}`}
+              className={`rounded-full px-2.5 py-1.5 transition xl:px-3 ${language === "en" ? "bg-white text-black" : "text-neutral-300 hover:text-white"}`}
               aria-pressed={language === "en"}
             >
               EN
@@ -71,7 +71,7 @@ export default function Navbar() {
 
         <button
           type="button"
-          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/15 bg-white/5 xl:hidden"
+          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/15 bg-white/5 lg:hidden"
           onClick={() => setMenuOpen((open) => !open)}
           aria-label={menuOpen ? t.nav.close : t.nav.menu}
           aria-expanded={menuOpen}
@@ -85,7 +85,7 @@ export default function Navbar() {
       </div>
 
       {menuOpen && (
-        <div className="max-h-[calc(100vh-4rem)] overflow-y-auto border-t border-white/10 bg-black/95 px-4 pb-6 pt-3 backdrop-blur-xl sm:px-6 xl:hidden">
+        <div className="max-h-[calc(100vh-4rem)] overflow-y-auto border-t border-white/10 bg-black/95 px-4 pb-6 pt-3 backdrop-blur-xl sm:px-6 lg:hidden">
           <div className="flex flex-col">
             {navItems.map((item) => (
               <Link
