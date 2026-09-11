@@ -7,6 +7,9 @@ import type { ProductRecord } from "../app/productTypes";
 
 const CATALOG_PREFIX = "cms/products/catalog/";
 const DEFAULT_SIZE = "30 × 30 mm";
+const PENDANT_CATEGORY_ID = "pendants";
+const PENDANT_CATEGORY = "Pendants";
+const PENDANT_CATEGORY_DE = "Anhänger";
 const LEGACY_SIZE_VALUES = new Set([
   "",
   "Size details coming soon",
@@ -31,22 +34,34 @@ export function isProductMediaUrl(value: string) {
   }
 }
 
-function withProductDefaults(product: ProductRecord): ProductRecord {
-  const genericJewelry =
+function isLegacyPendantCategory(product: ProductRecord) {
+  return (
+    !product.categoryId ||
+    product.categoryId === "jewelry" ||
+    product.categoryId === "borosilicate-glass-jewelry" ||
+    product.categoryId === "borosilicate-glass-pendant" ||
     product.category === "Jewelry" ||
     product.categoryDe === "Schmuck" ||
     product.category === "Borosilicate Glass Jewelry" ||
     product.categoryDe === "Borosilikatglas-Schmuck" ||
     product.category === "Borosilicate Glass Suncatcher" ||
-    product.categoryDe === "Borosilikatglas-Suncatcher";
+    product.categoryDe === "Borosilikatglas-Suncatcher" ||
+    product.category === "Borosilicate Glass Pendant" ||
+    product.categoryDe === "Borosilikatglas-Anhänger"
+  );
+}
+
+function withProductDefaults(product: ProductRecord): ProductRecord {
+  const pendant = isLegacyPendantCategory(product);
 
   return {
     ...product,
     images: [...product.images],
     size: LEGACY_SIZE_VALUES.has(product.size?.trim?.() ?? "") ? DEFAULT_SIZE : product.size,
     sizeDe: LEGACY_SIZE_VALUES.has(product.sizeDe?.trim?.() ?? "") ? DEFAULT_SIZE : product.sizeDe,
-    category: genericJewelry ? "Borosilicate Glass Pendant" : product.category,
-    categoryDe: genericJewelry ? "Borosilikatglas-Anhänger" : product.categoryDe,
+    categoryId: pendant ? PENDANT_CATEGORY_ID : product.categoryId,
+    category: pendant ? PENDANT_CATEGORY : product.category,
+    categoryDe: pendant ? PENDANT_CATEGORY_DE : product.categoryDe,
   };
 }
 
