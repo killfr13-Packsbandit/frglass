@@ -44,7 +44,7 @@ function normalizeItem(value: unknown): StudioMediaItem | null {
   const position: MediaPosition = ["top", "bottom", "left", "right"].includes(rawPosition)
     ? (rawPosition as MediaPosition)
     : "center";
-  const zoom = numberInRange(raw.zoom, mediaType === "image" ? 0.5 : 1, 2.5, 1);
+  const zoom = numberInRange(raw.zoom, 0.5, 2.5, 1);
   const focusX = numberInRange(raw.focusX, 0, 100, 50);
   const focusY = numberInRange(raw.focusY, 0, 100, 50);
 
