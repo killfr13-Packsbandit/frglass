@@ -29,6 +29,12 @@ export type ProductCategory = {
   name: string;
   nameDe: string;
   visible: boolean;
+  homeEyebrow?: string;
+  homeEyebrowDe?: string;
+  homeTitle?: string;
+  homeTitleDe?: string;
+  homeIntro?: string;
+  homeIntroDe?: string;
 };
 
 export const PRODUCT_STATUS = {
@@ -42,14 +48,7 @@ export function productStatusDe(status: string) {
 }
 
 export function categoryIdFromName(value: string) {
-  return value
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/ß/g, "ss")
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "")
-    .slice(0, 80);
+  return value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/ß/g, "ss").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 80);
 }
 
 export function formatProductPrice(value: string) {
