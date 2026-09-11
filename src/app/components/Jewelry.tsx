@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { formatProductPrice } from "../productTypes";
+import { categoryIdFromName, formatProductPrice } from "../productTypes";
 import { translations, useLanguage } from "./LanguageProvider";
 import ProductPicture from "./ProductPicture";
 import { useProducts } from "./useProducts";
@@ -13,7 +13,13 @@ export default function JewelryShowcase() {
   const { get } = useSiteContent();
   const t = translations[language].jewelry;
   const lang = language === "de" ? "de" : "en";
-  const featuredProducts = products.filter((product) => product.status === "Available").slice(0, 5);
+  const featuredProducts = products
+    .filter(
+      (product) =>
+        product.status === "Available" &&
+        (product.categoryId || categoryIdFromName(product.category)) === "pendants",
+    )
+    .slice(0, 5);
 
   const eyebrow = get(`home.jewelry.eyebrow.${lang}`, t.eyebrow);
   const title = get(`home.jewelry.title.${lang}`, t.title);
