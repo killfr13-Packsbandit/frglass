@@ -86,7 +86,8 @@ export default function Page() {
                       src={item.mediaUrl}
                       alt={caption || t.imageAlt}
                       loading="lazy"
-                      className="h-full w-full object-contain p-2 transition duration-700 group-hover:scale-[1.03] sm:p-3"
+                      className="h-full w-full p-2 transition duration-700 group-hover:scale-[1.03] sm:p-3"
+                      style={{ objectFit: item.fit ?? "contain", objectPosition: item.position ?? "center" }}
                     />
                   )}
                 </div>
