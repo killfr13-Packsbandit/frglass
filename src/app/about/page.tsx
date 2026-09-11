@@ -46,7 +46,7 @@ export default function Page() {
     <h1 className="sr-only">{language === "de" ? "Über mich" : "About FRGLASS"}</h1>
     <section className="mx-auto grid max-w-7xl gap-10 sm:gap-16 md:grid-cols-2 md:items-center">
       <div><p className="mb-6 text-xs font-bold uppercase tracking-[0.4em] text-orange-300 sm:mb-8 sm:text-sm sm:tracking-[0.5em]">{get(`about.eyebrow.${lang}`, t.eyebrow)}</p>{[1,2,3,4].map((number) => { const fallback = t[`p${number}` as keyof typeof t]; return <p key={number} className={`${number > 1 ? "mt-5 sm:mt-6" : ""} text-base leading-7 text-neutral-300 sm:text-lg sm:leading-8`}>{get(`about.p${number}.${lang}`, fallback)}</p>; })}</div>
-      <div className="relative h-[460px] overflow-hidden rounded-2xl border border-white/10 bg-neutral-950 sm:h-[600px] sm:rounded-3xl md:h-[720px]">{mediaUrl && (mediaType === "video" ? <video src={mediaUrl} controls playsInline preload="metadata" className="h-full w-full" style={mediaStyle} /> : <img src={mediaUrl} alt={language === "de" ? "Arbeit am Glasbrenner" : "Working at the glass torch"} className="h-full w-full" style={mediaStyle} />)}</div>
+      <div className="relative h-[460px] overflow-hidden rounded-2xl border border-white/10 bg-neutral-950 sm:h-[600px] sm:rounded-3xl md:h-[720px]">{mediaUrl && (mediaType === "video" ? <video src={mediaUrl} autoPlay muted loop playsInline preload="auto" className="h-full w-full" style={mediaStyle} /> : <img src={mediaUrl} alt={language === "de" ? "Arbeit am Glasbrenner" : "Working at the glass torch"} className="h-full w-full" style={mediaStyle} />)}</div>
     </section>
   </main>;
 }
