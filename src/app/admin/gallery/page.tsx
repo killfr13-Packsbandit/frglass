@@ -3,18 +3,10 @@
 import { upload } from "@vercel/blob/client";
 import Link from "next/link";
 import { ChangeEvent, useEffect, useState } from "react";
-import type { GalleryMediaItem, MediaFit, MediaPosition } from "../../galleryMediaTypes";
+import type { GalleryMediaItem, MediaFit } from "../../galleryMediaTypes";
 
 type Session = { authenticated: boolean };
 type PreviewMode = "desktop" | "mobile";
-
-const positions: { value: MediaPosition; label: string }[] = [
-  { value: "center", label: "Mitte" },
-  { value: "top", label: "Oben" },
-  { value: "bottom", label: "Unten" },
-  { value: "left", label: "Links" },
-  { value: "right", label: "Rechts" },
-];
 
 async function optimizeImage(file: File) {
   if (file.type === "image/gif") return file;
@@ -43,16 +35,29 @@ async function optimizeImage(file: File) {
   }
 }
 
+function imageStyle(item: GalleryMediaItem) {
+  const zoom = item.zoom ?? 1;
+  const focusX = item.focusX ?? 50;
+  const focusY = item.focusY ?? 50;
+  return {
+    objectFit: item.fit ?? "contain",
+    objectPosition: `${focusX}% ${focusY}%`,
+    transform: `scale(${zoom})`,
+    transformOrigin: `${focusX}% ${focusY}%`,
+  } as const;
+}
+
 export default function Page() {
   const [session, setSession] = useState<Session | null>(null);
   const [items, setItems] = useState<GalleryMediaItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [replacingId, setReplacingId] = useState<string | null>(null);
   const [dirty, setDirty] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
-  const [previewMode, setPreviewMode] = useState<PreviewMode>("desktop");
+  const [previewMode, setPreviewMode] = useState<PreviewMode>("mobile");
 
   async function loadItems() {
     const response = await fetch("/api/gallery-media", { cache: "no-store" });
@@ -98,6 +103,17 @@ export default function Page() {
     }
   }
 
+  async function uploadFile(file: File, prefix: string) {
+    const isVideo = file.type.startsWith("video/");
+    const prepared = isVideo ? file : await optimizeImage(file);
+    const safeName = prepared.name.replace(/[^a-zA-Z0-9._-]+/g, "-");
+    const blob = await upload(`gallery/media/${Date.now()}-${prefix}-${safeName}`, prepared, {
+      access: "public",
+      handleUploadUrl: "/api/gallery-media/upload",
+    });
+    return { blob, file: prepared, isVideo };
+  }
+
   async function uploadMedia(event: ChangeEvent<HTMLInputElement>) {
     const files = Array.from(event.target.files ?? []);
     event.target.value = "";
@@ -108,14 +124,7 @@ export default function Page() {
     try {
       const added: GalleryMediaItem[] = [];
       for (let index = 0; index < files.length; index += 1) {
-        const original = files[index];
-        const isVideo = original.type.startsWith("video/");
-        const file = isVideo ? original : await optimizeImage(original);
-        const safeName = file.name.replace(/[^a-zA-Z0-9._-]+/g, "-");
-        const blob = await upload(`gallery/media/${Date.now()}-${index}-${safeName}`, file, {
-          access: "public",
-          handleUploadUrl: "/api/gallery-media/upload",
-        });
+        const { blob, file, isVideo } = await uploadFile(files[index], String(index));
         added.push({
           id: crypto.randomUUID(),
           mediaUrl: blob.url,
@@ -126,9 +135,12 @@ export default function Page() {
           createdAt: new Date().toISOString(),
           fit: "contain",
           position: "center",
+          zoom: 1,
+          focusX: 50,
+          focusY: 50,
         });
       }
-      await persist([...added, ...items], "Hochgeladen ✓ Neue Medien stehen jetzt automatisch oben.");
+      await persist([...added, ...items], "Hochgeladen ✓");
     } catch {
       setError("Upload hat nicht geklappt. Videos dürfen maximal 100 MB groß sein.");
     } finally {
@@ -136,8 +148,35 @@ export default function Page() {
     }
   }
 
+  async function replaceMedia(item: GalleryMediaItem, event: ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    event.target.value = "";
+    if (!file) return;
+    setReplacingId(item.id);
+    setError("");
+    setMessage("");
+    try {
+      const { blob, file: prepared, isVideo } = await uploadFile(file, `replace-${item.id}`);
+      const next = items.map((entry) => entry.id === item.id ? {
+        ...entry,
+        mediaUrl: blob.url,
+        mediaType: isVideo ? "video" as const : "image" as const,
+        contentType: prepared.type,
+        fit: isVideo ? entry.fit : "cover" as const,
+        zoom: 1,
+        focusX: 50,
+        focusY: 50,
+      } : entry);
+      await persist(next, "Bild ersetzt ✓");
+    } catch {
+      setError("Bild konnte nicht ersetzt werden.");
+    } finally {
+      setReplacingId(null);
+    }
+  }
+
   function updateItem(id: string, patch: Partial<GalleryMediaItem>) {
-    setItems((current) => current.map((item) => (item.id === id ? { ...item, ...patch } : item)));
+    setItems((current) => current.map((item) => item.id === id ? { ...item, ...patch } : item));
     setDirty(true);
     setMessage("");
   }
@@ -161,14 +200,14 @@ export default function Page() {
   if (!session?.authenticated) return <main className="min-h-screen bg-black px-5 py-28 text-white"><section className="mx-auto max-w-3xl"><h1 className="text-4xl font-black uppercase">Galerie</h1><p className="mt-6 text-neutral-400">Bitte zuerst im Adminbereich einloggen.</p><Link href="/admin" className="mt-6 inline-block rounded-full border border-orange-300 px-5 py-3 font-bold text-orange-300">Zum Login</Link></section></main>;
 
   return (
-    <main className="min-h-screen bg-black px-4 py-24 text-white sm:px-6 sm:py-28">
-      <section className="mx-auto max-w-5xl">
+    <main className="min-h-screen bg-black px-4 py-20 text-white sm:px-6 sm:py-28">
+      <section className="mx-auto max-w-6xl">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
             <Link href="/admin" className="text-sm text-neutral-500 transition hover:text-white">← Admin</Link>
             <p className="mt-5 text-xs font-bold uppercase tracking-[0.4em] text-orange-300">FRGLASS CMS</p>
             <h1 className="mt-3 text-4xl font-black uppercase sm:text-6xl">Galerie</h1>
-            <p className="mt-4 max-w-2xl leading-7 text-neutral-400">Neue Bilder kommen automatisch ganz nach oben. Mit „Ganzes Bild“ wird nichts abgeschnitten, mit „Rahmen füllen“ kannst du den Ausschnitt und die Ausrichtung bestimmen.</p>
+            <p className="mt-4 max-w-2xl leading-7 text-neutral-400">Direkt am Handy den echten Bildausschnitt einstellen: zoomen, links/rechts und oben/unten verschieben und sofort sehen, wie die Karte auf der Seite aussieht.</p>
           </div>
           <label className="cursor-pointer rounded-full bg-white px-5 py-3 text-sm font-black uppercase tracking-wider text-black">
             {uploading ? "Upload …" : "+ Bild / Video"}
@@ -178,75 +217,95 @@ export default function Page() {
 
         {message && <p className="mt-6 rounded-2xl border border-emerald-500/20 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-200">{message}</p>}
         {error && <p className="mt-6 rounded-2xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-200">{error}</p>}
-        {dirty && <div className="sticky top-20 z-20 mt-6 flex items-center justify-between gap-4 rounded-2xl border border-orange-300/30 bg-black/95 p-4 shadow-2xl backdrop-blur"><p className="text-sm text-neutral-300">Änderungen noch nicht gespeichert.</p><button onClick={() => persist(items)} disabled={saving} className="rounded-full bg-orange-300 px-5 py-2.5 text-sm font-black uppercase tracking-wider text-black disabled:opacity-50">{saving ? "Speichert …" : "Speichern"}</button></div>}
+        {dirty && <div className="sticky top-16 z-30 mt-6 flex items-center justify-between gap-3 rounded-2xl border border-orange-300/30 bg-black/95 p-3 shadow-2xl backdrop-blur sm:p-4"><p className="text-sm text-neutral-300">Noch nicht gespeichert.</p><button onClick={() => persist(items)} disabled={saving} className="rounded-full bg-orange-300 px-5 py-2.5 text-sm font-black uppercase tracking-wider text-black disabled:opacity-50">{saving ? "Speichert …" : "Speichern"}</button></div>}
 
-        <section className="mt-8 overflow-hidden rounded-3xl border border-orange-300/20 bg-white/[0.035]">
-          <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/10 px-5 py-4 sm:px-6">
-            <div>
-              <p className="text-xs font-bold uppercase tracking-[0.3em] text-orange-300">Live-Vorschau</p>
-              <h2 className="mt-1 text-lg font-black">So sieht es auf der Website aus</h2>
-              <p className="mt-1 text-sm text-neutral-500">Änderungen an Bildausschnitt, Reihenfolge und Beschreibung siehst du hier sofort – auch vor dem Speichern.</p>
-            </div>
-            <div className="flex rounded-full border border-white/10 bg-black p-1">
-              <button type="button" onClick={() => setPreviewMode("desktop")} className={`rounded-full px-4 py-2 text-xs font-bold uppercase tracking-wider ${previewMode === "desktop" ? "bg-white text-black" : "text-neutral-400"}`}>Desktop</button>
-              <button type="button" onClick={() => setPreviewMode("mobile")} className={`rounded-full px-4 py-2 text-xs font-bold uppercase tracking-wider ${previewMode === "mobile" ? "bg-white text-black" : "text-neutral-400"}`}>Handy</button>
-            </div>
+        <div className="mt-7 flex justify-center">
+          <div className="flex rounded-full border border-white/10 bg-white/[0.04] p-1">
+            <button type="button" onClick={() => setPreviewMode("mobile")} className={`rounded-full px-4 py-2 text-xs font-bold uppercase ${previewMode === "mobile" ? "bg-white text-black" : "text-neutral-400"}`}>Handy</button>
+            <button type="button" onClick={() => setPreviewMode("desktop")} className={`rounded-full px-4 py-2 text-xs font-bold uppercase ${previewMode === "desktop" ? "bg-white text-black" : "text-neutral-400"}`}>Desktop</button>
           </div>
+        </div>
 
-          <div className="overflow-x-auto bg-black p-4 sm:p-6">
-            <div className={`mx-auto rounded-2xl border border-white/10 bg-black px-4 py-10 transition-all sm:px-6 ${previewMode === "mobile" ? "max-w-[390px]" : "max-w-[1100px]"}`}>
-              <p className="mb-5 text-center text-xs font-bold uppercase tracking-[0.4em] text-orange-300 sm:mb-6 sm:text-sm sm:tracking-[0.5em]">Galerie</p>
-              <p className="mx-auto mb-10 max-w-2xl text-center text-base leading-7 text-neutral-300">Eine Auswahl an Schmuck, Objekten und Experimenten aus der Werkstatt.</p>
-
-              <div className={previewMode === "mobile" ? "grid gap-4" : "grid gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3"}>
-                {items.map((item) => {
-                  const caption = item.description || item.descriptionEn;
-                  return (
-                    <div key={`preview-${item.id}`} className="group overflow-hidden rounded-2xl border border-white/10 bg-neutral-950 text-left sm:rounded-3xl">
-                      <div className={`relative flex items-center justify-center p-2 sm:p-3 ${previewMode === "mobile" ? "h-[330px]" : "h-[360px] lg:h-[410px]"}`}>
-                        {item.mediaType === "video" ? (
-                          <>
-                            <video src={item.mediaUrl} muted playsInline preload="metadata" className="h-full w-full object-contain" />
-                            <span className="pointer-events-none absolute bottom-4 right-4 rounded-full bg-black/70 px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-white">Video</span>
-                          </>
-                        ) : (
-                          <img src={item.mediaUrl} alt={caption || "Galerie-Vorschau"} className="h-full w-full p-2 sm:p-3" style={{ objectFit: item.fit ?? "contain", objectPosition: item.position ?? "center" }} />
-                        )}
-                      </div>
-                      {caption && <p className="border-t border-white/10 px-5 py-4 text-sm leading-6 text-neutral-400">{caption}</p>}
-                    </div>
-                  );
-                })}
-              </div>
-              {items.length === 0 && <p className="py-14 text-center text-sm text-neutral-600">Noch keine Bilder in der Galerie.</p>}
-            </div>
-          </div>
-        </section>
-
-        <div className="mt-8 grid gap-5 md:grid-cols-2">
+        <div className="mt-6 grid gap-7 lg:grid-cols-2">
           {items.map((item, index) => {
             const fit: MediaFit = item.fit ?? "contain";
-            const position: MediaPosition = item.position ?? "center";
+            const zoom = item.zoom ?? 1;
+            const focusX = item.focusX ?? 50;
+            const focusY = item.focusY ?? 50;
+            const caption = item.description || item.descriptionEn;
+            const previewHeight = previewMode === "mobile" ? "h-[330px]" : "h-[410px]";
+
             return (
               <article key={item.id} className="overflow-hidden rounded-3xl border border-white/10 bg-white/[0.04]">
-                <div className="h-[300px] bg-neutral-950 sm:h-[380px]">
-                  {item.mediaType === "video" ? <video src={item.mediaUrl} controls playsInline preload="metadata" className="h-full w-full object-contain" /> : <img src={item.mediaUrl} alt="Galerie" className="h-full w-full" style={{ objectFit: fit, objectPosition: position }} />}
-                </div>
-                <div className="p-5">
-                  <div className="flex flex-wrap items-center justify-between gap-3">
-                    <span className="text-xs font-bold uppercase tracking-[0.25em] text-neutral-500">Position {index + 1}</span>
-                    <div className="flex gap-2"><button type="button" onClick={() => move(index, -1)} disabled={index === 0} className="rounded-full border border-white/15 px-3 py-2 text-sm disabled:opacity-25">↑</button><button type="button" onClick={() => move(index, 1)} disabled={index === items.length - 1} className="rounded-full border border-white/15 px-3 py-2 text-sm disabled:opacity-25">↓</button><button type="button" onClick={() => remove(item)} disabled={saving} className="rounded-full border border-red-400/30 px-3 py-2 text-sm text-red-300">Löschen</button></div>
+                <div className="border-b border-white/10 bg-black p-3 sm:p-4">
+                  <div className="mb-3 flex items-center justify-between gap-3">
+                    <span className="text-xs font-bold uppercase tracking-[0.25em] text-orange-300">Website-Vorschau · {index + 1}</span>
+                    <div className="flex gap-1.5">
+                      <button type="button" onClick={() => move(index, -1)} disabled={index === 0} className="rounded-full border border-white/15 px-3 py-1.5 text-sm disabled:opacity-25">↑</button>
+                      <button type="button" onClick={() => move(index, 1)} disabled={index === items.length - 1} className="rounded-full border border-white/15 px-3 py-1.5 text-sm disabled:opacity-25">↓</button>
+                    </div>
                   </div>
 
-                  {item.mediaType === "image" && <div className="mt-5 rounded-2xl border border-white/10 bg-black/30 p-4"><p className="text-sm font-bold">Bilddarstellung</p><div className="mt-3 flex flex-wrap gap-2"><button type="button" onClick={() => updateItem(item.id, { fit: "contain" })} className={`rounded-full border px-3 py-2 text-xs font-bold ${fit === "contain" ? "border-orange-300 bg-orange-300 text-black" : "border-white/15 text-neutral-300"}`}>Ganzes Bild</button><button type="button" onClick={() => updateItem(item.id, { fit: "cover" })} className={`rounded-full border px-3 py-2 text-xs font-bold ${fit === "cover" ? "border-orange-300 bg-orange-300 text-black" : "border-white/15 text-neutral-300"}`}>Rahmen füllen</button></div>{fit === "cover" && <div className="mt-4"><p className="mb-2 text-xs text-neutral-500">Ausschnitt ausrichten</p><div className="flex flex-wrap gap-2">{positions.map((entry) => <button key={entry.value} type="button" onClick={() => updateItem(item.id, { position: entry.value })} className={`rounded-full border px-3 py-2 text-xs ${position === entry.value ? "border-white bg-white text-black" : "border-white/15 text-neutral-300"}`}>{entry.label}</button>)}</div></div>}</div>}
+                  <div className={`mx-auto overflow-hidden rounded-2xl border border-white/10 bg-neutral-950 ${previewMode === "mobile" ? "max-w-[390px]" : "max-w-[620px]"}`}>
+                    <div className={`relative flex items-center justify-center overflow-hidden ${previewHeight}`}>
+                      {item.mediaType === "video" ? (
+                        <video src={item.mediaUrl} controls playsInline preload="metadata" className="h-full w-full object-contain" />
+                      ) : (
+                        <img src={item.mediaUrl} alt="Galerie Vorschau" className="h-full w-full" style={imageStyle(item)} />
+                      )}
+                    </div>
+                    {caption && <p className="border-t border-white/10 px-5 py-4 text-sm leading-6 text-neutral-400">{caption}</p>}
+                  </div>
+                </div>
 
-                  <label className="mt-5 grid gap-2"><span className="text-sm font-bold">Kurze Beschreibung DE</span><textarea value={item.description} onChange={(event) => updateItem(item.id, { description: event.target.value.slice(0, 220) })} rows={2} maxLength={220} placeholder="Optional – ein kurzer Satz reicht." className="resize-none rounded-2xl border border-white/10 bg-black/50 px-4 py-3 outline-none focus:border-orange-300/60" /></label>
-                  <label className="mt-4 grid gap-2"><span className="text-sm font-bold">Short description EN</span><textarea value={item.descriptionEn} onChange={(event) => updateItem(item.id, { descriptionEn: event.target.value.slice(0, 220) })} rows={2} maxLength={220} placeholder="Optional – leer = deutscher Text als Fallback." className="resize-none rounded-2xl border border-white/10 bg-black/50 px-4 py-3 outline-none focus:border-orange-300/60" /></label>
+                <div className="p-4 sm:p-5">
+                  <div className="grid grid-cols-2 gap-2">
+                    <label className="flex cursor-pointer items-center justify-center rounded-2xl bg-white px-4 py-3 text-center text-sm font-black text-black">
+                      {replacingId === item.id ? "Ersetzt …" : "Bild ersetzen"}
+                      <input type="file" accept="image/jpeg,image/png,image/webp,image/gif,video/mp4,video/quicktime,video/webm" onChange={(event) => replaceMedia(item, event)} disabled={Boolean(replacingId) || saving} className="hidden" />
+                    </label>
+                    <button type="button" onClick={() => remove(item)} disabled={saving} className="rounded-2xl border border-red-400/30 px-4 py-3 text-sm font-bold text-red-300">Löschen</button>
+                  </div>
+
+                  {item.mediaType === "image" && (
+                    <div className="mt-4 rounded-2xl border border-orange-300/20 bg-black/40 p-4">
+                      <div className="flex items-center justify-between gap-3">
+                        <p className="font-bold">Bild einstellen</p>
+                        <button type="button" onClick={() => updateItem(item.id, { zoom: 1, focusX: 50, focusY: 50, fit: "cover", position: "center" })} className="text-xs font-bold text-orange-300">Zurücksetzen</button>
+                      </div>
+
+                      <div className="mt-4 flex gap-2">
+                        <button type="button" onClick={() => updateItem(item.id, { fit: "contain", zoom: 1 })} className={`flex-1 rounded-xl border px-3 py-2.5 text-xs font-bold ${fit === "contain" ? "border-orange-300 bg-orange-300 text-black" : "border-white/15 text-neutral-300"}`}>Ganzes Bild</button>
+                        <button type="button" onClick={() => updateItem(item.id, { fit: "cover" })} className={`flex-1 rounded-xl border px-3 py-2.5 text-xs font-bold ${fit === "cover" ? "border-orange-300 bg-orange-300 text-black" : "border-white/15 text-neutral-300"}`}>Rahmen füllen</button>
+                      </div>
+
+                      <label className="mt-5 block">
+                        <span className="flex justify-between text-sm"><b>Zoom</b><span className="text-neutral-500">{zoom.toFixed(2)}×</span></span>
+                        <input type="range" min="1" max="2.5" step="0.01" value={zoom} onChange={(event) => updateItem(item.id, { zoom: Number(event.target.value), fit: Number(event.target.value) > 1 ? "cover" : fit })} className="mt-2 w-full accent-orange-300" />
+                      </label>
+
+                      <label className="mt-5 block">
+                        <span className="flex justify-between text-sm"><b>Links ↔ Rechts</b><span className="text-neutral-500">{Math.round(focusX)}%</span></span>
+                        <input type="range" min="0" max="100" step="1" value={focusX} onChange={(event) => updateItem(item.id, { focusX: Number(event.target.value), position: "center" })} className="mt-2 w-full accent-orange-300" />
+                      </label>
+
+                      <label className="mt-5 block">
+                        <span className="flex justify-between text-sm"><b>Oben ↕ Unten</b><span className="text-neutral-500">{Math.round(focusY)}%</span></span>
+                        <input type="range" min="0" max="100" step="1" value={focusY} onChange={(event) => updateItem(item.id, { focusY: Number(event.target.value), position: "center" })} className="mt-2 w-full accent-orange-300" />
+                      </label>
+
+                      <p className="mt-4 text-xs leading-5 text-neutral-500">Die Vorschau oben ist der echte Ausschnitt. Die Regler funktionieren direkt mit dem Finger am Handy.</p>
+                    </div>
+                  )}
+
+                  <label className="mt-4 grid gap-2"><span className="text-sm font-bold">Beschreibung DE</span><textarea value={item.description} onChange={(event) => updateItem(item.id, { description: event.target.value.slice(0, 220) })} rows={2} maxLength={220} placeholder="Optional" className="resize-none rounded-2xl border border-white/10 bg-black/50 px-4 py-3 outline-none focus:border-orange-300/60" /></label>
+                  <label className="mt-4 grid gap-2"><span className="text-sm font-bold">Description EN</span><textarea value={item.descriptionEn} onChange={(event) => updateItem(item.id, { descriptionEn: event.target.value.slice(0, 220) })} rows={2} maxLength={220} placeholder="Optional" className="resize-none rounded-2xl border border-white/10 bg-black/50 px-4 py-3 outline-none focus:border-orange-300/60" /></label>
                 </div>
               </article>
             );
           })}
         </div>
+
         {items.length === 0 && <div className="mt-8 rounded-3xl border border-dashed border-white/15 p-10 text-center text-neutral-500">Noch keine Galerie-Medien.</div>}
       </section>
     </main>
