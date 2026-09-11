@@ -6,6 +6,7 @@ import { ChangeEvent, useEffect, useState } from "react";
 import type { GalleryMediaItem, MediaFit, MediaPosition } from "../../galleryMediaTypes";
 
 type Session = { authenticated: boolean };
+type PreviewMode = "desktop" | "mobile";
 
 const positions: { value: MediaPosition; label: string }[] = [
   { value: "center", label: "Mitte" },
@@ -51,6 +52,7 @@ export default function Page() {
   const [dirty, setDirty] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const [previewMode, setPreviewMode] = useState<PreviewMode>("desktop");
 
   async function loadItems() {
     const response = await fetch("/api/gallery-media", { cache: "no-store" });
@@ -177,6 +179,49 @@ export default function Page() {
         {message && <p className="mt-6 rounded-2xl border border-emerald-500/20 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-200">{message}</p>}
         {error && <p className="mt-6 rounded-2xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-200">{error}</p>}
         {dirty && <div className="sticky top-20 z-20 mt-6 flex items-center justify-between gap-4 rounded-2xl border border-orange-300/30 bg-black/95 p-4 shadow-2xl backdrop-blur"><p className="text-sm text-neutral-300">Änderungen noch nicht gespeichert.</p><button onClick={() => persist(items)} disabled={saving} className="rounded-full bg-orange-300 px-5 py-2.5 text-sm font-black uppercase tracking-wider text-black disabled:opacity-50">{saving ? "Speichert …" : "Speichern"}</button></div>}
+
+        <section className="mt-8 overflow-hidden rounded-3xl border border-orange-300/20 bg-white/[0.035]">
+          <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/10 px-5 py-4 sm:px-6">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.3em] text-orange-300">Live-Vorschau</p>
+              <h2 className="mt-1 text-lg font-black">So sieht es auf der Website aus</h2>
+              <p className="mt-1 text-sm text-neutral-500">Änderungen an Bildausschnitt, Reihenfolge und Beschreibung siehst du hier sofort – auch vor dem Speichern.</p>
+            </div>
+            <div className="flex rounded-full border border-white/10 bg-black p-1">
+              <button type="button" onClick={() => setPreviewMode("desktop")} className={`rounded-full px-4 py-2 text-xs font-bold uppercase tracking-wider ${previewMode === "desktop" ? "bg-white text-black" : "text-neutral-400"}`}>Desktop</button>
+              <button type="button" onClick={() => setPreviewMode("mobile")} className={`rounded-full px-4 py-2 text-xs font-bold uppercase tracking-wider ${previewMode === "mobile" ? "bg-white text-black" : "text-neutral-400"}`}>Handy</button>
+            </div>
+          </div>
+
+          <div className="overflow-x-auto bg-black p-4 sm:p-6">
+            <div className={`mx-auto rounded-2xl border border-white/10 bg-black px-4 py-10 transition-all sm:px-6 ${previewMode === "mobile" ? "max-w-[390px]" : "max-w-[1100px]"}`}>
+              <p className="mb-5 text-center text-xs font-bold uppercase tracking-[0.4em] text-orange-300 sm:mb-6 sm:text-sm sm:tracking-[0.5em]">Galerie</p>
+              <p className="mx-auto mb-10 max-w-2xl text-center text-base leading-7 text-neutral-300">Eine Auswahl an Schmuck, Objekten und Experimenten aus der Werkstatt.</p>
+
+              <div className={previewMode === "mobile" ? "grid gap-4" : "grid gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3"}>
+                {items.map((item) => {
+                  const caption = item.description || item.descriptionEn;
+                  return (
+                    <div key={`preview-${item.id}`} className="group overflow-hidden rounded-2xl border border-white/10 bg-neutral-950 text-left sm:rounded-3xl">
+                      <div className={`relative flex items-center justify-center p-2 sm:p-3 ${previewMode === "mobile" ? "h-[330px]" : "h-[360px] lg:h-[410px]"}`}>
+                        {item.mediaType === "video" ? (
+                          <>
+                            <video src={item.mediaUrl} muted playsInline preload="metadata" className="h-full w-full object-contain" />
+                            <span className="pointer-events-none absolute bottom-4 right-4 rounded-full bg-black/70 px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-white">Video</span>
+                          </>
+                        ) : (
+                          <img src={item.mediaUrl} alt={caption || "Galerie-Vorschau"} className="h-full w-full p-2 sm:p-3" style={{ objectFit: item.fit ?? "contain", objectPosition: item.position ?? "center" }} />
+                        )}
+                      </div>
+                      {caption && <p className="border-t border-white/10 px-5 py-4 text-sm leading-6 text-neutral-400">{caption}</p>}
+                    </div>
+                  );
+                })}
+              </div>
+              {items.length === 0 && <p className="py-14 text-center text-sm text-neutral-600">Noch keine Bilder in der Galerie.</p>}
+            </div>
+          </div>
+        </section>
 
         <div className="mt-8 grid gap-5 md:grid-cols-2">
           {items.map((item, index) => {
