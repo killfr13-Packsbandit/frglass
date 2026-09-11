@@ -20,11 +20,11 @@ export default function Navbar() {
   const languageLabel = language === "de" ? "Sprache" : "Language";
 
   return (
-    <nav className="fixed left-0 top-0 z-50 w-full border-b border-white/10 bg-black/50 backdrop-blur-xl">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 sm:px-8 sm:py-5">
+    <nav className="fixed left-0 top-0 z-50 w-full border-b border-white/10 bg-black/60 backdrop-blur-xl">
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3.5 sm:px-6 sm:py-4 xl:px-8 xl:py-5">
         <Link
           href="/"
-          className="flex items-center gap-3"
+          className="flex min-w-0 items-center gap-2.5 sm:gap-3"
           onClick={() => setMenuOpen(false)}
         >
           <span className="relative h-8 w-7 shrink-0 overflow-hidden sm:h-9 sm:w-8">
@@ -35,12 +35,12 @@ export default function Navbar() {
               className="absolute inset-0 h-full w-full scale-125 object-cover object-center"
             />
           </span>
-          <span className="text-lg font-black tracking-[0.28em] sm:text-xl sm:tracking-[0.3em]">
+          <span className="truncate text-base font-black tracking-[0.22em] sm:text-xl sm:tracking-[0.3em]">
             {siteConfig.name}
           </span>
         </Link>
 
-        <div className="hidden items-center gap-6 lg:flex">
+        <div className="hidden items-center gap-6 xl:flex">
           <div className="flex gap-6 text-sm uppercase tracking-widest">
             {navItems.map((item) => (
               <Link key={item.href} href={item.href} className="transition hover:text-orange-300">
@@ -71,7 +71,7 @@ export default function Navbar() {
 
         <button
           type="button"
-          className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-white/5 lg:hidden"
+          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/15 bg-white/5 xl:hidden"
           onClick={() => setMenuOpen((open) => !open)}
           aria-label={menuOpen ? t.nav.close : t.nav.menu}
           aria-expanded={menuOpen}
@@ -85,7 +85,7 @@ export default function Navbar() {
       </div>
 
       {menuOpen && (
-        <div className="border-t border-white/10 bg-black/95 px-5 pb-6 pt-4 backdrop-blur-xl lg:hidden">
+        <div className="max-h-[calc(100vh-4rem)] overflow-y-auto border-t border-white/10 bg-black/95 px-4 pb-6 pt-3 backdrop-blur-xl sm:px-6 xl:hidden">
           <div className="flex flex-col">
             {navItems.map((item) => (
               <Link
@@ -99,7 +99,7 @@ export default function Navbar() {
             ))}
           </div>
 
-          <div className="mt-5 flex items-center justify-between">
+          <div className="mt-5 flex items-center justify-between gap-4">
             <span className="text-xs font-bold uppercase tracking-[0.2em] text-neutral-500">{languageLabel}</span>
             <div className="flex items-center rounded-full border border-white/15 bg-white/5 p-1 text-xs font-bold">
               <button
