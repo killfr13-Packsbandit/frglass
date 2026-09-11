@@ -9,6 +9,18 @@ import {
 import { translations, useLanguage } from "./LanguageProvider";
 import { useSiteContent } from "./SiteContentProvider";
 
+function mediaStyle(item: StudioMediaItem) {
+  const zoom = item.zoom ?? 1;
+  const focusX = item.focusX ?? 50;
+  const focusY = item.focusY ?? 50;
+  return {
+    objectFit: item.fit ?? "cover",
+    objectPosition: `${focusX}% ${focusY}%`,
+    transform: `scale(${zoom})`,
+    transformOrigin: `${focusX}% ${focusY}%`,
+  } as const;
+}
+
 export default function Studio() {
   const { language } = useLanguage();
   const { get } = useSiteContent();
@@ -69,14 +81,15 @@ export default function Studio() {
                   key={item.id}
                   className="overflow-hidden rounded-2xl border border-white/10 bg-black/30 sm:rounded-3xl"
                 >
-                  <div className="h-[380px] bg-black sm:h-[520px]">
+                  <div className="h-[380px] overflow-hidden bg-black sm:h-[520px]">
                     {item.mediaType === "video" ? (
                       <video
                         src={item.mediaUrl}
                         controls
                         playsInline
                         preload="metadata"
-                        className="h-full w-full object-contain"
+                        className="h-full w-full"
+                        style={mediaStyle(item)}
                       />
                     ) : (
                       <img
@@ -89,7 +102,7 @@ export default function Studio() {
                         }
                         loading="lazy"
                         className="h-full w-full"
-                        style={{ objectFit: item.fit ?? "cover", objectPosition: item.position ?? "center" }}
+                        style={mediaStyle(item)}
                       />
                     )}
                   </div>
