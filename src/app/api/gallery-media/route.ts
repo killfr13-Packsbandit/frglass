@@ -15,6 +15,12 @@ function text(value: unknown, maxLength: number) {
   return typeof value === "string" ? value.trim().slice(0, maxLength) : "";
 }
 
+function clampNumber(value: unknown, min: number, max: number, fallback: number) {
+  const parsed = typeof value === "number" ? value : Number(value);
+  if (!Number.isFinite(parsed)) return fallback;
+  return Math.min(max, Math.max(min, parsed));
+}
+
 function normalizeItem(value: unknown): GalleryMediaItem | null {
   if (!value || typeof value !== "object") return null;
   const raw = value as Record<string, unknown>;
@@ -46,6 +52,9 @@ function normalizeItem(value: unknown): GalleryMediaItem | null {
     createdAt,
     fit,
     position,
+    zoom: clampNumber(raw.zoom, 1, 2.5, 1),
+    focusX: clampNumber(raw.focusX, 0, 100, 50),
+    focusY: clampNumber(raw.focusY, 0, 100, 50),
   };
 }
 
