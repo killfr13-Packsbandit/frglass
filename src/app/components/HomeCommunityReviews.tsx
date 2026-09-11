@@ -50,14 +50,14 @@ export default function HomeCommunityReviews() {
   );
 
   return (
-    <section className="bg-black px-4 py-20 text-white sm:px-6 sm:py-24">
+    <section className="bg-black px-4 py-16 text-white sm:px-6 sm:py-24">
       <div className="mx-auto max-w-7xl">
         <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <p className="text-xs font-bold uppercase tracking-[0.4em] text-orange-300 sm:text-sm">
+          <div className="min-w-0">
+            <p className="text-xs font-bold uppercase tracking-[0.32em] text-orange-300 sm:text-sm sm:tracking-[0.4em]">
               {eyebrow}
             </p>
-            <h2 className="mt-4 text-3xl font-black uppercase sm:text-5xl">
+            <h2 className="mt-4 break-normal text-3xl font-black uppercase leading-tight sm:text-5xl">
               {title}
             </h2>
             {average !== null && (
@@ -71,17 +71,17 @@ export default function HomeCommunityReviews() {
 
           <Link
             href="/community"
-            className="inline-flex w-fit rounded-full border border-white/15 px-5 py-3 text-xs font-bold uppercase tracking-widest transition hover:border-orange-300 hover:text-orange-300"
+            className="inline-flex w-fit shrink-0 rounded-full border border-white/15 px-5 py-3 text-xs font-bold uppercase tracking-widest transition hover:border-orange-300 hover:text-orange-300"
           >
             {button}
           </Link>
         </div>
 
-        <div className="mt-10 grid gap-5 md:grid-cols-3">
+        <div className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
           {visibleReviews.map((review) => (
             <article
               key={review.id}
-              className="overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03]"
+              className="overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] sm:rounded-3xl"
             >
               {review.mediaUrl && (
                 <div className="aspect-[4/3] overflow-hidden bg-neutral-950">
@@ -93,8 +93,8 @@ export default function HomeCommunityReviews() {
                   />
                 </div>
               )}
-              <div className="p-6">
-                <div className="flex items-start justify-between gap-4">
+              <div className="p-5 sm:p-6">
+                <div className="flex flex-wrap items-start justify-between gap-3">
                   <p className="font-bold">{review.name}</p>
                   <span className="whitespace-nowrap text-sm tracking-wider text-orange-300">
                     {stars(review.rating)}
