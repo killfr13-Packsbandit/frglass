@@ -10,6 +10,7 @@ type Props = {
   onChange: (next: { zoom?: number; focusX?: number; focusY?: number }) => void;
   aspectClass?: string;
   mediaType?: "image" | "video";
+  fit?: "cover" | "contain";
 };
 
 export default function ImageFocusEditor({
@@ -20,6 +21,7 @@ export default function ImageFocusEditor({
   onChange,
   aspectClass = "aspect-[4/3]",
   mediaType = "image",
+  fit,
 }: Props) {
   function place(event: PointerEvent<HTMLDivElement>) {
     const rect = event.currentTarget.getBoundingClientRect();
@@ -37,8 +39,9 @@ export default function ImageFocusEditor({
     if (event.currentTarget.hasPointerCapture(event.pointerId)) place(event);
   }
 
-  const minZoom = 0.5;
+  const effectiveFit = fit ?? (zoom < 1 ? "contain" : "cover");
   const mediaStyle = {
+    objectFit: effectiveFit,
     objectPosition: `${focusX}% ${focusY}%`,
     transform: `scale(${zoom})`,
     transformOrigin: `${focusX}% ${focusY}%`,
@@ -59,7 +62,7 @@ export default function ImageFocusEditor({
             loop
             playsInline
             preload="metadata"
-            className="pointer-events-none h-full w-full object-cover"
+            className="pointer-events-none h-full w-full"
             style={mediaStyle}
           />
         ) : (
@@ -67,7 +70,7 @@ export default function ImageFocusEditor({
             src={src}
             alt="Bildvorschau"
             draggable={false}
-            className="pointer-events-none h-full w-full object-cover"
+            className="pointer-events-none h-full w-full"
             style={mediaStyle}
           />
         )}
@@ -85,7 +88,7 @@ export default function ImageFocusEditor({
 
       <label className="mt-4 block">
         <span className="flex justify-between text-sm"><b>Zoom</b><span className="text-neutral-500">{zoom.toFixed(2)}×</span></span>
-        <input type="range" min={minZoom} max="2.5" step="0.01" value={zoom} onChange={(event) => onChange({ zoom: Number(event.target.value) })} className="mt-2 w-full accent-orange-300" />
+        <input type="range" min="0.5" max="2.5" step="0.01" value={zoom} onChange={(event) => onChange({ zoom: Number(event.target.value) })} className="mt-2 w-full accent-orange-300" />
       </label>
       <div className="mt-2 flex items-center justify-between text-xs text-neutral-500">
         <span>X {Math.round(focusX)}% · Y {Math.round(focusY)}%</span>
