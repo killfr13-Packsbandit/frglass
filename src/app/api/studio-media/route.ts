@@ -15,6 +15,11 @@ function text(value: unknown, maxLength: number) {
   return typeof value === "string" ? value.trim().slice(0, maxLength) : "";
 }
 
+function numberInRange(value: unknown, min: number, max: number, fallback: number) {
+  const number = typeof value === "number" ? value : Number(value);
+  return Number.isFinite(number) ? Math.min(max, Math.max(min, number)) : fallback;
+}
+
 function validMediaUrl(value: string) {
   return value.startsWith("/") || isStudioMediaUrl(value);
 }
@@ -39,6 +44,9 @@ function normalizeItem(value: unknown): StudioMediaItem | null {
   const position: MediaPosition = ["top", "bottom", "left", "right"].includes(rawPosition)
     ? (rawPosition as MediaPosition)
     : "center";
+  const zoom = numberInRange(raw.zoom, 1, 2.5, 1);
+  const focusX = numberInRange(raw.focusX, 0, 100, 50);
+  const focusY = numberInRange(raw.focusY, 0, 100, 50);
 
   return {
     id: text(raw.id, 120) || randomUUID(),
@@ -50,6 +58,9 @@ function normalizeItem(value: unknown): StudioMediaItem | null {
     createdAt,
     fit,
     position,
+    zoom,
+    focusX,
+    focusY,
   };
 }
 
