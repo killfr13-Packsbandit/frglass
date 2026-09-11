@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { products } from "../../products";
+import { getProductCatalog } from "../../../lib/productCatalog";
 
 const SITE_URL = "https://frglass.at";
 
@@ -18,36 +18,47 @@ function numericPrice(value: string) {
   return Number.isFinite(price) ? price.toFixed(2) : null;
 }
 
+function seoDescription(product: Awaited<ReturnType<typeof getProductCatalog>>[number]) {
+  const description = product.description?.trim();
+  if (description) return description;
+  return `${product.name} – handgemachter ${product.categoryDe || "Borosilikatglas-Anhänger"} von FRGLASS aus Österreich.`;
+}
+
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
+  const products = await getProductCatalog();
   const product = products.find((item) => item.slug === slug);
 
   if (!product) {
     return {
-      title: "Piece not found",
+      title: "Stück nicht gefunden | FRGLASS",
       robots: { index: false, follow: false },
     };
   }
 
+  const description = seoDescription(product);
+  const title = `${product.name} – Borosilikatglas-Anhänger`;
+  const images = product.images.length > 0 ? product.images : [product.image];
+
   return {
-    title: product.name,
-    description: product.description,
+    title,
+    description,
     alternates: { canonical: `/shop/${product.slug}` },
     openGraph: {
-      title: `${product.name} | FRGLASS`,
-      description: product.description,
+      title: `${title} | FRGLASS`,
+      description,
       url: `/shop/${product.slug}`,
       type: "website",
-      images: product.images.length > 0 ? product.images : [product.image],
+      images,
     },
     twitter: {
       card: "summary_large_image",
-      title: `${product.name} | FRGLASS`,
-      description: product.description,
+      title: `${title} | FRGLASS`,
+      description,
       images: [product.image],
     },
   };
@@ -61,6 +72,7 @@ export default async function ProductLayout({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
+  const products = await getProductCatalog();
   const product = products.find((item) => item.slug === slug);
 
   if (!product) return children;
@@ -68,13 +80,14 @@ export default async function ProductLayout({
   const price = numericPrice(product.price);
   const productUrl = `${SITE_URL}/shop/${product.slug}`;
   const images = (product.images.length > 0 ? product.images : [product.image]).map(absoluteUrl);
+  const description = seoDescription(product);
 
   const structuredData: Record<string, unknown> = {
     "@context": "https://schema.org",
     "@type": "Product",
     name: product.name,
     alternateName: product.nameDe || undefined,
-    description: product.description,
+    description,
     image: images,
     url: productUrl,
     sku: product.slug,
@@ -89,12 +102,12 @@ export default async function ProductLayout({
     material: product.material || "Borosilicate glass",
     color: product.colors || undefined,
     productionDate: product.year || undefined,
-    category: product.category || undefined,
+    category: product.category || "Borosilicate Glass Pendant",
     additionalProperty: [
       product.size
         ? {
             "@type": "PropertyValue",
-            name: "Size",
+            name: "Dimensions",
             value: product.size,
           }
         : null,
