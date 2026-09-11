@@ -1,3 +1,6 @@
+export type MediaFit = "cover" | "contain";
+export type MediaPosition = "center" | "top" | "bottom" | "left" | "right";
+
 export type GalleryMediaItem = {
   id: string;
   mediaUrl: string;
@@ -6,6 +9,8 @@ export type GalleryMediaItem = {
   description: string;
   descriptionEn: string;
   createdAt: string;
+  fit?: MediaFit;
+  position?: MediaPosition;
 };
 
 const DEFAULT_GALLERY_URLS = [
@@ -30,5 +35,7 @@ export const DEFAULT_GALLERY_MEDIA: GalleryMediaItem[] = DEFAULT_GALLERY_URLS.ma
     description: "",
     descriptionEn: "",
     createdAt: new Date(Date.UTC(2026, 0, 1, 0, 0, index)).toISOString(),
+    fit: "contain",
+    position: "center",
   }),
 );
