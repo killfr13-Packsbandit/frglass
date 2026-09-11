@@ -39,7 +39,7 @@ export default function ImageFocusEditor({
     if (event.currentTarget.hasPointerCapture(event.pointerId)) place(event);
   }
 
-  const effectiveFit = fit ?? (zoom < 1 ? "contain" : "cover");
+  const effectiveFit = zoom < 1 ? "contain" : (fit ?? "cover");
   const mediaStyle = {
     objectFit: effectiveFit,
     objectPosition: `${focusX}% ${focusY}%`,
