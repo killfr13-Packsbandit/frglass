@@ -52,7 +52,7 @@ function normalizeItem(value: unknown): GalleryMediaItem | null {
     createdAt,
     fit,
     position,
-    zoom: clampNumber(raw.zoom, 1, 2.5, 1),
+    zoom: clampNumber(raw.zoom, mediaType === "image" ? 0.5 : 1, 2.5, 1),
     focusX: clampNumber(raw.focusX, 0, 100, 50),
     focusY: clampNumber(raw.focusY, 0, 100, 50),
   };
