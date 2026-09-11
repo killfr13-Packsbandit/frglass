@@ -23,12 +23,12 @@ const copy = {
   },
 } as const;
 
-function imageStyle(item: GalleryMediaItem) {
+function mediaStyle(item: GalleryMediaItem) {
   const zoom = item.zoom ?? 1;
   const focusX = item.focusX ?? 50;
   const focusY = item.focusY ?? 50;
   return {
-    objectFit: item.fit ?? "contain",
+    objectFit: item.fit ?? (zoom < 1 ? "contain" : "cover"),
     objectPosition: `${focusX}% ${focusY}%`,
     transform: `scale(${zoom})`,
     transformOrigin: `${focusX}% ${focusY}%`,
@@ -81,7 +81,7 @@ export default function Page() {
                 <div className="relative flex h-[330px] items-center justify-center overflow-hidden p-2 sm:h-[400px] sm:p-3 lg:h-[430px] xl:h-[460px]">
                   {item.mediaType === "video" ? (
                     <>
-                      <video src={item.mediaUrl} muted playsInline preload="metadata" className="h-full w-full object-contain" />
+                      <video src={item.mediaUrl} muted playsInline preload="metadata" className="h-full w-full" style={mediaStyle(item)} />
                       <span className="pointer-events-none absolute bottom-4 right-4 rounded-full bg-black/70 px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-white">Video</span>
                     </>
                   ) : (
@@ -90,7 +90,7 @@ export default function Page() {
                       alt={caption || t.imageAlt}
                       loading="lazy"
                       className="h-full w-full transition duration-700"
-                      style={imageStyle(item)}
+                      style={mediaStyle(item)}
                     />
                   )}
                 </div>
