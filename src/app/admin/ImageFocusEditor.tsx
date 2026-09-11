@@ -37,6 +37,7 @@ export default function ImageFocusEditor({
     if (event.currentTarget.hasPointerCapture(event.pointerId)) place(event);
   }
 
+  const minZoom = mediaType === "image" ? 0.5 : 1;
   const mediaStyle = {
     objectPosition: `${focusX}% ${focusY}%`,
     transform: `scale(${zoom})`,
@@ -84,7 +85,7 @@ export default function ImageFocusEditor({
 
       <label className="mt-4 block">
         <span className="flex justify-between text-sm"><b>Zoom</b><span className="text-neutral-500">{zoom.toFixed(2)}×</span></span>
-        <input type="range" min="1" max="2.5" step="0.01" value={zoom} onChange={(event) => onChange({ zoom: Number(event.target.value) })} className="mt-2 w-full accent-orange-300" />
+        <input type="range" min={minZoom} max="2.5" step="0.01" value={zoom} onChange={(event) => onChange({ zoom: Number(event.target.value) })} className="mt-2 w-full accent-orange-300" />
       </label>
       <div className="mt-2 flex items-center justify-between text-xs text-neutral-500">
         <span>X {Math.round(focusX)}% · Y {Math.round(focusY)}%</span>
