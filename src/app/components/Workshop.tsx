@@ -4,9 +4,9 @@ import type { CSSProperties } from "react";
 import { translations, useLanguage } from "./LanguageProvider";
 import { useSiteContent } from "./SiteContentProvider";
 
-function Media({ url, type, className, auto = false, style }: { url: string; type: string; className: string; auto?: boolean; style?: CSSProperties }) {
+function Media({ url, type, className, style }: { url: string; type: string; className: string; style?: CSSProperties }) {
   if (!url) return null;
-  if (type === "video") return <video src={url} autoPlay={auto} muted={auto} loop={auto} controls={!auto} playsInline preload="metadata" className={className} style={style} />;
+  if (type === "video") return <video src={url} autoPlay muted loop playsInline preload="auto" className={className} style={style} />;
   return <img src={url} alt="FRGLASS workshop" className={className} style={style} />;
 }
 
@@ -51,7 +51,7 @@ export default function Workshop() {
     <div className="max-w-2xl"><p className="mb-4 text-xs font-bold uppercase tracking-[0.32em] text-orange-300 sm:text-sm sm:tracking-[0.45em]">{eyebrow}</p><h2 className="text-3xl font-black uppercase leading-tight sm:text-5xl">{title}</h2><p className="mt-6 text-base leading-7 text-neutral-300 sm:mt-8 sm:text-lg sm:leading-8">{text}</p></div>
     <div className="min-w-0">
       <div className="grid grid-cols-[1.12fr_.88fr] grid-rows-2 gap-3 sm:gap-5">
-        {mainUrl && <div className="row-span-2 min-h-[390px] overflow-hidden rounded-2xl border border-white/10 bg-neutral-950 shadow-2xl sm:min-h-[560px] sm:rounded-3xl xl:min-h-[480px]"><Media url={mainUrl} type={mainType} auto={mainType === "video"} className="h-full w-full" style={crop("home.workshop.main")} /></div>}
+        {mainUrl && <div className="row-span-2 min-h-[390px] overflow-hidden rounded-2xl border border-white/10 bg-neutral-950 shadow-2xl sm:min-h-[560px] sm:rounded-3xl xl:min-h-[480px]"><Media url={mainUrl} type={mainType} className="h-full w-full" style={crop("home.workshop.main")} /></div>}
         {smallMedia.map((item, index) => <div key={`${item.url}-${index}`} className="relative min-h-0 overflow-hidden rounded-xl border border-white/10 bg-neutral-950 sm:rounded-2xl"><Media url={item.url} type={item.type} className="h-full w-full" style={crop(item.base)} /></div>)}
       </div>
     </div>
