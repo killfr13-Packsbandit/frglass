@@ -7,7 +7,7 @@ import {
   isStudioMediaUrl,
   saveStudioMediaCatalog,
 } from "../../../lib/studioMediaCatalog";
-import type { StudioMediaItem } from "../../studioMediaTypes";
+import type { MediaFit, MediaPosition, StudioMediaItem } from "../../studioMediaTypes";
 
 export const dynamic = "force-dynamic";
 
@@ -33,6 +33,12 @@ function normalizeItem(value: unknown): StudioMediaItem | null {
   const createdAt = Number.isNaN(Date.parse(createdAtText))
     ? new Date().toISOString()
     : createdAtText;
+  const rawFit = text(raw.fit, 20);
+  const fit: MediaFit = rawFit === "contain" ? "contain" : "cover";
+  const rawPosition = text(raw.position, 20);
+  const position: MediaPosition = ["top", "bottom", "left", "right"].includes(rawPosition)
+    ? (rawPosition as MediaPosition)
+    : "center";
 
   return {
     id: text(raw.id, 120) || randomUUID(),
@@ -42,6 +48,8 @@ function normalizeItem(value: unknown): StudioMediaItem | null {
     description: text(raw.description, 220),
     descriptionEn: text(raw.descriptionEn, 220),
     createdAt,
+    fit,
+    position,
   };
 }
 
