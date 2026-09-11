@@ -249,11 +249,12 @@ export default function Page() {
                   <ImageFocusEditor
                     src={item.mediaUrl}
                     mediaType={item.mediaType}
+                    fit={fit}
                     zoom={zoom}
                     focusX={focusX}
                     focusY={focusY}
                     aspectClass="aspect-[1/1.18]"
-                    onChange={(next) => updateItem(item.id, { ...next, fit: "cover", position: "center" })}
+                    onChange={(next) => updateItem(item.id, { ...next, position: "center" })}
                   />
 
                   <div className="mt-4 grid grid-cols-2 gap-2">
@@ -264,15 +265,13 @@ export default function Page() {
                     <button type="button" onClick={() => remove(item)} disabled={saving} className="rounded-xl border border-red-400/30 px-3 py-3 text-xs font-bold uppercase tracking-wider text-red-300">Löschen</button>
                   </div>
 
-                  {item.mediaType === "image" && (
-                    <button
-                      type="button"
-                      onClick={() => updateItem(item.id, { fit: fit === "contain" ? "cover" : "contain", zoom: fit === "cover" ? 1 : zoom, position: "center" })}
-                      className="mt-2 w-full rounded-xl border border-white/15 px-3 py-3 text-xs font-bold text-neutral-300"
-                    >
-                      {fit === "contain" ? "Rahmen füllen" : "Ganzes Bild anzeigen"}
-                    </button>
-                  )}
+                  <button
+                    type="button"
+                    onClick={() => updateItem(item.id, { fit: fit === "contain" ? "cover" : "contain", position: "center" })}
+                    className="mt-2 w-full rounded-xl border border-white/15 px-3 py-3 text-xs font-bold text-neutral-300"
+                  >
+                    {fit === "contain" ? "Rahmen füllen" : "Ganzes Medium anzeigen"}
+                  </button>
 
                   <label className="mt-5 grid gap-2">
                     <span className="text-sm font-bold">Beschreibung DE</span>
