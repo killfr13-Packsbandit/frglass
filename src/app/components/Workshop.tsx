@@ -55,16 +55,16 @@ export default function Workshop() {
   ].filter((item) => item.url);
 
   return (
-    <section className="relative overflow-hidden bg-black px-4 py-20 text-white sm:px-6 sm:py-32">
+    <section className="relative overflow-hidden bg-black px-4 py-16 text-white sm:px-6 sm:py-24 xl:py-32">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,120,30,.15),transparent_60%)]" />
 
-      <div className="relative mx-auto grid max-w-7xl items-center gap-10 sm:gap-16 lg:grid-cols-2">
-        <div>
-          <p className="mb-4 text-xs font-bold uppercase tracking-[0.4em] text-orange-300 sm:text-sm sm:tracking-[0.5em]">
+      <div className="relative mx-auto grid max-w-7xl items-center gap-10 sm:gap-12 xl:grid-cols-2 xl:gap-16">
+        <div className="max-w-2xl">
+          <p className="mb-4 text-xs font-bold uppercase tracking-[0.32em] text-orange-300 sm:text-sm sm:tracking-[0.45em]">
             {eyebrow}
           </p>
 
-          <h2 className="text-4xl font-black uppercase leading-tight sm:text-5xl">
+          <h2 className="text-3xl font-black uppercase leading-tight sm:text-5xl">
             {title}
           </h2>
 
