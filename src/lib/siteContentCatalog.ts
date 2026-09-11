@@ -6,6 +6,73 @@ import type { SiteContentMap } from "../app/siteContent";
 
 const CATALOG_PREFIX = "cms/site-content/catalog/";
 
+const STALE_COPY: Record<string, { old: string; next: string }[]> = {
+  "home.hero.subtitle.en": [
+    { old: "Borosilicate Glass", next: "Borosilicate glass · Carinthia, Austria" },
+  ],
+  "home.hero.subtitle.de": [
+    { old: "Borosilikatglas", next: "Borosilikatglas · Kärnten, Österreich" },
+  ],
+  "home.hero.text.en": [
+    {
+      old: "Handmade borosilicate glass, jewelry and other experiments from my mind.",
+      next: "I’m Florian Robatsch, a glass artist from Carinthia. At the torch I turn borosilicate glass into one-of-a-kind jewelry, objects and whatever ideas happen to stick in my head.",
+    },
+  ],
+  "home.hero.text.de": [
+    {
+      old: "Handgemachtes Borosilikatglas, Schmuck und andere Experimente aus meinem Kopf.",
+      next: "Ich bin Florian Robatsch, Glaskünstler aus Kärnten. Am Brenner entstehen aus Borosilikatglas handgemachte Unikate – Schmuck, Objekte und alles, was mir sonst noch durch den Kopf geht.",
+    },
+  ],
+  "home.jewelry.intro.en": [
+    {
+      old: "Handmade pendants from borosilicate glass. Each piece is one of a kind.",
+      next: "Handmade borosilicate glass pendants from Austria. Every piece is made individually at the torch and is one of a kind.",
+    },
+  ],
+  "home.jewelry.intro.de": [
+    {
+      old: "Handgemachte Anhänger aus Borosilikatglas. Jedes Stück ein Unikat.",
+      next: "Handgemachte Anhänger aus Borosilikatglas aus Österreich. Jedes Stück entsteht einzeln am Brenner und ist ein Unikat.",
+    },
+  ],
+  "home.workshop.text.en": [
+    {
+      old: "I make each piece by hand from borosilicate glass at the torch. Some start with a clear idea, others develop while I work.",
+      next: "I make each piece by hand from borosilicate glass in my workshop in Carinthia. Some start with a clear idea, others develop while I work.",
+    },
+  ],
+  "home.workshop.text.de": [
+    {
+      old: "Ich fertige jedes Stück von Hand aus Borosilikatglas am Brenner. Manche Arbeiten sind vorher geplant, andere entwickeln sich erst beim Machen.",
+      next: "In meiner Werkstatt in Kärnten fertige ich jedes Stück von Hand aus Borosilikatglas am Brenner. Manche Arbeiten sind vorher geplant, andere entwickeln sich erst beim Machen.",
+    },
+  ],
+  "shop.intro.en": [
+    {
+      old: "These pieces are currently available. If you are interested in one, send me a message and we can arrange payment and shipping directly.",
+      next: "These pieces are currently available. Open a piece to see all details and send an inquiry from there.",
+    },
+  ],
+  "shop.intro.de": [
+    {
+      old: "Diese Stücke sind aktuell verfügbar. Wenn dich eines interessiert, schreib mir einfach und wir klären Bezahlung und Versand direkt.",
+      next: "Diese Stücke sind aktuell verfügbar. Öffne ein Stück für alle Details und stelle deine Anfrage direkt auf der Produktseite.",
+    },
+  ],
+};
+
+function normalizeSiteContent(content: SiteContentMap) {
+  const next = { ...content };
+  for (const [key, replacements] of Object.entries(STALE_COPY)) {
+    for (const replacement of replacements) {
+      if (next[key] === replacement.old) next[key] = replacement.next;
+    }
+  }
+  return next;
+}
+
 export function isSiteContentStorageConfigured() {
   return Boolean(process.env.BLOB_READ_WRITE_TOKEN);
 }
@@ -32,7 +99,7 @@ export async function getSiteContent(): Promise<SiteContentMap> {
     for (const [key, value] of Object.entries(data as Record<string, unknown>)) {
       if (typeof value === "string") content[key] = value;
     }
-    return content;
+    return normalizeSiteContent(content);
   } catch (error) {
     console.error("Could not load site content", error);
     return {};
@@ -45,10 +112,11 @@ export async function saveSiteContent(content: SiteContentMap) {
   }
 
   const previous = await catalogBlobs();
+  const normalizedContent = normalizeSiteContent(content);
 
   await put(
     `${CATALOG_PREFIX}${Date.now()}-${randomUUID()}.json`,
-    JSON.stringify(content),
+    JSON.stringify(normalizedContent),
     {
       access: "public",
       addRandomSuffix: false,
@@ -60,5 +128,5 @@ export async function saveSiteContent(content: SiteContentMap) {
     await del(previous.map((blob) => blob.url));
   }
 
-  return content;
+  return normalizedContent;
 }
