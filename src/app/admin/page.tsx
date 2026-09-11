@@ -38,7 +38,7 @@ export default function Page() {
     {session?.authenticated && <div className="mt-10"><p className="max-w-2xl leading-7 text-neutral-400">Die Bereiche, die du für die Website wirklich brauchst.</p><div className="mt-8 grid gap-5 sm:grid-cols-2">
       <Card href="/admin/products" icon="◆" title="Produkte" text="Zuerst Kategorie wählen, danach die passenden Stücke anlegen und bearbeiten." accent />
       <Card href="/admin/pages" icon="✎" title="Website-Inhalte" text="Texte und feste Bilder der Startseite, Über-mich-Seite, Studio-Seite, Shop- und Galerie-Einleitung." />
-      <Card href="/admin/gallery" icon="▧" title="Bilder & Videos" text="Galerie und Studio-Medien verwalten." />
+      <Card href="/admin/gallery" icon="▧" title="Bilder & Videos" text="Galerie-Bilder und Videos verwalten." />
       <Card href="/admin/community" icon="★" title="Bewertungen" text="Community-Bewertungen ansehen, freigeben und löschen." />
     </div><button onClick={logout} className="mt-8 text-sm text-neutral-500 transition hover:text-white">Ausloggen</button></div>}
   </section></main>;
