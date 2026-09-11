@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import ProductPicture from "../../components/ProductPicture";
 import { useLanguage } from "../../components/LanguageProvider";
 import { useProducts } from "../../components/useProducts";
-import { formatProductPrice } from "../../productTypes";
+import { categoryIdFromName, formatProductPrice } from "../../productTypes";
 
 const copy = {
   en: {
@@ -18,6 +18,11 @@ const copy = {
     size: "Dimensions",
     year: "Year",
     request: "Ask about this piece",
+    availableTitle: "Available original",
+    availableText: "This is a one-off piece. Send a short inquiry and I’ll get back to you directly.",
+    unavailableTitle: "No longer available",
+    unavailableText: "This piece stays here as part of the gallery. You can find currently available work below.",
+    browseAvailable: "See available pieces",
     similar: "More pieces",
     alsoLike: "You might also like",
     previousImage: "Previous image",
@@ -31,7 +36,12 @@ const copy = {
     colors: "Farben",
     size: "Größe",
     year: "Jahr",
-    request: "Stück anfragen",
+    request: "Dieses Stück anfragen",
+    availableTitle: "Verfügbares Einzelstück",
+    availableText: "Dieses Stück gibt es nur einmal. Schick mir kurz eine Anfrage – ich melde mich direkt bei dir.",
+    unavailableTitle: "Nicht mehr verfügbar",
+    unavailableText: "Dieses Stück bleibt als Teil der Galerie sichtbar. Aktuell verfügbare Arbeiten findest du weiter unten.",
+    browseAvailable: "Verfügbare Stücke ansehen",
     similar: "Weitere Stücke",
     alsoLike: "Vielleicht gefällt dir auch",
     previousImage: "Vorheriges Bild",
@@ -62,13 +72,23 @@ export default function Page() {
   const currentImage = activeImage ?? product.image;
   const currentIndex = Math.max(0, product.images.indexOf(currentImage));
   const hasMultipleImages = product.images.length > 1;
+  const isAvailable = product.status === "Available";
+  const productCategoryId = product.categoryId || categoryIdFromName(product.category);
 
   const goToImage = (direction: number) => {
     const nextIndex = (currentIndex + direction + product.images.length) % product.images.length;
     setActiveImage(product.images[nextIndex]);
   };
 
-  const similarProducts = products.filter((item) => item.slug !== product.slug && item.status === "Available").slice(0, 3);
+  const similarProducts = products
+    .filter((item) => item.slug !== product.slug && item.status === "Available")
+    .sort((a, b) => {
+      const aId = a.categoryId || categoryIdFromName(a.category);
+      const bId = b.categoryId || categoryIdFromName(b.category);
+      return Number(bId === productCategoryId) - Number(aId === productCategoryId);
+    })
+    .slice(0, 3);
+
   const name = language === "de" ? product.nameDe : product.name;
   const category = language === "de" ? product.categoryDe : product.category;
   const price = formatProductPrice(language === "de" ? product.priceDe : product.price);
@@ -88,6 +108,7 @@ export default function Page() {
         <div className="min-w-0">
           <div className="relative flex h-[420px] items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-neutral-950 p-2 sm:h-[560px] sm:rounded-3xl sm:p-4 lg:h-[620px] xl:h-[720px]">
             <ProductPicture src={currentImage} alt={imageAlt} sizes="(min-width: 1024px) 52vw, 100vw" className="object-contain p-2 sm:p-4" priority />
+            <div className={`absolute left-3 top-3 rounded-full border px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.22em] backdrop-blur sm:left-5 sm:top-5 sm:text-xs ${isAvailable ? "border-orange-300/40 bg-orange-300/10 text-orange-200" : "border-white/15 bg-black/70 text-neutral-300"}`}>{status}</div>
             {hasMultipleImages && <><button type="button" onClick={() => goToImage(-1)} aria-label={t.previousImage} className="absolute left-2 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/70 text-xl text-white backdrop-blur transition hover:border-orange-300 hover:text-orange-300 sm:left-4 sm:h-12 sm:w-12 sm:text-2xl">‹</button><button type="button" onClick={() => goToImage(1)} aria-label={t.nextImage} className="absolute right-2 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/70 text-xl text-white backdrop-blur transition hover:border-orange-300 hover:text-orange-300 sm:right-4 sm:h-12 sm:w-12 sm:text-2xl">›</button></>}
           </div>
 
@@ -103,6 +124,16 @@ export default function Page() {
           {price && <p className="mt-6 text-3xl text-neutral-100 sm:mt-8">{price}</p>}
           {description && <p className="mt-6 max-w-xl text-base leading-7 text-neutral-300 sm:mt-8 sm:text-lg sm:leading-8 lg:text-base lg:leading-7 xl:text-lg xl:leading-8">{description}</p>}
 
+          <div className={`mt-8 rounded-3xl border p-5 sm:p-6 ${isAvailable ? "border-orange-300/20 bg-orange-300/[0.05]" : "border-white/10 bg-white/[0.03]"}`}>
+            <p className={`text-xs font-black uppercase tracking-[0.28em] ${isAvailable ? "text-orange-300" : "text-neutral-400"}`}>{isAvailable ? t.availableTitle : t.unavailableTitle}</p>
+            <p className="mt-3 max-w-xl text-sm leading-6 text-neutral-300 sm:text-base sm:leading-7">{isAvailable ? t.availableText : t.unavailableText}</p>
+            {isAvailable ? (
+              <Link href={`/contact?product=${encodeURIComponent(name)}&slug=${encodeURIComponent(product.slug)}`} className="mt-5 inline-flex w-full items-center justify-center rounded-full bg-orange-300 px-6 py-4 text-center text-sm font-black uppercase tracking-widest text-black transition hover:bg-white sm:w-auto sm:px-8">{t.request} →</Link>
+            ) : (
+              <Link href="/shop" className="mt-5 inline-flex w-full items-center justify-center rounded-full border border-white/15 px-6 py-4 text-center text-sm font-bold uppercase tracking-widest text-white transition hover:border-orange-300 hover:text-orange-300 sm:w-auto sm:px-8">{t.browseAvailable}</Link>
+            )}
+          </div>
+
           {story && <div className="mt-8 border-y border-white/10 py-6 sm:mt-10 sm:py-8"><h2 className="mb-4 text-xs font-bold uppercase tracking-[0.32em] text-orange-300 sm:text-sm sm:tracking-[0.4em]">{t.story}</h2><p className="leading-7 text-neutral-300 sm:leading-8 lg:text-[15px] xl:text-base">{story}</p></div>}
 
           <div className="mt-6 grid grid-cols-2 gap-x-5 gap-y-6 text-neutral-300 sm:mt-8 sm:gap-x-8 lg:gap-x-5 xl:grid-cols-4 xl:gap-4">
@@ -111,8 +142,6 @@ export default function Page() {
             <div><p className="text-xs uppercase tracking-[0.22em] text-neutral-500">{t.size}</p><p className="mt-2 text-sm sm:text-base">{size}</p></div>
             <div><p className="text-xs uppercase tracking-[0.22em] text-neutral-500">{t.year}</p><p className="mt-2 text-sm sm:text-base">{product.year}</p></div>
           </div>
-
-          <Link href={`/contact?product=${encodeURIComponent(name)}&slug=${encodeURIComponent(product.slug)}`} className="mt-8 inline-block w-full rounded-full border border-orange-300 px-6 py-4 text-center text-sm font-bold uppercase tracking-widest text-orange-300 transition hover:bg-orange-300 hover:text-black sm:mt-10 sm:w-fit sm:px-8">{t.request}</Link>
         </div>
       </section>
 
