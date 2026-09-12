@@ -51,8 +51,13 @@ export function mediaBucket() {
   return lazyBucket;
 }
 
-export function isR2Configured() {
-  return true;
+export async function isR2Configured() {
+  try {
+    await boundBucket();
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 function pathnameFromMediaValue(value: string) {
