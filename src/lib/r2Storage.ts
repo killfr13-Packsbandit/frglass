@@ -81,5 +81,9 @@ export function mediaKeyFromUrl(value: string) {
 }
 
 export function mediaUrlForKey(key: string) {
-  return `/api/media/${encodeURIComponent(key)}`;
+  const encodedPath = key
+    .split("/")
+    .map((segment) => encodeURIComponent(segment))
+    .join("/");
+  return `/api/media/${encodedPath}`;
 }
