@@ -51,7 +51,11 @@ export function mediaBucket() {
   return lazyBucket;
 }
 
-export async function isR2Configured() {
+export function isR2Configured() {
+  return true;
+}
+
+export async function checkR2Configured() {
   try {
     await boundBucket();
     return true;
