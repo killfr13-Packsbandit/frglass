@@ -1,7 +1,5 @@
 import "server-only";
 
-import { env } from "cloudflare:workers";
-
 interface R2ObjectBody {
   text(): Promise<string>;
   arrayBuffer(): Promise<ArrayBuffer>;
@@ -25,14 +23,40 @@ interface R2BucketBinding {
 
 type FrglassEnv = { FRGLASS_MEDIA?: R2BucketBinding };
 
+let bucketPromise: Promise<R2BucketBinding> | null = null;
+
+async function boundBucket() {
+  if (!bucketPromise) {
+    bucketPromise = import("cloudflare:workers").then((runtime) => {
+      const bucket = (runtime.env as unknown as FrglassEnv).FRGLASS_MEDIA;
+      if (!bucket) throw new Error("Cloudflare R2 binding FRGLASS_MEDIA is not configured.");
+      return bucket;
+    });
+  }
+  return bucketPromise;
+}
+
+const lazyBucket: R2BucketBinding = {
+  async get(key) {
+    return (await boundBucket()).get(key);
+  },
+  async put(key, value, options) {
+    return (await boundBucket()).put(key, value, options);
+  },
+  async delete(key) {
+    return (await boundBucket()).delete(key);
+  },
+  async list(options) {
+    return (await boundBucket()).list(options);
+  },
+};
+
 export function mediaBucket() {
-  const bucket = (env as unknown as FrglassEnv).FRGLASS_MEDIA;
-  if (!bucket) throw new Error("Cloudflare R2 binding FRGLASS_MEDIA is not configured.");
-  return bucket;
+  return lazyBucket;
 }
 
 export function isR2Configured() {
-  return Boolean((env as unknown as FrglassEnv).FRGLASS_MEDIA);
+  return true;
 }
 
 export async function readJson<T>(key: string): Promise<T | null> {
