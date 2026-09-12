@@ -1,7 +1,14 @@
 import "server-only";
 
 import type { SiteContentMap } from "../app/siteContent";
-import { isR2Configured, normalizeMediaUrl, readJson, writeJson } from "./r2Storage";
+import {
+  isR2Configured,
+  mediaBucket,
+  mediaKeyFromUrl,
+  normalizeMediaUrl,
+  readJson,
+  writeJson,
+} from "./r2Storage";
 
 const CATALOG_KEY = "cms/site-content/catalog.json";
 
@@ -113,6 +120,15 @@ function normalizeSiteContent(content: SiteContentMap) {
   return next;
 }
 
+function referencedR2Media(content: SiteContentMap) {
+  return new Set(
+    Object.entries(content)
+      .filter(([key]) => key.endsWith(".url"))
+      .map(([, value]) => mediaKeyFromUrl(value))
+      .filter((key): key is string => Boolean(key)),
+  );
+}
+
 export function isSiteContentStorageConfigured() {
   return isR2Configured();
 }
@@ -140,7 +156,17 @@ export async function saveSiteContent(content: SiteContentMap) {
     throw new Error("Cloudflare R2 is not configured yet.");
   }
 
+  const previousContent = await getSiteContent();
+  const previousMedia = referencedR2Media(previousContent);
   const normalizedContent = normalizeSiteContent(content);
+  const nextMedia = referencedR2Media(normalizedContent);
+
   await writeJson(CATALOG_KEY, normalizedContent);
+
+  const removedMedia = [...previousMedia].filter((key) => !nextMedia.has(key));
+  if (removedMedia.length) {
+    await mediaBucket().delete(removedMedia);
+  }
+
   return normalizedContent;
 }

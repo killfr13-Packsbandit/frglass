@@ -1,41 +1,36 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# FRGLASS
 
-## Getting Started
+Website und kleines CMS für FRGLASS auf **Next.js + Cloudflare Workers + R2**.
 
-First, run the development server:
+## Lokal starten
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Danach läuft die Seite unter `http://localhost:3000`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Cloudflare
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Die Produktion läuft über Cloudflare Workers mit OpenNext. Medien und CMS-Daten liegen im R2-Bucket `frglass-media` über das Binding `FRGLASS_MEDIA`.
 
-## FRGLASS notes
+Nützliche Befehle:
 
-The private Behind the Scenes uploader is available at `/admin/behind-the-scenes`.
-It uses Vercel Blob for public workshop photos/videos and requires the Vercel environment variables `BLOB_READ_WRITE_TOKEN` and `BEHIND_SCENES_ADMIN_PASSWORD`.
+```bash
+npm run cf:build
+npm run cf:deploy
+npm run cf:upload
+```
 
-## Learn More
+Die öffentliche Hauptdomain ist `https://frglass.at`. `www.frglass.at` wird auf die Hauptdomain weitergeleitet.
 
-To learn more about Next.js, take a look at the following resources:
+## Admin
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Der Adminbereich liegt unter `/admin`. Das Admin-Passwort wird als Cloudflare-Secret `BEHIND_SCENES_ADMIN_PASSWORD` gesetzt.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Neue Website-Medien werden als Bilder in R2 gespeichert. Bilder werden im Browser vor dem Upload verkleinert und nach Möglichkeit als WebP gespeichert, damit Speicher und Datenverkehr klein bleiben.
 
-## Deploy on Vercel
+## Speicher-Hinweis
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Galerie-, Studio- und Produktmedien werden beim Entfernen aus ihren Katalogen ebenfalls aus R2 gelöscht. Bei Website-Inhalten werden ersetzte, nicht mehr verwendete R2-Bilder ebenfalls automatisch entfernt.
