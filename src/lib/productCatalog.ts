@@ -1,11 +1,10 @@
 import "server-only";
 
-import { randomUUID } from "node:crypto";
-import { del, list, put } from "@vercel/blob";
 import { products as legacyProducts } from "../app/products";
 import type { ProductRecord } from "../app/productTypes";
+import { isR2Configured, mediaBucket, mediaKeyFromUrl, readJson, writeJson } from "./r2Storage";
 
-const CATALOG_PREFIX = "cms/products/catalog/";
+const CATALOG_KEY = "cms/products/catalog.json";
 const DEFAULT_SIZE = "30 × 30 mm";
 const PENDANT_CATEGORY_ID = "pendants";
 const PENDANT_CATEGORY = "Pendants";
@@ -17,21 +16,11 @@ const LEGACY_SIZE_VALUES = new Set([
 ]);
 
 export function isProductStorageConfigured() {
-  return Boolean(process.env.BLOB_READ_WRITE_TOKEN);
+  return isR2Configured();
 }
 
 export function isProductMediaUrl(value: string) {
-  if (!value) return false;
-  try {
-    const url = new URL(value);
-    return (
-      url.protocol === "https:" &&
-      url.hostname.endsWith(".blob.vercel-storage.com") &&
-      url.pathname.includes("/products/media/")
-    );
-  } catch {
-    return false;
-  }
+  return Boolean(mediaKeyFromUrl(value));
 }
 
 function isLegacyPendantCategory(product: ProductRecord) {
@@ -69,22 +58,11 @@ function fallbackCatalog(): ProductRecord[] {
   return (legacyProducts as unknown as ProductRecord[]).map(withProductDefaults);
 }
 
-async function catalogBlobs() {
-  const result = await list({ prefix: CATALOG_PREFIX, limit: 1000 });
-  return result.blobs.sort((a, b) => b.pathname.localeCompare(a.pathname));
-}
-
 export async function getProductCatalog(): Promise<ProductRecord[]> {
   if (!isProductStorageConfigured()) return fallbackCatalog();
 
   try {
-    const blobs = await catalogBlobs();
-    const latest = blobs[0];
-    if (!latest) return fallbackCatalog();
-
-    const response = await fetch(latest.url, { cache: "no-store" });
-    if (!response.ok) return fallbackCatalog();
-    const data = (await response.json()) as unknown;
+    const data = await readJson<unknown>(CATALOG_KEY);
     return Array.isArray(data)
       ? (data as ProductRecord[]).map(withProductDefaults)
       : fallbackCatalog();
@@ -94,40 +72,30 @@ export async function getProductCatalog(): Promise<ProductRecord[]> {
   }
 }
 
-function mediaUrls(products: ProductRecord[]) {
+function mediaKeys(products: ProductRecord[]) {
   return new Set(
-    products.flatMap((product) => product.images).filter(isProductMediaUrl),
+    products
+      .flatMap((product) => product.images)
+      .map(mediaKeyFromUrl)
+      .filter((key): key is string => Boolean(key)),
   );
 }
 
 export async function saveProductCatalog(products: ProductRecord[]) {
   if (!isProductStorageConfigured()) {
-    throw new Error("Vercel Blob is not configured yet.");
+    throw new Error("Cloudflare R2 is not configured yet.");
   }
 
   const previousProducts = await getProductCatalog();
-  const previousMedia = mediaUrls(previousProducts);
+  const previousMedia = mediaKeys(previousProducts);
   const nextProducts = products.map(withProductDefaults);
-  const nextMedia = mediaUrls(nextProducts);
-  const previousCatalogBlobs = await catalogBlobs();
+  const nextMedia = mediaKeys(nextProducts);
 
-  await put(
-    `${CATALOG_PREFIX}${Date.now()}-${randomUUID()}.json`,
-    JSON.stringify(nextProducts),
-    {
-      access: "public",
-      addRandomSuffix: false,
-      contentType: "application/json",
-    },
-  );
+  await writeJson(CATALOG_KEY, nextProducts);
 
-  if (previousCatalogBlobs.length) {
-    await del(previousCatalogBlobs.map((blob) => blob.url));
-  }
-
-  const removedMedia = [...previousMedia].filter((url) => !nextMedia.has(url));
+  const removedMedia = [...previousMedia].filter((key) => !nextMedia.has(key));
   if (removedMedia.length) {
-    await del(removedMedia);
+    await mediaBucket().delete(removedMedia);
   }
 
   return nextProducts;
