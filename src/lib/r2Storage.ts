@@ -1,5 +1,7 @@
 import "server-only";
 
+import { getCloudflareContext } from "@opennextjs/cloudflare";
+
 interface R2ObjectBody {
   text(): Promise<string>;
   arrayBuffer(): Promise<ArrayBuffer>;
@@ -23,17 +25,11 @@ interface R2BucketBinding {
 
 type FrglassEnv = { FRGLASS_MEDIA?: R2BucketBinding };
 
-let bucketPromise: Promise<R2BucketBinding> | null = null;
-
 async function boundBucket() {
-  if (!bucketPromise) {
-    bucketPromise = import("cloudflare:workers").then((runtime) => {
-      const bucket = (runtime.env as unknown as FrglassEnv).FRGLASS_MEDIA;
-      if (!bucket) throw new Error("Cloudflare R2 binding FRGLASS_MEDIA is not configured.");
-      return bucket;
-    });
-  }
-  return bucketPromise;
+  const context = await getCloudflareContext({ async: true });
+  const bucket = (context.env as unknown as FrglassEnv).FRGLASS_MEDIA;
+  if (!bucket) throw new Error("Cloudflare R2 binding FRGLASS_MEDIA is not configured.");
+  return bucket;
 }
 
 const lazyBucket: R2BucketBinding = {

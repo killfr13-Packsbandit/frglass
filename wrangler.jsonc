@@ -1,0 +1,29 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "main": ".open-next/worker.js",
+  "name": "frglass",
+  "compatibility_date": "2026-09-12",
+  "compatibility_flags": [
+    "nodejs_compat",
+    "global_fetch_strictly_public"
+  ],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  "services": [
+    {
+      "binding": "WORKER_SELF_REFERENCE",
+      "service": "frglass"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "FRGLASS_MEDIA",
+      "bucket_name": "frglass-media"
+    }
+  ],
+  "images": {
+    "binding": "IMAGES"
+  }
+}
