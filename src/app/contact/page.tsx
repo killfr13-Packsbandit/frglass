@@ -9,14 +9,14 @@ const copy = {
   en: {
     eyebrow: "Contact",
     title: "Get in touch.",
-    intro: "Interested in a piece, a custom idea or the future workshop setup? Send me a message here and it will go straight to my inbox.",
+    intro: "Interested in a piece, a custom idea or the future workshop setup? Send me a message here. Your inquiry is saved safely and I can reply to you by email.",
     vision: "You can ask me about",
     items: ["Available pieces", "Custom ideas", "Future torch rental", "Small workshops or workshop time"],
   },
   de: {
     eyebrow: "Kontakt",
     title: "Meld dich.",
-    intro: "Du interessierst dich für ein Stück, eine eigene Idee oder die spätere Werkstatt-Nutzung? Schreib mir hier direkt – die Anfrage geht an mein E-Mail-Postfach.",
+    intro: "Du interessierst dich für ein Stück, eine eigene Idee oder die spätere Werkstatt-Nutzung? Schreib mir hier direkt. Deine Anfrage wird sicher gespeichert und ich kann dir per E-Mail antworten.",
     vision: "Du kannst mich fragen wegen",
     items: ["Verfügbaren Stücken", "Eigener Ideen und Anfragen", "Späterer Brennermietung", "Kleinen Workshops oder Werkstattzeit"],
   },
