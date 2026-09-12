@@ -1,11 +1,10 @@
 import "server-only";
 
-import { randomUUID } from "node:crypto";
-import { del, list, put } from "@vercel/blob";
 import { products as legacyProducts } from "../app/products";
 import { categoryIdFromName, type ProductCategory, type ProductRecord } from "../app/productTypes";
+import { isR2Configured, readJson, writeJson } from "./r2Storage";
 
-const CATEGORY_PREFIX = "cms/products/categories/";
+const CATEGORY_KEY = "cms/products/categories.json";
 const PENDANT_CATEGORY: ProductCategory = {
   id: "pendants",
   name: "Pendants",
@@ -14,7 +13,7 @@ const PENDANT_CATEGORY: ProductCategory = {
 };
 
 export function isCategoryStorageConfigured() {
-  return Boolean(process.env.BLOB_READ_WRITE_TOKEN);
+  return isR2Configured();
 }
 
 function normalizeCategories(categories: ProductCategory[]) {
@@ -66,22 +65,11 @@ function fallbackCategories(): ProductCategory[] {
   return normalizeCategories(categories);
 }
 
-async function categoryBlobs() {
-  const result = await list({ prefix: CATEGORY_PREFIX, limit: 1000 });
-  return result.blobs.sort((a, b) => b.pathname.localeCompare(a.pathname));
-}
-
 export async function getProductCategories(): Promise<ProductCategory[]> {
   if (!isCategoryStorageConfigured()) return fallbackCategories();
 
   try {
-    const blobs = await categoryBlobs();
-    const latest = blobs[0];
-    if (!latest) return fallbackCategories();
-
-    const response = await fetch(latest.url, { cache: "no-store" });
-    if (!response.ok) return fallbackCategories();
-    const data = (await response.json()) as unknown;
+    const data = await readJson<unknown>(CATEGORY_KEY);
     return Array.isArray(data)
       ? normalizeCategories(data as ProductCategory[])
       : fallbackCategories();
@@ -93,21 +81,10 @@ export async function getProductCategories(): Promise<ProductCategory[]> {
 
 export async function saveProductCategories(categories: ProductCategory[]) {
   if (!isCategoryStorageConfigured()) {
-    throw new Error("Vercel Blob is not configured yet.");
+    throw new Error("Cloudflare R2 is not configured yet.");
   }
 
   const nextCategories = normalizeCategories(categories);
-  const previous = await categoryBlobs();
-  await put(
-    `${CATEGORY_PREFIX}${Date.now()}-${randomUUID()}.json`,
-    JSON.stringify(nextCategories),
-    {
-      access: "public",
-      addRandomSuffix: false,
-      contentType: "application/json",
-    },
-  );
-
-  if (previous.length) await del(previous.map((blob) => blob.url));
+  await writeJson(CATEGORY_KEY, nextCategories);
   return nextCategories;
 }
