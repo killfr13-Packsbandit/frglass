@@ -29,9 +29,15 @@ export default function JewelryShowcase() {
   const fallbackEyebrow = get(`home.jewelry.eyebrow.${lang}`, t.eyebrow);
   const fallbackTitle = get(`home.jewelry.title.${lang}`, t.title);
   const fallbackIntro = get(`home.jewelry.intro.${lang}`, t.intro);
-  const eyebrow = activeCategory ? (language === "de" ? activeCategory.homeEyebrowDe : activeCategory.homeEyebrow) || (language === "de" ? activeCategory.nameDe : activeCategory.name) : fallbackEyebrow;
-  const title = activeCategory ? (language === "de" ? activeCategory.homeTitleDe : activeCategory.homeTitle) || (language === "de" ? activeCategory.nameDe : activeCategory.name) : fallbackTitle;
-  const intro = activeCategory ? (language === "de" ? activeCategory.homeIntroDe : activeCategory.homeIntro) || fallbackIntro : fallbackIntro;
+  const categoryName = activeCategory ? (language === "de" ? activeCategory.nameDe || activeCategory.name : activeCategory.name || activeCategory.nameDe) : "";
+  const categoryIntroFallback = activeCategory
+    ? language === "de"
+      ? `Handgemachte ${categoryName} aus Borosilikatglas aus Österreich. Jedes Stück entsteht einzeln am Brenner und ist ein Unikat.`
+      : `Handmade ${categoryName.toLowerCase()} in borosilicate glass from Austria. Each piece is individually shaped at the torch and is one of a kind.`
+    : fallbackIntro;
+  const eyebrow = activeCategory ? (language === "de" ? activeCategory.homeEyebrowDe : activeCategory.homeEyebrow) || categoryName : fallbackEyebrow;
+  const title = activeCategory ? (language === "de" ? activeCategory.homeTitleDe : activeCategory.homeTitle) || categoryName : fallbackTitle;
+  const intro = activeCategory ? (language === "de" ? activeCategory.homeIntroDe : activeCategory.homeIntro) || categoryIntroFallback : fallbackIntro;
 
   return <section id="collections" className="bg-black px-4 py-16 text-white sm:px-6 sm:py-24 xl:py-28">
     <div key={activeId} className="animate-[fadeIn_.5s_ease-out]"><p className="mb-4 text-center text-xs font-bold uppercase tracking-[0.32em] text-orange-300 sm:text-sm sm:tracking-[0.45em]">{eyebrow}</p><h2 className="mx-auto mb-5 max-w-4xl text-center text-3xl font-black uppercase tracking-[0.08em] sm:mb-6 sm:text-4xl sm:tracking-[0.14em] xl:tracking-[0.2em]">{title}</h2><p className="mx-auto mb-8 max-w-2xl text-center leading-7 text-neutral-400 sm:mb-10">{intro}</p></div>
