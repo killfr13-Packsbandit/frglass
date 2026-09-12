@@ -19,9 +19,9 @@ export type StudioMediaItem = {
 export const DEFAULT_STUDIO_MEDIA: StudioMediaItem[] = [
   {
     id: "studio-me1",
-    mediaUrl: "/workshop/me1.png",
+    mediaUrl: "/jewelry/Cobald5 x Opaldust Leaf.jpg",
     mediaType: "image",
-    contentType: "image/png",
+    contentType: "image/jpeg",
     description: "",
     descriptionEn: "",
     createdAt: "2026-01-01T00:00:00.000Z",
