@@ -1,14 +1,10 @@
 import { createHash, randomUUID } from "node:crypto";
-import { list, put } from "@vercel/blob";
-import { handleUpload, type HandleUploadBody } from "@vercel/blob/client";
 import { NextResponse } from "next/server";
+import { isR2Configured, mediaBucket, mediaUrlForKey } from "../../../../lib/r2Storage";
 
 const MAX_UPLOAD_BYTES = 8 * 1024 * 1024;
 const MAX_UPLOADS_PER_DAY = 10;
-
-function storageConfigured() {
-  return Boolean(process.env.BLOB_READ_WRITE_TOKEN);
-}
+const ALLOWED_IMAGE_TYPES = new Set(["image/jpeg", "image/png", "image/webp"]);
 
 function clientIp(request: Request) {
   return request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || request.headers.get("x-real-ip") || "unknown";
@@ -21,32 +17,40 @@ function dailyRatePrefix(request: Request) {
   return `community/rate/v2/uploads/${day}/${hash}/`;
 }
 
+function safeName(value: string) {
+  return value.replace(/[^a-zA-Z0-9._-]+/g, "-").replace(/^-+|-+$/g, "") || "community.webp";
+}
+
 async function reserveUploadSlot(request: Request) {
   const prefix = dailyRatePrefix(request);
-  const { blobs } = await list({ prefix, limit: MAX_UPLOADS_PER_DAY + 1 });
-  if (blobs.length >= MAX_UPLOADS_PER_DAY) throw new Error("Upload limit reached for today.");
-  await put(`${prefix}${Date.now()}-${randomUUID()}.txt`, "1", { access: "public", addRandomSuffix: false, contentType: "text/plain" });
+  const result = await mediaBucket().list({ prefix, limit: MAX_UPLOADS_PER_DAY + 1 });
+  if (result.objects.length >= MAX_UPLOADS_PER_DAY) throw new Error("Upload limit reached for today.");
+  await mediaBucket().put(`${prefix}${Date.now()}-${randomUUID()}.txt`, "1", {
+    httpMetadata: { contentType: "text/plain", cacheControl: "no-store" },
+  });
 }
 
 export async function POST(request: Request) {
-  if (!storageConfigured()) return NextResponse.json({ error: "Vercel Blob is not configured yet." }, { status: 503 });
-  const body = (await request.json()) as HandleUploadBody;
+  if (!isR2Configured()) {
+    return NextResponse.json({ error: "Cloudflare R2 is not configured yet." }, { status: 503 });
+  }
+
   try {
-    const jsonResponse = await handleUpload({
-      body,
-      request,
-      onBeforeGenerateToken: async () => {
-        await reserveUploadSlot(request);
-        return {
-          allowedContentTypes: ["image/jpeg", "image/png", "image/webp"],
-          maximumSizeInBytes: MAX_UPLOAD_BYTES,
-          addRandomSuffix: true,
-          tokenPayload: JSON.stringify({ source: "frglass-community" }),
-        };
+    const form = await request.formData();
+    const file = form.get("file");
+    if (!(file instanceof File)) return NextResponse.json({ error: "No image received." }, { status: 400 });
+    if (!ALLOWED_IMAGE_TYPES.has(file.type)) return NextResponse.json({ error: "Only JPEG, PNG and WebP images are allowed." }, { status: 415 });
+    if (file.size > MAX_UPLOAD_BYTES) return NextResponse.json({ error: "Image is too large." }, { status: 413 });
+
+    await reserveUploadSlot(request);
+    const key = `community/media/${Date.now()}-${randomUUID()}-${safeName(file.name)}`;
+    await mediaBucket().put(key, await file.arrayBuffer(), {
+      httpMetadata: {
+        contentType: file.type,
+        cacheControl: "public, max-age=31536000, immutable",
       },
-      onUploadCompleted: async () => {},
     });
-    return NextResponse.json(jsonResponse);
+    return NextResponse.json({ url: mediaUrlForKey(key) });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Upload failed.";
     return NextResponse.json({ error: message }, { status: 400 });

@@ -1,11 +1,12 @@
 import { randomUUID } from "node:crypto";
-import { del, list, put } from "@vercel/blob";
 import { NextResponse } from "next/server";
 import { isAdmin } from "../../../../lib/adminAuth";
+import { isR2Configured, mediaBucket, mediaKeyFromUrl, readJson, writeJson } from "../../../../lib/r2Storage";
 
 export const dynamic = "force-dynamic";
 
-const POST_PREFIX = "behind-scenes/posts/";
+const CATALOG_KEY = "behind-scenes/posts/catalog.json";
+const MEDIA_PREFIX = "behind-scenes/media/";
 
 export type BehindScenesPost = {
   id: string;
@@ -18,57 +19,32 @@ export type BehindScenesPost = {
   recordUrl?: string;
 };
 
-function storageConfigured() {
-  return Boolean(process.env.BLOB_READ_WRITE_TOKEN);
-}
-
 function cleanText(value: unknown, maxLength: number) {
   return typeof value === "string" ? value.trim().slice(0, maxLength) : "";
 }
 
-function isBlobMediaUrl(value: string) {
-  try {
-    const url = new URL(value);
-    return (
-      url.protocol === "https:" &&
-      url.hostname.endsWith(".blob.vercel-storage.com") &&
-      url.pathname.includes("/behind-scenes/media/")
-    );
-  } catch {
-    return false;
-  }
+function isValidMediaUrl(value: string) {
+  const key = mediaKeyFromUrl(value);
+  return Boolean(key && key.startsWith(MEDIA_PREFIX));
 }
 
-async function readPost(recordUrl: string): Promise<BehindScenesPost | null> {
-  try {
-    const response = await fetch(recordUrl, { cache: "no-store" });
-    if (!response.ok) return null;
+async function readPosts() {
+  return (await readJson<BehindScenesPost[]>(CATALOG_KEY)) ?? [];
+}
 
-    const post = (await response.json()) as BehindScenesPost;
-    if (!post?.id || !post?.mediaUrl || !post?.createdAt) return null;
-
-    return { ...post, recordUrl };
-  } catch {
-    return null;
-  }
+function withRecordUrl(post: BehindScenesPost): BehindScenesPost {
+  return { ...post, recordUrl: `behind-scenes/posts/${post.id}` };
 }
 
 export async function GET() {
-  if (!storageConfigured()) {
+  if (!isR2Configured()) {
     return NextResponse.json({ posts: [], configured: false });
   }
 
   try {
-    const { blobs } = await list({ prefix: POST_PREFIX, limit: 1000 });
-    const posts = (
-      await Promise.all(blobs.map((blob) => readPost(blob.url)))
-    )
-      .filter((post): post is BehindScenesPost => Boolean(post))
-      .sort(
-        (a, b) =>
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-      );
-
+    const posts = (await readPosts())
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+      .map(withRecordUrl);
     return NextResponse.json({ posts, configured: true });
   } catch (error) {
     console.error("Could not load behind-the-scenes posts", error);
@@ -80,56 +56,33 @@ export async function POST(request: Request) {
   if (!(await isAdmin())) {
     return NextResponse.json({ error: "Not authorized." }, { status: 401 });
   }
-
-  if (!storageConfigured()) {
-    return NextResponse.json(
-      { error: "Vercel Blob is not configured yet." },
-      { status: 503 },
-    );
+  if (!isR2Configured()) {
+    return NextResponse.json({ error: "Cloudflare R2 is not configured yet." }, { status: 503 });
   }
 
   const body = (await request.json().catch(() => null)) as
-    | {
-        title?: unknown;
-        text?: unknown;
-        mediaUrl?: unknown;
-        contentType?: unknown;
-      }
+    | { title?: unknown; text?: unknown; mediaUrl?: unknown; contentType?: unknown }
     | null;
-
   const mediaUrl = cleanText(body?.mediaUrl, 2000);
   const contentType = cleanText(body?.contentType, 120).toLowerCase();
-
-  if (!isBlobMediaUrl(mediaUrl)) {
+  if (!isValidMediaUrl(mediaUrl)) {
     return NextResponse.json({ error: "Invalid media URL." }, { status: 400 });
   }
-
-  const mediaType: "image" | "video" = contentType.startsWith("video/")
-    ? "video"
-    : "image";
 
   const post: BehindScenesPost = {
     id: randomUUID(),
     title: cleanText(body?.title, 100),
     text: cleanText(body?.text, 700),
     mediaUrl,
-    mediaType,
-    contentType,
+    mediaType: "image",
+    contentType: contentType || "image/webp",
     createdAt: new Date().toISOString(),
   };
 
   try {
-    const record = await put(
-      `${POST_PREFIX}${Date.now()}-${post.id}.json`,
-      JSON.stringify(post),
-      {
-        access: "public",
-        addRandomSuffix: false,
-        contentType: "application/json",
-      },
-    );
-
-    return NextResponse.json({ post: { ...post, recordUrl: record.url } });
+    const posts = await readPosts();
+    await writeJson(CATALOG_KEY, [post, ...posts].slice(0, 250));
+    return NextResponse.json({ post: withRecordUrl(post) });
   } catch (error) {
     console.error("Could not save behind-the-scenes post", error);
     return NextResponse.json({ error: "Could not save the post." }, { status: 500 });
@@ -140,12 +93,8 @@ export async function DELETE(request: Request) {
   if (!(await isAdmin())) {
     return NextResponse.json({ error: "Not authorized." }, { status: 401 });
   }
-
-  if (!storageConfigured()) {
-    return NextResponse.json(
-      { error: "Vercel Blob is not configured yet." },
-      { status: 503 },
-    );
+  if (!isR2Configured()) {
+    return NextResponse.json({ error: "Cloudflare R2 is not configured yet." }, { status: 503 });
   }
 
   const body = (await request.json().catch(() => null)) as
@@ -153,13 +102,16 @@ export async function DELETE(request: Request) {
     | null;
   const recordUrl = cleanText(body?.recordUrl, 2000);
   const mediaUrl = cleanText(body?.mediaUrl, 2000);
-
-  if (!recordUrl || !mediaUrl || !isBlobMediaUrl(mediaUrl)) {
+  const id = recordUrl.startsWith("behind-scenes/posts/") ? recordUrl.slice("behind-scenes/posts/".length) : "";
+  const mediaKey = mediaKeyFromUrl(mediaUrl);
+  if (!id || !mediaKey?.startsWith(MEDIA_PREFIX)) {
     return NextResponse.json({ error: "Invalid post." }, { status: 400 });
   }
 
   try {
-    await Promise.all([del(recordUrl), del(mediaUrl)]);
+    const posts = await readPosts();
+    await writeJson(CATALOG_KEY, posts.filter((post) => post.id !== id));
+    await mediaBucket().delete(mediaKey);
     return NextResponse.json({ ok: true });
   } catch (error) {
     console.error("Could not delete behind-the-scenes post", error);

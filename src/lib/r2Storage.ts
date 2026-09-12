@@ -8,6 +8,10 @@ interface R2ObjectBody {
   httpMetadata?: { contentType?: string };
 }
 
+interface R2ListedObject {
+  key: string;
+}
+
 interface R2BucketBinding {
   get(key: string): Promise<R2ObjectBody | null>;
   put(
@@ -16,6 +20,7 @@ interface R2BucketBinding {
     options?: { httpMetadata?: { contentType?: string; cacheControl?: string } },
   ): Promise<unknown>;
   delete(key: string | string[]): Promise<void>;
+  list(options?: { prefix?: string; limit?: number }): Promise<{ objects: R2ListedObject[] }>;
 }
 
 type FrglassEnv = { FRGLASS_MEDIA?: R2BucketBinding };
