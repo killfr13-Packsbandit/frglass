@@ -19,7 +19,8 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@vercel/blob/client": ["./src/lib/r2UploadClient.ts"]
     }
   },
   "include": [
