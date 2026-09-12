@@ -1,7 +1,7 @@
 import "server-only";
 
 import type { SiteContentMap } from "../app/siteContent";
-import { isR2Configured, readJson, writeJson } from "./r2Storage";
+import { isR2Configured, normalizeMediaUrl, readJson, writeJson } from "./r2Storage";
 
 const CATALOG_KEY = "cms/site-content/catalog.json";
 
@@ -68,6 +68,9 @@ function normalizeSiteContent(content: SiteContentMap) {
     for (const replacement of replacements) {
       if (next[key] === replacement.old) next[key] = replacement.next;
     }
+  }
+  for (const [key, value] of Object.entries(next)) {
+    if (key.endsWith(".url")) next[key] = normalizeMediaUrl(value);
   }
   return next;
 }

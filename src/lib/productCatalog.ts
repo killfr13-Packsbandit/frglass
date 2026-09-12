@@ -2,7 +2,7 @@ import "server-only";
 
 import { products as legacyProducts } from "../app/products";
 import type { ProductRecord } from "../app/productTypes";
-import { isR2Configured, mediaBucket, mediaKeyFromUrl, readJson, writeJson } from "./r2Storage";
+import { isR2Configured, mediaBucket, mediaKeyFromUrl, normalizeMediaUrl, readJson, writeJson } from "./r2Storage";
 
 const CATALOG_KEY = "cms/products/catalog.json";
 const DEFAULT_SIZE = "30 × 30 mm";
@@ -42,10 +42,15 @@ function isLegacyPendantCategory(product: ProductRecord) {
 
 function withProductDefaults(product: ProductRecord): ProductRecord {
   const pendant = isLegacyPendantCategory(product);
+  const images = Array.isArray(product.images)
+    ? product.images.map(normalizeMediaUrl).filter(Boolean)
+    : [];
+  const image = normalizeMediaUrl(product.image || images[0] || "");
 
   return {
     ...product,
-    images: [...product.images],
+    image,
+    images,
     size: LEGACY_SIZE_VALUES.has(product.size?.trim?.() ?? "") ? DEFAULT_SIZE : product.size,
     sizeDe: LEGACY_SIZE_VALUES.has(product.sizeDe?.trim?.() ?? "") ? DEFAULT_SIZE : product.sizeDe,
     categoryId: pendant ? PENDANT_CATEGORY_ID : product.categoryId,

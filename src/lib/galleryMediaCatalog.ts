@@ -5,7 +5,7 @@ import {
   type GalleryMediaItem,
 } from "../app/galleryMediaTypes";
 import { getSiteContent } from "./siteContentCatalog";
-import { isR2Configured, mediaBucket, mediaKeyFromUrl, readJson, writeJson } from "./r2Storage";
+import { isR2Configured, mediaBucket, mediaKeyFromUrl, normalizeMediaUrl, readJson, writeJson } from "./r2Storage";
 
 const CATALOG_KEY = "cms/gallery/catalog.json";
 
@@ -35,16 +35,20 @@ export function isAllowedGalleryMediaUrl(value: string) {
   return value.startsWith("/") || isGalleryMediaUrl(value) || isLegacySiteMediaUrl(value);
 }
 
+function normalizeItem(item: GalleryMediaItem): GalleryMediaItem {
+  return { ...item, mediaUrl: normalizeMediaUrl(item.mediaUrl) };
+}
+
 async function fallbackCatalog(): Promise<GalleryMediaItem[]> {
   if (!isGalleryMediaStorageConfigured()) {
-    return DEFAULT_GALLERY_MEDIA.map((item) => ({ ...item }));
+    return DEFAULT_GALLERY_MEDIA.map((item) => normalizeItem({ ...item }));
   }
 
   try {
     const siteContent = await getSiteContent();
     return DEFAULT_GALLERY_MEDIA.map((item, index) => {
       const number = index + 1;
-      const mediaUrl = siteContent[`gallery.media${number}.url`] || item.mediaUrl;
+      const mediaUrl = normalizeMediaUrl(siteContent[`gallery.media${number}.url`] || item.mediaUrl);
       const rawType = siteContent[`gallery.media${number}.type`] || item.mediaType;
       const mediaType: "image" | "video" = rawType === "video" ? "video" : "image";
       return {
@@ -54,7 +58,7 @@ async function fallbackCatalog(): Promise<GalleryMediaItem[]> {
       };
     }).filter((item) => item.mediaUrl);
   } catch {
-    return DEFAULT_GALLERY_MEDIA.map((item) => ({ ...item }));
+    return DEFAULT_GALLERY_MEDIA.map((item) => normalizeItem({ ...item }));
   }
 }
 
@@ -63,7 +67,9 @@ export async function getGalleryMediaCatalog(): Promise<GalleryMediaItem[]> {
 
   try {
     const data = await readJson<unknown>(CATALOG_KEY);
-    return Array.isArray(data) ? (data as GalleryMediaItem[]) : fallbackCatalog();
+    return Array.isArray(data)
+      ? (data as GalleryMediaItem[]).map(normalizeItem)
+      : fallbackCatalog();
   } catch (error) {
     console.error("Could not load gallery media catalog", error);
     return fallbackCatalog();
@@ -85,14 +91,15 @@ export async function saveGalleryMediaCatalog(items: GalleryMediaItem[]) {
 
   const previousItems = await getGalleryMediaCatalog();
   const previousMedia = remoteMediaKeys(previousItems);
-  const nextMedia = remoteMediaKeys(items);
+  const normalizedItems = items.map(normalizeItem);
+  const nextMedia = remoteMediaKeys(normalizedItems);
 
-  await writeJson(CATALOG_KEY, items);
+  await writeJson(CATALOG_KEY, normalizedItems);
 
   const removedMedia = [...previousMedia].filter((key) => !nextMedia.has(key));
   if (removedMedia.length) {
     await mediaBucket().delete(removedMedia);
   }
 
-  return items;
+  return normalizedItems;
 }

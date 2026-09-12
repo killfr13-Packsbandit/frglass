@@ -55,28 +55,26 @@ export function isR2Configured() {
   return true;
 }
 
-export async function readJson<T>(key: string): Promise<T | null> {
-  const object = await mediaBucket().get(key);
-  if (!object) return null;
-  return JSON.parse(await object.text()) as T;
-}
-
-export async function writeJson(key: string, value: unknown) {
-  await mediaBucket().put(key, JSON.stringify(value), {
-    httpMetadata: {
-      contentType: "application/json; charset=utf-8",
-      cacheControl: "no-store",
-    },
-  });
+function pathnameFromMediaValue(value: string) {
+  if (/^https?:\/\//i.test(value)) {
+    try {
+      return new URL(value).pathname;
+    } catch {
+      return value;
+    }
+  }
+  return value;
 }
 
 export function mediaKeyFromUrl(value: string) {
   const prefix = "/api/media/";
-  if (!value.startsWith(prefix)) return null;
+  const pathname = pathnameFromMediaValue(value);
+  if (!pathname.startsWith(prefix)) return null;
+  const rawKey = pathname.slice(prefix.length);
   try {
-    return decodeURIComponent(value.slice(prefix.length));
+    return decodeURIComponent(rawKey);
   } catch {
-    return null;
+    return rawKey;
   }
 }
 
@@ -86,4 +84,40 @@ export function mediaUrlForKey(key: string) {
     .map((segment) => encodeURIComponent(segment))
     .join("/");
   return `/api/media/${encodedPath}`;
+}
+
+export function normalizeMediaUrl(value: string) {
+  if (!value) return value;
+  const key = mediaKeyFromUrl(value);
+  return key ? mediaUrlForKey(key) : value;
+}
+
+function normalizeStoredValue(value: unknown): unknown {
+  if (typeof value === "string") return normalizeMediaUrl(value);
+  if (Array.isArray(value)) return value.map(normalizeStoredValue);
+  if (value && typeof value === "object") {
+    return Object.fromEntries(
+      Object.entries(value as Record<string, unknown>).map(([key, nested]) => [
+        key,
+        normalizeStoredValue(nested),
+      ]),
+    );
+  }
+  return value;
+}
+
+export async function readJson<T>(key: string): Promise<T | null> {
+  const object = await mediaBucket().get(key);
+  if (!object) return null;
+  const parsed = JSON.parse(await object.text()) as unknown;
+  return normalizeStoredValue(parsed) as T;
+}
+
+export async function writeJson(key: string, value: unknown) {
+  await mediaBucket().put(key, JSON.stringify(normalizeStoredValue(value)), {
+    httpMetadata: {
+      contentType: "application/json; charset=utf-8",
+      cacheControl: "no-store",
+    },
+  });
 }

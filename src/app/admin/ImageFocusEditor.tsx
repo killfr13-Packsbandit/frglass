@@ -48,11 +48,11 @@ export default function ImageFocusEditor({
   } as const;
 
   return (
-    <div>
+    <div className="w-full min-w-0">
       <div
         onPointerDown={pointerDown}
         onPointerMove={pointerMove}
-        className={`relative ${aspectClass} touch-none cursor-crosshair overflow-hidden rounded-2xl border border-white/15 bg-neutral-950 select-none`}
+        className={`relative w-full min-w-0 ${aspectClass} touch-none cursor-crosshair overflow-hidden rounded-2xl border border-white/15 bg-neutral-950 select-none`}
       >
         {mediaType === "video" ? (
           <video
@@ -62,7 +62,7 @@ export default function ImageFocusEditor({
             loop
             playsInline
             preload="metadata"
-            className="pointer-events-none h-full w-full"
+            className="pointer-events-none block h-full w-full"
             style={mediaStyle}
           />
         ) : (
@@ -70,7 +70,7 @@ export default function ImageFocusEditor({
             src={src}
             alt="Bildvorschau"
             draggable={false}
-            className="pointer-events-none h-full w-full"
+            className="pointer-events-none block h-full w-full"
             style={mediaStyle}
           />
         )}

@@ -4,7 +4,7 @@ import {
   DEFAULT_STUDIO_MEDIA,
   type StudioMediaItem,
 } from "../app/studioMediaTypes";
-import { isR2Configured, mediaBucket, mediaKeyFromUrl, readJson, writeJson } from "./r2Storage";
+import { isR2Configured, mediaBucket, mediaKeyFromUrl, normalizeMediaUrl, readJson, writeJson } from "./r2Storage";
 
 const CATALOG_KEY = "cms/studio/catalog.json";
 
@@ -16,8 +16,12 @@ export function isStudioMediaUrl(value: string) {
   return Boolean(mediaKeyFromUrl(value));
 }
 
+function normalizeItem(item: StudioMediaItem): StudioMediaItem {
+  return { ...item, mediaUrl: normalizeMediaUrl(item.mediaUrl) };
+}
+
 function fallbackCatalog(): StudioMediaItem[] {
-  return DEFAULT_STUDIO_MEDIA.map((item) => ({ ...item }));
+  return DEFAULT_STUDIO_MEDIA.map((item) => normalizeItem({ ...item }));
 }
 
 export async function getStudioMediaCatalog(): Promise<StudioMediaItem[]> {
@@ -25,7 +29,9 @@ export async function getStudioMediaCatalog(): Promise<StudioMediaItem[]> {
 
   try {
     const data = await readJson<unknown>(CATALOG_KEY);
-    return Array.isArray(data) ? (data as StudioMediaItem[]) : fallbackCatalog();
+    return Array.isArray(data)
+      ? (data as StudioMediaItem[]).map(normalizeItem)
+      : fallbackCatalog();
   } catch (error) {
     console.error("Could not load studio media catalog", error);
     return fallbackCatalog();
@@ -47,14 +53,15 @@ export async function saveStudioMediaCatalog(items: StudioMediaItem[]) {
 
   const previousItems = await getStudioMediaCatalog();
   const previousMedia = remoteMediaKeys(previousItems);
-  const nextMedia = remoteMediaKeys(items);
+  const normalizedItems = items.map(normalizeItem);
+  const nextMedia = remoteMediaKeys(normalizedItems);
 
-  await writeJson(CATALOG_KEY, items);
+  await writeJson(CATALOG_KEY, normalizedItems);
 
   const removedMedia = [...previousMedia].filter((key) => !nextMedia.has(key));
   if (removedMedia.length) {
     await mediaBucket().delete(removedMedia);
   }
 
-  return items;
+  return normalizedItems;
 }

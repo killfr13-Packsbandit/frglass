@@ -17,15 +17,22 @@ export default function ProductPicture({
   className = "object-contain",
   priority = false,
 }: Props) {
-  const isRemote = /^https:\/\//i.test(src);
+  if (!src) return null;
 
-  if (isRemote) {
+  const isRemote = /^https:\/\//i.test(src);
+  const isR2Media = src.startsWith("/api/media/");
+
+  // R2 uploads are already resized/compressed to WebP in the admin. Serving them
+  // directly avoids an unnecessary second image-transformation request and keeps
+  // Cloudflare usage predictable.
+  if (isRemote || isR2Media) {
     return (
       <img
         src={src}
         alt={alt}
         loading={priority ? "eager" : "lazy"}
-        className={`absolute inset-0 h-full w-full ${className}`}
+        decoding="async"
+        className={`absolute inset-0 block h-full w-full ${className}`}
       />
     );
   }
