@@ -18,8 +18,8 @@ export default function Hero() {
   const subtitle = get(`home.hero.subtitle.${lang}`, t.subtitle);
   const text = get(`home.hero.text.${lang}`, t.text);
   const cta = get(`home.hero.cta.${lang}`, t.cta);
-  const mediaUrl = get("home.hero.media.url", "/hero/hero.mp4");
-  const mediaType = get("home.hero.media.type", "video");
+  const mediaUrl = get("home.hero.media.url", "/workshop/me2.jpg");
+  const mediaType = get("home.hero.media.type", "image");
   const zoom = numeric(get("home.hero.media.zoom", "1"), 1);
   const focusX = numeric(get("home.hero.media.focusX", "50"), 50);
   const focusY = numeric(get("home.hero.media.focusY", "50"), 50);
@@ -35,6 +35,6 @@ export default function Hero() {
       <div className="flex min-w-0 flex-col items-center gap-4 text-center sm:flex-row sm:gap-7 sm:text-left"><div className="relative h-28 w-20 shrink-0 overflow-hidden sm:h-44 sm:w-28"><Image src="/logo.png" alt="FRGLASS Logo" fill sizes="256px" quality={100} priority className="scale-110 object-cover object-center drop-shadow-[0_0_22px_rgba(253,186,116,0.12)]" /></div><div className="min-w-0 max-w-full"><h1 className="break-normal text-3xl font-semibold uppercase tracking-[0.1em] text-white sm:text-4xl sm:tracking-[0.14em]">FRGLASS</h1><p className="mt-3 break-normal text-xs font-semibold uppercase leading-5 tracking-[0.12em] text-neutral-400 sm:text-base sm:leading-6 sm:tracking-[0.16em]">{subtitle}</p></div></div>
       <div className="my-5 h-px bg-gradient-to-r from-orange-300/60 via-white/15 to-transparent sm:my-7" /><p className="max-w-lg text-[15px] leading-7 text-neutral-300 sm:text-lg sm:leading-8">{text}</p><div className="mt-5 flex flex-wrap justify-center gap-2 sm:mt-7 sm:justify-start">{tags.map((tag) => <span key={tag} className="rounded-full border border-white/10 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-neutral-400 sm:text-[11px] sm:tracking-[0.16em]">{tag}</span>)}</div><a href="#collections" className="mt-6 inline-flex max-w-full items-center rounded-full bg-orange-300 px-5 py-3 text-xs font-bold uppercase tracking-[0.1em] text-black transition hover:bg-orange-200 sm:mt-8 sm:px-6 sm:text-sm sm:tracking-[0.14em]">{cta}</a>
     </div></div></div>
-    <div className="relative min-h-[48vh] min-w-0 overflow-hidden bg-neutral-950 sm:min-h-[58vh] xl:min-h-full">{mediaUrl && (mediaType === "image" ? <img src={mediaUrl} alt="" className="absolute inset-0 h-full w-full" style={mediaStyle} /> : <video src={mediaUrl} autoPlay muted loop playsInline preload="metadata" className="absolute inset-0 h-full w-full" style={mediaStyle} />)}<div className="absolute inset-0 bg-gradient-to-r from-black/25 via-transparent to-black/10" /><div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-black/45 to-transparent xl:hidden" /></div>
+    <div className="relative min-h-[48vh] min-w-0 overflow-hidden bg-neutral-950 sm:min-h-[58vh] xl:min-h-full">{mediaUrl && (mediaType === "image" ? <img src={mediaUrl} alt="" className="absolute inset-0 h-full w-full" style={mediaStyle} /> : <video src={mediaUrl} muted controls playsInline preload="none" poster="/workshop/me2.jpg" className="absolute inset-0 h-full w-full" style={mediaStyle} />)}<div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/25 via-transparent to-black/10" /><div className="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-black/45 to-transparent xl:hidden" /></div>
   </div></section>;
 }
