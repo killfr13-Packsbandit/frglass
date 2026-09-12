@@ -62,11 +62,49 @@ const STALE_COPY: Record<string, { old: string; next: string }[]> = {
   ],
 };
 
+const LEGACY_MEDIA: Array<{
+  urlKey: string;
+  typeKey: string;
+  oldUrl: string;
+  nextUrl: string;
+}> = [
+  {
+    urlKey: "home.hero.media.url",
+    typeKey: "home.hero.media.type",
+    oldUrl: "/hero/hero.mp4",
+    nextUrl: "/workshop/me2.jpg",
+  },
+  {
+    urlKey: "home.workshop.main.url",
+    typeKey: "home.workshop.main.type",
+    oldUrl: "/workshop/hero.mp4",
+    nextUrl: "/workshop/me2.jpg",
+  },
+  {
+    urlKey: "home.workshop.media1.url",
+    typeKey: "home.workshop.media1.type",
+    oldUrl: "/workshop/me1.png",
+    nextUrl: "/jewelry/Cobald5 x Opaldust Leaf.jpg",
+  },
+  {
+    urlKey: "about.media.url",
+    typeKey: "about.media.type",
+    oldUrl: "/workshop/me1.png",
+    nextUrl: "/workshop/me2.jpg",
+  },
+];
+
 function normalizeSiteContent(content: SiteContentMap) {
   const next = { ...content };
   for (const [key, replacements] of Object.entries(STALE_COPY)) {
     for (const replacement of replacements) {
       if (next[key] === replacement.old) next[key] = replacement.next;
+    }
+  }
+  for (const migration of LEGACY_MEDIA) {
+    if (next[migration.urlKey] === migration.oldUrl) {
+      next[migration.urlKey] = migration.nextUrl;
+      next[migration.typeKey] = "image";
     }
   }
   for (const [key, value] of Object.entries(next)) {
