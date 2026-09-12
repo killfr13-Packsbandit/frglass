@@ -32,7 +32,7 @@ export async function GET() {
 
 export async function PUT(request: Request) {
   if (!(await isAdmin())) return NextResponse.json({ error: "Not authorized." }, { status: 401 });
-  if (!isCategoryStorageConfigured()) return NextResponse.json({ error: "Vercel Blob is not configured yet." }, { status: 503 });
+  if (!isCategoryStorageConfigured()) return NextResponse.json({ error: "Cloudflare R2 is not configured yet." }, { status: 503 });
   const body = (await request.json().catch(() => null)) as { categories?: unknown } | null;
   if (!Array.isArray(body?.categories) || body.categories.length === 0 || body.categories.length > 30) return NextResponse.json({ error: "Invalid category list." }, { status: 400 });
   const categories = body.categories.map(normalizeCategory).filter((category): category is ProductCategory => Boolean(category));

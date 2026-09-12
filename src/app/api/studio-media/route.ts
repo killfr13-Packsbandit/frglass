@@ -79,7 +79,7 @@ export async function PUT(request: Request) {
 
   if (!isStudioMediaStorageConfigured()) {
     return NextResponse.json(
-      { error: "Vercel Blob is not configured yet." },
+      { error: "Cloudflare R2 is not configured yet." },
       { status: 503 },
     );
   }
