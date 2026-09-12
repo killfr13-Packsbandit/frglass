@@ -67,11 +67,10 @@ export default function Studio() {
                     {item.mediaType === "video" ? (
                       <video
                         src={item.mediaUrl}
-                        autoPlay
                         muted
-                        loop
+                        controls
                         playsInline
-                        preload="auto"
+                        preload="none"
                         className="h-full w-full"
                         style={mediaStyle(item)}
                       />
@@ -80,6 +79,7 @@ export default function Studio() {
                         src={item.mediaUrl}
                         alt={caption || (language === "de" ? "FRGLASS Studio und Arbeit mit Borosilikatglas" : "FRGLASS studio and borosilicate glasswork")}
                         loading="lazy"
+                        decoding="async"
                         className="h-full w-full"
                         style={mediaStyle(item)}
                       />
