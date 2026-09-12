@@ -11,9 +11,15 @@ function validEmail(value: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 }
 
+function errorMessage(language: "de" | "en") {
+  return language === "de"
+    ? "Die Anfrage konnte gerade nicht gesendet werden. Bitte versuch es noch einmal oder nutze den E-Mail-Link."
+    : "The inquiry could not be sent right now. Please try again or use the email link.";
+}
+
 export async function GET() {
   return NextResponse.json(
-    { configured: Boolean(process.env.RESEND_API_KEY) },
+    { configured: Boolean(process.env.RESEND_API_KEY?.trim()) },
     { headers: { "Cache-Control": "no-store, max-age=0" } },
   );
 }
@@ -37,27 +43,42 @@ export async function POST(request: Request) {
   const productName = cleanText(body?.productName, 160);
   const productSlug = cleanText(body?.productSlug, 180);
   const company = cleanText(body?.company, 160);
-  const language = cleanText(body?.language, 5) === "de" ? "de" : "en";
+  const language: "de" | "en" = cleanText(body?.language, 5) === "de" ? "de" : "en";
 
+  // Honeypot for simple form bots. Pretend success so bots do not learn the rule.
   if (company) return NextResponse.json({ ok: true });
 
   if (!name || !validEmail(email) || !message) {
     return NextResponse.json(
-      { error: language === "de" ? "Bitte Name, gültige E-Mail-Adresse und Nachricht ausfüllen." : "Please enter your name, a valid email address and a message." },
+      {
+        error:
+          language === "de"
+            ? "Bitte Name, gültige E-Mail-Adresse und Nachricht ausfüllen."
+            : "Please enter your name, a valid email address and a message.",
+      },
       { status: 400 },
     );
   }
 
   const apiKey = process.env.RESEND_API_KEY?.trim();
   if (!apiKey) {
-    return NextResponse.json({ error: "Email delivery is not configured yet." }, { status: 503 });
+    console.error("Inquiry email is missing RESEND_API_KEY");
+    return NextResponse.json({ error: errorMessage(language) }, { status: 503 });
   }
 
   const to = process.env.INQUIRY_EMAIL_TO?.trim() || siteConfig.email;
-  const from = process.env.INQUIRY_EMAIL_FROM?.trim() || "FRGLASS Website <onboarding@resend.dev>";
-  const productLine = productName ? `Produkt / Piece: ${productName}` : "Allgemeine Anfrage / General inquiry";
-  const productUrl = productSlug ? `https://www.frglass.at/shop/${encodeURIComponent(productSlug)}` : "";
-  const subject = productName ? `FRGLASS Anfrage – ${productName}` : "FRGLASS Website-Anfrage";
+  const from =
+    process.env.INQUIRY_EMAIL_FROM?.trim() ||
+    "FRGLASS Website <website@frglass.at>";
+  const productLine = productName
+    ? `Produkt / Piece: ${productName}`
+    : "Allgemeine Anfrage / General inquiry";
+  const productUrl = productSlug
+    ? `https://frglass.at/shop/${encodeURIComponent(productSlug)}`
+    : "";
+  const subject = productName
+    ? `FRGLASS Anfrage – ${productName}`
+    : "FRGLASS Website-Anfrage";
   const text = [
     "Neue Anfrage über frglass.at",
     "",
@@ -71,7 +92,9 @@ export async function POST(request: Request) {
     message,
     "",
     `Gesendet: ${new Date().toISOString()}`,
-  ].filter(Boolean).join("\n");
+  ]
+    .filter(Boolean)
+    .join("\n");
 
   try {
     const response = await fetch("https://api.resend.com/emails", {
@@ -90,19 +113,21 @@ export async function POST(request: Request) {
     });
 
     if (!response.ok) {
-      console.error("Inquiry email provider returned", response.status);
-      return NextResponse.json(
-        { error: language === "de" ? "Die Anfrage konnte gerade nicht per E-Mail zugestellt werden." : "The inquiry could not be delivered by email right now." },
-        { status: 502 },
+      const providerResponse = await response.text().catch(() => "");
+      console.error(
+        "Inquiry email provider returned",
+        response.status,
+        providerResponse.slice(0, 500),
       );
+      return NextResponse.json({ error: errorMessage(language) }, { status: 502 });
     }
 
     return NextResponse.json({ ok: true });
   } catch (error) {
-    console.error("Could not send inquiry email", error instanceof Error ? error.message : "unknown error");
-    return NextResponse.json(
-      { error: language === "de" ? "Die Anfrage konnte gerade nicht per E-Mail zugestellt werden." : "The inquiry could not be delivered by email right now." },
-      { status: 502 },
+    console.error(
+      "Could not send inquiry email",
+      error instanceof Error ? error.message : "unknown error",
     );
+    return NextResponse.json({ error: errorMessage(language) }, { status: 502 });
   }
 }

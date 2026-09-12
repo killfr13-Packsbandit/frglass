@@ -8,6 +8,10 @@ import { getSiteContent } from "./siteContentCatalog";
 import { isR2Configured, mediaBucket, mediaKeyFromUrl, normalizeMediaUrl, readJson, writeJson } from "./r2Storage";
 
 const CATALOG_KEY = "cms/gallery/catalog.json";
+const LEGACY_STATIC_MEDIA: Record<string, string> = {
+  "/jewelry/AmberPurple Leaf STube (2).JPG": "/jewelry/AmberPurple Leaf (2).JPG",
+  "/jewelry/leaf3.jpg": "/jewelry/AmberPurple Leaf (2).JPG",
+};
 
 export function isGalleryMediaStorageConfigured() {
   return isR2Configured();
@@ -36,7 +40,8 @@ export function isAllowedGalleryMediaUrl(value: string) {
 }
 
 function normalizeItem(item: GalleryMediaItem): GalleryMediaItem {
-  return { ...item, mediaUrl: normalizeMediaUrl(item.mediaUrl) };
+  const mediaUrl = LEGACY_STATIC_MEDIA[item.mediaUrl] || item.mediaUrl;
+  return { ...item, mediaUrl: normalizeMediaUrl(mediaUrl) };
 }
 
 async function fallbackCatalog(): Promise<GalleryMediaItem[]> {
@@ -48,14 +53,14 @@ async function fallbackCatalog(): Promise<GalleryMediaItem[]> {
     const siteContent = await getSiteContent();
     return DEFAULT_GALLERY_MEDIA.map((item, index) => {
       const number = index + 1;
-      const mediaUrl = normalizeMediaUrl(siteContent[`gallery.media${number}.url`] || item.mediaUrl);
+      const mediaUrl = siteContent[`gallery.media${number}.url`] || item.mediaUrl;
       const rawType = siteContent[`gallery.media${number}.type`] || item.mediaType;
       const mediaType: "image" | "video" = rawType === "video" ? "video" : "image";
-      return {
+      return normalizeItem({
         ...item,
         mediaUrl,
         mediaType,
-      };
+      });
     }).filter((item) => item.mediaUrl);
   } catch {
     return DEFAULT_GALLERY_MEDIA.map((item) => normalizeItem({ ...item }));

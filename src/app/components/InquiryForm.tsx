@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useEffect, useMemo, useState } from "react";
 import { useLanguage } from "./LanguageProvider";
 import { siteConfig } from "../siteConfig";
 
@@ -30,8 +30,8 @@ const copy = {
     success: "Danke! Deine Anfrage wurde gesendet. Ich melde mich per E-Mail bei dir.",
     validation: "Bitte Name, gültige E-Mail-Adresse, Nachricht und Zustimmung ausfüllen.",
     error: "Die Anfrage konnte gerade nicht gesendet werden. Bitte versuch es noch einmal.",
-    notConfigured: "Der direkte E-Mail-Versand ist noch nicht fertig eingerichtet.",
-    fallback: "Alternativ direkt per E-Mail schreiben",
+    fallbackHint: "Falls der Versand gerade nicht klappt, kannst du dieselbe Nachricht direkt in deiner E-Mail-App öffnen.",
+    fallback: "Nachricht in E-Mail-App öffnen",
   },
   en: {
     eyebrow: "Direct inquiry",
@@ -52,8 +52,8 @@ const copy = {
     success: "Thank you! Your inquiry was sent. I will reply by email.",
     validation: "Please enter your name, a valid email address, a message and give consent.",
     error: "The inquiry could not be sent right now. Please try again.",
-    notConfigured: "Direct email delivery has not been fully configured yet.",
-    fallback: "Alternatively send an email directly",
+    fallbackHint: "If delivery is temporarily unavailable, you can open the same message directly in your email app.",
+    fallback: "Open message in email app",
   },
 } as const;
 
@@ -75,8 +75,30 @@ export default function InquiryForm({ productName, productSlug }: Props) {
 
   useEffect(() => {
     if (!productName) return;
-    setMessage((current) => current.trim() ? current : copy[language].productMessage(productName));
+    setMessage((current) => (current.trim() ? current : copy[language].productMessage(productName)));
   }, [productName, language]);
+
+  const fallbackSubject = useMemo(
+    () =>
+      productName
+        ? `${language === "de" ? "Anfrage" : "Inquiry"} – ${productName}`
+        : language === "de"
+          ? "FRGLASS Anfrage"
+          : "FRGLASS inquiry",
+    [language, productName],
+  );
+
+  const fallbackBody = useMemo(() => {
+    const productLine = productName
+      ? `${language === "de" ? "Stück" : "Piece"}: ${productName}`
+      : "";
+    const productUrl = productSlug ? `https://frglass.at/shop/${encodeURIComponent(productSlug)}` : "";
+    return [message.trim(), "", productLine, productUrl, "", name.trim() ? `Name: ${name.trim()}` : "", email.trim() ? `E-Mail: ${email.trim()}` : ""]
+      .filter(Boolean)
+      .join("\n");
+  }, [email, language, message, name, productName, productSlug]);
+
+  const fallbackHref = `mailto:${siteConfig.email}?subject=${encodeURIComponent(fallbackSubject)}&body=${encodeURIComponent(fallbackBody)}`;
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -110,7 +132,7 @@ export default function InquiryForm({ productName, productSlug }: Props) {
         | null;
 
       if (!response.ok) {
-        throw new Error(response.status === 503 ? t.notConfigured : data?.error || t.error);
+        throw new Error(data?.error || t.error);
       }
 
       setName("");
@@ -125,10 +147,6 @@ export default function InquiryForm({ productName, productSlug }: Props) {
       setSending(false);
     }
   }
-
-  const fallbackSubject = productName
-    ? `${language === "de" ? "Anfrage" : "Inquiry"} ${productName}`
-    : "FRGLASS inquiry";
 
   return (
     <form
@@ -175,7 +193,8 @@ export default function InquiryForm({ productName, productSlug }: Props) {
         {status === "error" && (
           <div className="rounded-2xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-200">
             <p>{errorMessage || t.error}</p>
-            <a href={`mailto:${siteConfig.email}?subject=${encodeURIComponent(fallbackSubject)}`} className="mt-2 inline-block font-bold underline underline-offset-4">{t.fallback}</a>
+            <p className="mt-2 text-red-200/80">{t.fallbackHint}</p>
+            <a href={fallbackHref} className="mt-3 inline-block font-bold underline underline-offset-4">{t.fallback}</a>
           </div>
         )}
 

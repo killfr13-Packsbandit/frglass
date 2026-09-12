@@ -11,7 +11,7 @@ const posts = {
     {
       title: "Behind the scenes",
       category: "Workshop",
-      image: "/workshop/me1.png",
+      image: "/jewelry/goldsilver.jpg",
       excerpt: "A look at the torch, tools and the way the pieces are made.",
       href: "/journal/behind-the-scenes",
     },
@@ -27,7 +27,7 @@ const posts = {
     {
       title: "Hinter den Kulissen",
       category: "Werkstatt",
-      image: "/workshop/me1.png",
+      image: "/jewelry/goldsilver.jpg",
       excerpt: "Ein Blick auf Brenner, Werkzeuge und darauf, wie die Stücke entstehen.",
       href: "/journal/behind-the-scenes",
     },

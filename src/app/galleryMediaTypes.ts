@@ -19,7 +19,7 @@ export type GalleryMediaItem = {
 const DEFAULT_GALLERY_URLS = [
   "/jewelry/Cobald5 x Opaldust Leaf.jpg",
   "/jewelry/leaf2.jpg",
-  "/jewelry/AmberPurple Leaf STube (2).JPG",
+  "/jewelry/AmberPurple Leaf (2).JPG",
   "/jewelry/leaf4.jpg",
   "/jewelry/leaf5.jpg",
   "/jewelry/implo.jpg",
