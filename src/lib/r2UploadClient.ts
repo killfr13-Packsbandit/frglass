@@ -1,6 +1,9 @@
 export type UploadOptions = {
   access?: "public";
   handleUploadUrl: string;
+  multipart?: boolean;
+  onUploadProgress?: (event: { percentage: number }) => void;
+  [key: string]: unknown;
 };
 
 type UploadResult = { url: string };
@@ -15,6 +18,8 @@ export async function upload(
   if (!ALLOWED_IMAGE_TYPES.has(file.type)) {
     throw new Error("Only JPEG, PNG and WebP images are allowed on the website.");
   }
+
+  options.onUploadProgress?.({ percentage: 1 });
 
   const form = new FormData();
   form.append("file", file, file.name);
@@ -31,5 +36,6 @@ export async function upload(
     throw new Error(data?.error || "Upload failed.");
   }
 
+  options.onUploadProgress?.({ percentage: 100 });
   return { url: data.url };
 }
