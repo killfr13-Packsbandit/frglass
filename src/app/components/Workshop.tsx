@@ -6,8 +6,8 @@ import { useSiteContent } from "./SiteContentProvider";
 
 function Media({ url, type, className, style }: { url: string; type: string; className: string; style?: CSSProperties }) {
   if (!url) return null;
-  if (type === "video") return <video src={url} autoPlay muted loop playsInline preload="auto" className={className} style={style} />;
-  return <img src={url} alt="FRGLASS workshop" className={className} style={style} />;
+  if (type === "video") return <video src={url} muted controls playsInline preload="none" poster="/workshop/me2.jpg" className={className} style={style} />;
+  return <img src={url} alt="FRGLASS workshop" loading="lazy" className={className} style={style} />;
 }
 
 function numeric(value: string, fallback: number) {
@@ -36,9 +36,9 @@ export default function Workshop() {
     } as CSSProperties;
   }
 
-  const mainUrl = get("home.workshop.main.url", "/workshop/hero.mp4");
-  const mainType = get("home.workshop.main.type", "video");
-  const media1Url = get("home.workshop.media1.url", "/workshop/me1.png");
+  const mainUrl = get("home.workshop.main.url", "/workshop/me2.jpg");
+  const mainType = get("home.workshop.main.type", "image");
+  const media1Url = get("home.workshop.media1.url", "/jewelry/Cobald5 x Opaldust Leaf.jpg");
   const media1Type = get("home.workshop.media1.type", "image");
   const media2Url = get("home.workshop.media2.url", "/workshop/me2.jpg");
   const media2Type = get("home.workshop.media2.type", "image");
