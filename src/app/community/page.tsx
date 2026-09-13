@@ -1,7 +1,7 @@
 "use client";
 
-import { upload } from "@vercel/blob/client";
 import { FormEvent, useEffect, useMemo, useState } from "react";
+import { upload } from "../../lib/r2UploadClient";
 import { useLanguage } from "../components/LanguageProvider";
 
 type Review = {
