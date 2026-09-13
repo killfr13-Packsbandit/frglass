@@ -3,8 +3,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { products } from "../products";
+import ProductPicture from "../components/ProductPicture";
 import { useLanguage } from "../components/LanguageProvider";
+import { useProducts } from "../components/useProducts";
 
 const posts = {
   en: [
@@ -64,11 +65,13 @@ const copy = {
 
 function formatPrice(value: string) {
   const price = value.trim();
+  if (!price) return "";
   return price.startsWith("€") ? price : `€${price}`;
 }
 
 export default function Page() {
   const { language } = useLanguage();
+  const { products } = useProducts();
   const t = copy[language];
   const availableProducts = products.filter((product) => product.status === "Available");
   const [productIndex, setProductIndex] = useState(0);
@@ -82,6 +85,14 @@ export default function Page() {
 
     return () => window.clearInterval(interval);
   }, [availableProducts.length]);
+
+  useEffect(() => {
+    if (availableProducts.length === 0) {
+      setProductIndex(0);
+    } else if (productIndex >= availableProducts.length) {
+      setProductIndex(0);
+    }
+  }, [availableProducts.length, productIndex]);
 
   const currentProduct = availableProducts[productIndex % Math.max(availableProducts.length, 1)];
 
@@ -105,11 +116,10 @@ export default function Page() {
             <Link href={`/shop/${currentProduct.slug}`} className="block">
               <article className="h-full overflow-hidden rounded-2xl border border-white/10 bg-white/5 transition duration-500 hover:-translate-y-2 hover:border-orange-300/60 sm:rounded-3xl">
                 <div className="relative h-[300px] bg-neutral-950 sm:h-[360px]">
-                  <Image
+                  <ProductPicture
                     key={currentProduct.image}
                     src={currentProduct.image}
                     alt={language === "de" ? currentProduct.nameDe : currentProduct.name}
-                    fill
                     sizes="(min-width: 768px) 33vw, 100vw"
                     className="object-contain p-3 transition-opacity duration-500"
                   />
@@ -125,7 +135,10 @@ export default function Page() {
                   </h2>
 
                   <p className="mt-4 text-neutral-300">
-                    {language === "de" ? currentProduct.nameDe : currentProduct.name} · {formatPrice(language === "de" ? currentProduct.priceDe : currentProduct.price)}
+                    {language === "de" ? currentProduct.nameDe : currentProduct.name}
+                    {formatPrice(language === "de" ? currentProduct.priceDe : currentProduct.price)
+                      ? ` · ${formatPrice(language === "de" ? currentProduct.priceDe : currentProduct.price)}`
+                      : ""}
                   </p>
 
                   <p className="mt-6 text-sm font-bold uppercase tracking-[0.25em] text-orange-300">
