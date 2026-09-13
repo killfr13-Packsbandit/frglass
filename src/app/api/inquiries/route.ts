@@ -60,9 +60,7 @@ export async function POST(request: Request) {
   }
 
   const to = process.env.INQUIRY_EMAIL_TO?.trim() || siteConfig.email;
-  const from =
-    process.env.INQUIRY_EMAIL_FROM?.trim() ||
-    "FRGLASS Website <onboarding@resend.dev>";
+  const from = "FRGLASS Website <anfrage@frglass.at>";
   const productLine = productName
     ? `Produkt / Piece: ${productName}`
     : "Allgemeine Anfrage / General inquiry";
