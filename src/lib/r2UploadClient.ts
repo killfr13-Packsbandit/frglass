@@ -8,15 +8,23 @@ export type UploadOptions = {
 
 type UploadResult = { url: string };
 
-const ALLOWED_IMAGE_TYPES = new Set(["image/jpeg", "image/png", "image/webp"]);
+const ALLOWED_MEDIA_TYPES = new Set([
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+  "image/gif",
+  "video/mp4",
+  "video/quicktime",
+  "video/webm",
+]);
 
 export async function upload(
   _pathname: string,
   file: File,
   options: UploadOptions,
 ): Promise<UploadResult> {
-  if (!ALLOWED_IMAGE_TYPES.has(file.type)) {
-    throw new Error("Only JPEG, PNG and WebP images are allowed on the website.");
+  if (!ALLOWED_MEDIA_TYPES.has(file.type)) {
+    throw new Error("Only JPEG, PNG, WebP, GIF, MP4, MOV and WebM files are allowed on the website.");
   }
 
   options.onUploadProgress?.({ percentage: 1 });
