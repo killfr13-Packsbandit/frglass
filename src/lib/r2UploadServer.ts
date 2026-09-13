@@ -4,12 +4,23 @@ import { NextResponse } from "next/server";
 import { isAdmin } from "./adminAuth";
 import { mediaBucket, mediaUrlForKey } from "./r2Storage";
 
-const ALLOWED_IMAGE_TYPES = new Set(["image/jpeg", "image/png", "image/webp"]);
-const MAX_UPLOAD_BYTES = 8 * 1024 * 1024;
+const ALLOWED_IMAGE_TYPES = new Set([
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+  "image/gif",
+]);
+const ALLOWED_VIDEO_TYPES = new Set([
+  "video/mp4",
+  "video/quicktime",
+  "video/webm",
+]);
+const MAX_IMAGE_BYTES = 8 * 1024 * 1024;
+const MAX_VIDEO_BYTES = 100 * 1024 * 1024;
 
 function safeName(value: string) {
   const cleaned = value.replace(/[^a-zA-Z0-9._-]+/g, "-").replace(/^-+|-+$/g, "");
-  return cleaned || "image.webp";
+  return cleaned || "media-upload";
 }
 
 export async function handleR2ImageUpload(request: Request, prefix: string) {
@@ -21,17 +32,26 @@ export async function handleR2ImageUpload(request: Request, prefix: string) {
     const form = await request.formData();
     const file = form.get("file");
     if (!(file instanceof File)) {
-      return NextResponse.json({ error: "No image received." }, { status: 400 });
+      return NextResponse.json({ error: "No file received." }, { status: 400 });
     }
-    if (!ALLOWED_IMAGE_TYPES.has(file.type)) {
+
+    const isImage = ALLOWED_IMAGE_TYPES.has(file.type);
+    const isVideo = ALLOWED_VIDEO_TYPES.has(file.type);
+    if (!isImage && !isVideo) {
       return NextResponse.json(
-        { error: "Only JPEG, PNG and WebP images are allowed." },
+        { error: "Only JPEG, PNG, WebP, GIF, MP4, MOV and WebM files are allowed." },
         { status: 415 },
       );
     }
-    if (file.size > MAX_UPLOAD_BYTES) {
+
+    const maxBytes = isVideo ? MAX_VIDEO_BYTES : MAX_IMAGE_BYTES;
+    if (file.size > maxBytes) {
       return NextResponse.json(
-        { error: "Image is too large. Maximum is 8 MB after compression." },
+        {
+          error: isVideo
+            ? "Video is too large. Maximum is 100 MB."
+            : "Image is too large. Maximum is 8 MB after compression.",
+        },
         { status: 413 },
       );
     }
