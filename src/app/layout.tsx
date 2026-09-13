@@ -6,6 +6,7 @@ import Footer from "./components/Footer";
 import { LanguageProvider } from "./components/LanguageProvider";
 import LanguageWelcome from "./components/LanguageWelcome";
 import { SiteContentProvider } from "./components/SiteContentProvider";
+import MediaPickerCompatibility from "./admin/MediaPickerCompatibility";
 import { siteConfig } from "./siteConfig";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
@@ -40,5 +41,5 @@ const structuredData = {
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="de-AT" className={`${geistSans.variable} ${geistMono.variable} h-full bg-black antialiased`}><body className="min-h-full bg-black flex flex-col"><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData).replace(/</g, "\\u003c") }} /><LanguageProvider><SiteContentProvider><LanguageWelcome /><Navbar />{children}<Footer /></SiteContentProvider></LanguageProvider></body></html>;
+  return <html lang="de-AT" className={`${geistSans.variable} ${geistMono.variable} h-full bg-black antialiased`}><body className="min-h-full bg-black flex flex-col"><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData).replace(/</g, "\\u003c") }} /><MediaPickerCompatibility /><LanguageProvider><SiteContentProvider><LanguageWelcome /><Navbar />{children}<Footer /></SiteContentProvider></LanguageProvider></body></html>;
 }

@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import MediaPickerCompatibility from "./MediaPickerCompatibility";
 
 export const metadata: Metadata = {
   title: "Admin",
@@ -7,10 +6,5 @@ export const metadata: Metadata = {
 };
 
 export default function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return (
-    <>
-      <MediaPickerCompatibility />
-      {children}
-    </>
-  );
+  return children;
 }
