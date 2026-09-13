@@ -29,11 +29,11 @@ const copy = {
       "gelesen und bin mit der Verarbeitung meiner Angaben zur Bearbeitung der Anfrage einverstanden.",
     submit: "Anfrage senden",
     sending: "Wird gesendet …",
-    success: "Danke! Deine Anfrage ist angekommen. Ich melde mich per E-Mail bei dir.",
+    success: "Danke! Deine Anfrage wurde per E-Mail gesendet. Ich melde mich bei dir.",
     validation:
       "Bitte Name, gültige E-Mail-Adresse, Nachricht und Zustimmung ausfüllen.",
     error:
-      "Die Anfrage konnte gerade nicht gespeichert werden. Bitte versuch es noch einmal oder schreib mir direkt per E-Mail.",
+      "Die Anfrage konnte gerade nicht gesendet werden. Bitte versuch es noch einmal oder schreib mir direkt per E-Mail.",
     fallback: "Direkt per E-Mail schreiben",
   },
   en: {
@@ -54,11 +54,11 @@ const copy = {
       "and agree that my details may be processed to handle this inquiry.",
     submit: "Send inquiry",
     sending: "Sending …",
-    success: "Thank you! Your inquiry has arrived. I will reply by email.",
+    success: "Thank you! Your inquiry was sent by email. I will get back to you.",
     validation:
       "Please enter your name, a valid email address, a message and give consent.",
     error:
-      "The inquiry could not be saved right now. Please try again or email me directly.",
+      "The inquiry could not be sent right now. Please try again or email me directly.",
     fallback: "Send an email directly",
   },
 } as const;

@@ -1,13 +1,4 @@
-import { randomUUID } from "node:crypto";
 import { NextResponse } from "next/server";
-import { isAdmin } from "../../../lib/adminAuth";
-import {
-  addInquiry,
-  deleteInquiry,
-  getInquiryCatalog,
-  updateInquiry,
-  type InquiryRecord,
-} from "../../../lib/inquiryCatalog";
 import { siteConfig } from "../../siteConfig";
 
 export const dynamic = "force-dynamic";
@@ -20,24 +11,10 @@ function validEmail(value: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 }
 
-function resendConfigured() {
-  return Boolean(process.env.RESEND_API_KEY?.trim());
-}
-
-export async function GET() {
-  if (!(await isAdmin())) {
-    return NextResponse.json({ error: "Not authorized." }, { status: 401 });
-  }
-
-  try {
-    return NextResponse.json({
-      inquiries: await getInquiryCatalog(),
-      emailConfigured: resendConfigured(),
-    });
-  } catch (error) {
-    console.error("Could not load inquiries", error);
-    return NextResponse.json({ error: "Could not load inquiries." }, { status: 500 });
-  }
+function deliveryError(language: "de" | "en") {
+  return language === "de"
+    ? "Die Anfrage konnte gerade nicht per E-Mail gesendet werden. Bitte versuch es noch einmal oder schreib mir direkt per E-Mail."
+    : "The inquiry could not be sent by email right now. Please try again or email me directly.";
 }
 
 export async function POST(request: Request) {
@@ -61,8 +38,8 @@ export async function POST(request: Request) {
   const company = cleanText(body?.company, 160);
   const language: "de" | "en" = cleanText(body?.language, 5) === "de" ? "de" : "en";
 
-  // Honeypot: bots get a harmless success response without writing anything.
-  if (company) return NextResponse.json({ ok: true, delivered: false });
+  // Honeypot for simple bots. Pretend success without sending anything.
+  if (company) return NextResponse.json({ ok: true });
 
   if (!name || !validEmail(email) || !message) {
     return NextResponse.json(
@@ -76,39 +53,10 @@ export async function POST(request: Request) {
     );
   }
 
-  const inquiry: InquiryRecord = {
-    id: randomUUID(),
-    name,
-    email,
-    message,
-    productName,
-    productSlug,
-    language,
-    createdAt: new Date().toISOString(),
-    emailDelivered: false,
-    handled: false,
-  };
-
-  // First save the lead in R2. That way no inquiry is lost if the mail provider
-  // is missing or temporarily unavailable.
-  try {
-    await addInquiry(inquiry);
-  } catch (error) {
-    console.error("Could not store inquiry", error);
-    return NextResponse.json(
-      {
-        error:
-          language === "de"
-            ? "Die Anfrage konnte gerade nicht gespeichert werden."
-            : "The inquiry could not be saved right now.",
-      },
-      { status: 503 },
-    );
-  }
-
   const apiKey = process.env.RESEND_API_KEY?.trim();
   if (!apiKey) {
-    return NextResponse.json({ ok: true, delivered: false, id: inquiry.id });
+    console.error("Inquiry email is missing RESEND_API_KEY");
+    return NextResponse.json({ error: deliveryError(language) }, { status: 503 });
   }
 
   const to = process.env.INQUIRY_EMAIL_TO?.trim() || siteConfig.email;
@@ -136,7 +84,7 @@ export async function POST(request: Request) {
     "Nachricht:",
     message,
     "",
-    `Gesendet: ${inquiry.createdAt}`,
+    `Gesendet: ${new Date().toISOString()}`,
   ]
     .filter(Boolean)
     .join("\n");
@@ -159,68 +107,20 @@ export async function POST(request: Request) {
 
     if (!response.ok) {
       const providerMessage = await response.text().catch(() => "");
-      console.error("Inquiry email provider returned", response.status, providerMessage.slice(0, 300));
-      return NextResponse.json({ ok: true, delivered: false, id: inquiry.id });
+      console.error(
+        "Inquiry email provider returned",
+        response.status,
+        providerMessage.slice(0, 300),
+      );
+      return NextResponse.json({ error: deliveryError(language) }, { status: 502 });
     }
 
-    try {
-      await updateInquiry(inquiry.id, { emailDelivered: true });
-    } catch (error) {
-      console.error("Inquiry was emailed but delivery flag could not be saved", error);
-    }
-
-    return NextResponse.json({ ok: true, delivered: true, id: inquiry.id });
+    return NextResponse.json({ ok: true });
   } catch (error) {
     console.error(
       "Could not send inquiry email",
       error instanceof Error ? error.message : "unknown error",
     );
-    return NextResponse.json({ ok: true, delivered: false, id: inquiry.id });
-  }
-}
-
-export async function PATCH(request: Request) {
-  if (!(await isAdmin())) {
-    return NextResponse.json({ error: "Not authorized." }, { status: 401 });
-  }
-
-  const body = (await request.json().catch(() => null)) as
-    | { id?: unknown; handled?: unknown }
-    | null;
-  const id = cleanText(body?.id, 80);
-  if (!id || typeof body?.handled !== "boolean") {
-    return NextResponse.json({ error: "Invalid inquiry." }, { status: 400 });
-  }
-
-  try {
-    const inquiry = await updateInquiry(id, { handled: body.handled });
-    if (!inquiry) {
-      return NextResponse.json({ error: "Inquiry not found." }, { status: 404 });
-    }
-    return NextResponse.json({ inquiry });
-  } catch (error) {
-    console.error("Could not update inquiry", error);
-    return NextResponse.json({ error: "Could not update inquiry." }, { status: 500 });
-  }
-}
-
-export async function DELETE(request: Request) {
-  if (!(await isAdmin())) {
-    return NextResponse.json({ error: "Not authorized." }, { status: 401 });
-  }
-
-  const body = (await request.json().catch(() => null)) as { id?: unknown } | null;
-  const id = cleanText(body?.id, 80);
-  if (!id) return NextResponse.json({ error: "Invalid inquiry." }, { status: 400 });
-
-  try {
-    const removed = await deleteInquiry(id);
-    if (!removed) {
-      return NextResponse.json({ error: "Inquiry not found." }, { status: 404 });
-    }
-    return NextResponse.json({ ok: true });
-  } catch (error) {
-    console.error("Could not delete inquiry", error);
-    return NextResponse.json({ error: "Could not delete inquiry." }, { status: 500 });
+    return NextResponse.json({ error: deliveryError(language) }, { status: 502 });
   }
 }

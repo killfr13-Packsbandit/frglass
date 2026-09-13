@@ -28,6 +28,6 @@
   },
   "vars": {
     "INQUIRY_EMAIL_TO": "frglasswork@gmx.at",
-    "INQUIRY_EMAIL_FROM": "FRGLASS Website <website@frglass.at>"
+    "INQUIRY_EMAIL_FROM": "FRGLASS Website <onboarding@resend.dev>"
   }
 }

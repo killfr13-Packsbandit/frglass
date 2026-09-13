@@ -13,7 +13,7 @@ Danach läuft die Seite unter `http://localhost:3000`.
 
 ## Cloudflare
 
-Die Produktion läuft über Cloudflare Workers mit OpenNext. Medien, CMS-Daten und Website-Anfragen liegen im R2-Bucket `frglass-media` über das Binding `FRGLASS_MEDIA`.
+Die Produktion läuft über Cloudflare Workers mit OpenNext. Medien und CMS-Daten liegen im R2-Bucket `frglass-media` über das Binding `FRGLASS_MEDIA`.
 
 Nützliche Befehle:
 
@@ -29,7 +29,7 @@ Die öffentliche Hauptdomain ist `https://frglass.at`. `www.frglass.at` wird auf
 
 Der Adminbereich liegt unter `/admin`. Das Admin-Passwort wird als Cloudflare-Secret `BEHIND_SCENES_ADMIN_PASSWORD` gesetzt.
 
-Anfragen aus dem Kontakt- und Produktformular werden zuerst in R2 gespeichert und sind unter `/admin/inquiries` sichtbar. Wenn `RESEND_API_KEY` gesetzt ist, wird zusätzlich eine E-Mail-Benachrichtigung verschickt. Optional können `INQUIRY_EMAIL_TO` und `INQUIRY_EMAIL_FROM` gesetzt werden.
+Anfragen aus dem Kontakt- und Produktformular werden direkt über Resend an `frglasswork@gmx.at` geschickt. Der geheime Resend-Schlüssel wird in Cloudflare als `RESEND_API_KEY` gesetzt. Es gibt bewusst keinen zweiten Anfrage-Posteingang im Adminbereich.
 
 Neue Website-Medien werden als Bilder in R2 gespeichert. Bilder werden im Browser vor dem Upload verkleinert und nach Möglichkeit als WebP gespeichert, damit Speicher und Datenverkehr klein bleiben.
 
