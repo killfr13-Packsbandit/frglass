@@ -3,6 +3,17 @@
   "main": ".open-next/worker.js",
   "name": "frglass",
   "compatibility_date": "2026-09-12",
+  "observability": {
+    "logs": {
+      "enabled": true,
+      "head_sampling_rate": 1,
+      "invocation_logs": true,
+      "persist": true
+    },
+    "traces": {
+      "enabled": false
+    }
+  },
   "compatibility_flags": [
     "nodejs_compat",
     "global_fetch_strictly_public"
