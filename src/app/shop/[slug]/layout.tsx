@@ -19,9 +19,14 @@ function numericPrice(value: string) {
 }
 
 function seoDescription(product: Awaited<ReturnType<typeof getProductCatalog>>[number]) {
-  const description = product.description?.trim();
+  const description = product.descriptionDe?.trim() || product.description?.trim();
   if (description) return description;
-  return `${product.name} – handgemachter ${product.categoryDe || "Borosilikatglas-Anhänger"} von FRGLASS aus Österreich.`;
+  return `${product.nameDe || product.name} – handgemachtes Borosilikatglas-Unikat von FRGLASS aus Kärnten, Österreich.`;
+}
+
+function seoCategory(product: Awaited<ReturnType<typeof getProductCatalog>>[number]) {
+  const category = product.categoryDe?.trim() || product.category?.trim();
+  return category || "Borosilikatglas-Unikat";
 }
 
 export async function generateMetadata({
@@ -41,7 +46,8 @@ export async function generateMetadata({
   }
 
   const description = seoDescription(product);
-  const title = `${product.name} – Borosilikatglas-Anhänger`;
+  const displayName = product.nameDe || product.name;
+  const title = `${displayName} – ${seoCategory(product)}`;
   const images = product.images.length > 0 ? product.images : [product.image];
 
   return {
@@ -85,8 +91,8 @@ export default async function ProductLayout({
   const structuredData: Record<string, unknown> = {
     "@context": "https://schema.org",
     "@type": "Product",
-    name: product.name,
-    alternateName: product.nameDe || undefined,
+    name: product.nameDe || product.name,
+    alternateName: product.name || undefined,
     description,
     image: images,
     url: productUrl,
@@ -99,21 +105,27 @@ export default async function ProductLayout({
       "@type": "Person",
       name: "Florian Robatsch",
     },
-    material: product.material || "Borosilicate glass",
-    color: product.colors || undefined,
-    productionDate: product.year || undefined,
-    category: product.category || "Borosilicate Glass Pendant",
+    material: product.materialDe || product.material || "Borosilikatglas",
+    color: product.colorsDe || product.colors || undefined,
+    category: product.categoryDe || product.category || "Borosilikatglas",
     additionalProperty: [
-      product.size
+      product.sizeDe || product.size
         ? {
             "@type": "PropertyValue",
-            name: "Dimensions",
-            value: product.size,
+            name: "Größe",
+            value: product.sizeDe || product.size,
+          }
+        : null,
+      product.year
+        ? {
+            "@type": "PropertyValue",
+            name: "Jahr",
+            value: product.year,
           }
         : null,
       {
         "@type": "PropertyValue",
-        name: "Technique",
+        name: "Technik",
         value: "Lampworking",
       },
     ].filter(Boolean),
