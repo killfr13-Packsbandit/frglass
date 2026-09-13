@@ -151,7 +151,7 @@ export const translations = {
 } as const;
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  const [language, setLanguageState] = useState<Language>("en");
+  const [language, setLanguageState] = useState<Language>("de");
 
   useEffect(() => {
     const saved = window.localStorage.getItem("frglass-language");
@@ -163,11 +163,13 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     const browserLanguage = window.navigator.language.toLowerCase();
     if (browserLanguage.startsWith("de")) {
       setLanguageState("de");
+    } else {
+      setLanguageState("en");
     }
   }, []);
 
   useEffect(() => {
-    document.documentElement.lang = language;
+    document.documentElement.lang = language === "de" ? "de-AT" : "en";
   }, [language]);
 
   const setLanguage = (nextLanguage: Language) => {
