@@ -10,6 +10,12 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       {
+        source: "/",
+        has: [{ type: "host", value: "www.frglass.at" }],
+        destination: "https://frglass.at/",
+        permanent: true,
+      },
+      {
         source: "/:path*",
         has: [
           {

@@ -3,6 +3,9 @@ import { getProductCatalog } from "../lib/productCatalog";
 
 const baseUrl = "https://frglass.at";
 
+// Read the current R2 catalog so admin uploads appear without another build.
+export const dynamic = "force-dynamic";
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const products = await getProductCatalog();
   const staticRoutes = [
