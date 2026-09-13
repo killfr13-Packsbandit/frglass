@@ -19,57 +19,73 @@ export default function Page() {
   const [pending, setPending] = useState<Review[]>([]);
   const [approved, setApproved] = useState<Review[]>([]);
   const [busy, setBusy] = useState("");
+  const [error, setError] = useState("");
 
   async function load() {
+    setError("");
     const sessionResponse = await fetch("/api/admin/session", { cache: "no-store" });
+    if (!sessionResponse.ok) throw new Error("Admin-Session konnte nicht geladen werden.");
     const session = await sessionResponse.json();
     setAuthenticated(Boolean(session.authenticated));
     if (!session.authenticated) return;
 
     const response = await fetch("/api/community/reviews?admin=1", { cache: "no-store" });
-    const data = await response.json();
-    setPending(Array.isArray(data.pending) ? data.pending : []);
-    setApproved(Array.isArray(data.reviews) ? data.reviews : []);
+    const data = await response.json().catch(() => null);
+    if (!response.ok) throw new Error(data?.error || "Bewertungen konnten nicht geladen werden.");
+    setPending(Array.isArray(data?.pending) ? data.pending : []);
+    setApproved(Array.isArray(data?.reviews) ? data.reviews : []);
   }
 
   useEffect(() => {
-    load().catch(() => setAuthenticated(false));
+    load().catch((loadError) => {
+      setError(loadError instanceof Error ? loadError.message : "Bewertungen konnten nicht geladen werden.");
+      setAuthenticated(false);
+    });
   }, []);
 
   async function approve(review: Review) {
-    if (!review.recordUrl) return;
+    if (!review.recordUrl || busy) return;
     setBusy(review.id);
+    setError("");
     try {
       const response = await fetch("/api/community/reviews", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ action: "approve", recordUrl: review.recordUrl }),
       });
-      if (!response.ok) throw new Error("approve failed");
+      const data = await response.json().catch(() => null);
+      if (!response.ok) throw new Error(data?.error || "Freigeben fehlgeschlagen.");
       await load();
+    } catch (actionError) {
+      setError(actionError instanceof Error ? actionError.message : "Freigeben fehlgeschlagen.");
     } finally {
       setBusy("");
     }
   }
 
   async function remove(review: Review) {
-    if (!review.recordUrl) return;
+    if (!review.recordUrl || busy) return;
     if (!window.confirm("Diesen Beitrag wirklich löschen?")) return;
     setBusy(review.id);
+    setError("");
     try {
       const response = await fetch("/api/community/reviews", {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ recordUrl: review.recordUrl, mediaUrl: review.mediaUrl ?? "" }),
       });
-      if (!response.ok) throw new Error("delete failed");
+      const data = await response.json().catch(() => null);
+      if (!response.ok) throw new Error(data?.error || "Löschen fehlgeschlagen.");
       await load();
+    } catch (actionError) {
+      setError(actionError instanceof Error ? actionError.message : "Löschen fehlgeschlagen.");
     } finally {
       setBusy("");
     }
   }
 
   function ReviewCard({ review, pendingReview }: { review: Review; pendingReview: boolean }) {
+    const actionRunning = Boolean(busy);
     return (
       <article className="overflow-hidden rounded-3xl border border-white/10 bg-white/[0.04]">
         {review.mediaUrl && (
@@ -85,23 +101,23 @@ export default function Page() {
             </div>
             <span className="text-orange-300">{"★".repeat(review.rating)}{"☆".repeat(5 - review.rating)}</span>
           </div>
-          <p className="mt-4 whitespace-pre-wrap leading-7 text-neutral-300">{review.text}</p>
+          {review.text && <p className="mt-4 whitespace-pre-wrap leading-7 text-neutral-300">{review.text}</p>}
           <div className="mt-5 flex gap-3">
             {pendingReview && (
               <button
                 onClick={() => approve(review)}
-                disabled={busy === review.id}
+                disabled={actionRunning}
                 className="rounded-full bg-white px-4 py-2 text-sm font-black text-black disabled:opacity-50"
               >
-                Freigeben
+                {busy === review.id ? "Freigabe …" : "Freigeben"}
               </button>
             )}
             <button
               onClick={() => remove(review)}
-              disabled={busy === review.id}
+              disabled={actionRunning}
               className="rounded-full border border-red-400/25 px-4 py-2 text-sm font-bold text-red-300 disabled:opacity-50"
             >
-              Löschen
+              {busy === review.id ? "Bitte warten …" : "Löschen"}
             </button>
           </div>
         </div>
@@ -118,6 +134,7 @@ export default function Page() {
       <main className="min-h-screen bg-black px-5 py-28 text-white">
         <div className="mx-auto max-w-3xl">
           <h1 className="text-4xl font-black uppercase">Community Reviews</h1>
+          {error && <p className="mt-5 rounded-2xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-200">{error}</p>}
           <p className="mt-5 text-neutral-400">Du bist nicht eingeloggt.</p>
           <Link href="/admin" className="mt-6 inline-flex rounded-full bg-white px-5 py-3 font-bold text-black">Zum Admin-Login</Link>
         </div>
@@ -136,6 +153,8 @@ export default function Page() {
           </div>
           <Link href="/community" className="rounded-full border border-white/15 px-4 py-2 text-sm font-bold hover:border-orange-300/40">Öffentliche Seite</Link>
         </div>
+
+        {error && <p className="mt-6 rounded-2xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-200">{error}</p>}
 
         <div className="mt-12">
           <h2 className="text-2xl font-black uppercase">Wartet auf Freigabe <span className="text-orange-300">{pending.length}</span></h2>
