@@ -3,6 +3,7 @@ import "server-only";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 
 interface R2ObjectBody {
+  body: ReadableStream<Uint8Array>;
   text(): Promise<string>;
   arrayBuffer(): Promise<ArrayBuffer>;
   httpMetadata?: { contentType?: string };
