@@ -28,14 +28,14 @@ const copy = {
     message: "Dein Text (optional)",
     messagePlaceholder: "Wenn du möchtest: ein paar Worte zu deinem Stück oder deiner Erfahrung.",
     photo: "Foto (optional)",
-    photoHint: "JPG, PNG, WebP oder ein normales iPhone-Foto. Das Bild wird vor dem Upload automatisch verkleinert.",
+    photoHint: "Fotos von Samsung, Android und iPhone werden automatisch fürs Web verkleinert. JPG, PNG und WebP funktionieren direkt.",
     consent: "Ich bin damit einverstanden, dass Name, Bewertung, Text und optionales Foto nach Freigabe öffentlich auf frglass.at erscheinen. Ich habe die Rechte am hochgeladenen Bild.",
     submit: "Bewertung senden",
     sending: "Wird gesendet …",
     success: "Danke! Deine Bewertung wartet jetzt auf Freigabe.",
     validationName: "Bitte gib deinen Namen ein.",
     validationConsent: "Bitte bestätige die Zustimmung zur Veröffentlichung.",
-    photoError: "Das Foto konnte nicht verarbeitet oder hochgeladen werden. Versuch es ohne Foto oder als JPG/PNG.",
+    photoError: "Das Foto konnte auf diesem Gerät nicht gelesen werden. Bei Samsung kann HEIF/HEIC die Ursache sein – bitte als JPG wählen oder einen Screenshot des Fotos verwenden.",
     limit: "Von diesem Gerät wurden heute schon mehrere Beiträge gesendet. Versuch es bitte morgen wieder.",
     error: "Die Bewertung konnte gerade nicht gespeichert werden. Bitte versuch es noch einmal.",
     google: "Auch auf Google bewerten",
@@ -54,14 +54,14 @@ const copy = {
     message: "Your text (optional)",
     messagePlaceholder: "If you like, add a few words about your piece or experience.",
     photo: "Photo (optional)",
-    photoHint: "JPG, PNG, WebP or a normal iPhone photo. Images are resized in your browser before upload.",
+    photoHint: "Photos from Samsung, Android and iPhone are automatically resized for the web. JPG, PNG and WebP work directly.",
     consent: "I agree that my name, rating, text and optional photo may appear publicly on frglass.at after approval. I have the rights to the uploaded image.",
     submit: "Send review",
     sending: "Sending …",
     success: "Thank you! Your review is now waiting for approval.",
     validationName: "Please enter your name.",
     validationConsent: "Please confirm your consent to publication.",
-    photoError: "The photo could not be processed or uploaded. Try again without a photo or use JPG/PNG.",
+    photoError: "This photo could not be read on your device. On Samsung, HEIF/HEIC may be the cause — please choose a JPG or use a screenshot of the photo.",
     limit: "Several posts have already been sent from this device today. Please try again tomorrow.",
     error: "The review could not be saved right now. Please try again.",
     google: "Review on Google too",
@@ -72,8 +72,34 @@ function stars(rating: number) {
   return "★★★★★".slice(0, rating) + "☆☆☆☆☆".slice(0, 5 - rating);
 }
 
-async function optimizeImage(file: File) {
-  if (!file.type.startsWith("image/")) throw new Error("unsupported-image");
+function inferredImageType(file: File) {
+  const type = file.type.toLowerCase();
+  if (type === "image/jpg") return "image/jpeg";
+  if (["image/jpeg", "image/png", "image/webp"].includes(type)) return type;
+
+  const name = file.name.toLowerCase();
+  if (/\.jpe?g$/.test(name)) return "image/jpeg";
+  if (/\.png$/.test(name)) return "image/png";
+  if (/\.webp$/.test(name)) return "image/webp";
+  if (/\.(heic|heif)$/.test(name) || type === "image/heic" || type === "image/heif") return "image/heic";
+  return type.startsWith("image/") ? type : "";
+}
+
+async function decodeImage(file: File) {
+  if (typeof createImageBitmap === "function") {
+    try {
+      const bitmap = await createImageBitmap(file);
+      return {
+        source: bitmap as CanvasImageSource,
+        width: bitmap.width,
+        height: bitmap.height,
+        close: () => bitmap.close(),
+      };
+    } catch {
+      // Some Samsung/Android browsers cannot decode HEIF here. Try the normal image decoder next.
+    }
+  }
+
   const objectUrl = URL.createObjectURL(file);
   try {
     const image = await new Promise<HTMLImageElement>((resolve, reject) => {
@@ -82,23 +108,54 @@ async function optimizeImage(file: File) {
       img.onerror = reject;
       img.src = objectUrl;
     });
+    return {
+      source: image as CanvasImageSource,
+      width: image.naturalWidth,
+      height: image.naturalHeight,
+      close: () => undefined,
+    };
+  } finally {
+    URL.revokeObjectURL(objectUrl);
+  }
+}
+
+async function optimizeImage(file: File) {
+  const detectedType = inferredImageType(file);
+  if (!detectedType) throw new Error("unsupported-image");
+
+  const decoded = await decodeImage(file);
+  try {
     const maxEdge = 1600;
-    const scale = Math.min(1, maxEdge / Math.max(image.naturalWidth, image.naturalHeight));
-    const width = Math.max(1, Math.round(image.naturalWidth * scale));
-    const height = Math.max(1, Math.round(image.naturalHeight * scale));
+    const scale = Math.min(1, maxEdge / Math.max(decoded.width, decoded.height));
+    const width = Math.max(1, Math.round(decoded.width * scale));
+    const height = Math.max(1, Math.round(decoded.height * scale));
     const canvas = document.createElement("canvas");
     canvas.width = width;
     canvas.height = height;
     const context = canvas.getContext("2d");
     if (!context) throw new Error("image-canvas");
-    context.drawImage(image, 0, 0, width, height);
-    const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, "image/webp", 0.84));
+
+    context.fillStyle = "#ffffff";
+    context.fillRect(0, 0, width, height);
+    context.drawImage(decoded.source, 0, 0, width, height);
+
+    const blob = await new Promise<Blob | null>((resolve) =>
+      canvas.toBlob(resolve, "image/jpeg", 0.86),
+    );
     if (!blob) throw new Error("image-conversion");
+
     const baseName = file.name.replace(/\.[^.]+$/, "") || "review-photo";
-    return new File([blob], `${baseName}.webp`, { type: "image/webp" });
+    return new File([blob], `${baseName}.jpg`, { type: "image/jpeg" });
   } finally {
-    URL.revokeObjectURL(objectUrl);
+    decoded.close();
   }
+}
+
+function originalFallback(file: File) {
+  const type = inferredImageType(file);
+  if (!["image/jpeg", "image/png", "image/webp"].includes(type)) return null;
+  if (file.size > 8 * 1024 * 1024) return null;
+  return file.type === type ? file : new File([file], file.name || "review-photo", { type });
 }
 
 export default function Page() {
@@ -114,6 +171,7 @@ export default function Page() {
   const [submitting, setSubmitting] = useState(false);
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState("");
+  const [fileInputKey, setFileInputKey] = useState(0);
   const googleReviewUrl = process.env.NEXT_PUBLIC_GOOGLE_REVIEW_URL ?? "";
 
   useEffect(() => {
@@ -150,20 +208,23 @@ export default function Page() {
       let mediaUrl = "";
       let contentType = "";
       if (file) {
-        let optimized: File;
+        let prepared: File;
         try {
-          optimized = await optimizeImage(file);
+          prepared = await optimizeImage(file);
         } catch {
-          throw new Error(t.photoError);
+          const fallback = originalFallback(file);
+          if (!fallback) throw new Error(t.photoError);
+          prepared = fallback;
         }
+
         try {
-          const safeName = optimized.name.replace(/[^a-zA-Z0-9._-]+/g, "-");
-          const blob = await upload(`community/media/${Date.now()}-${safeName}`, optimized, {
+          const safeName = prepared.name.replace(/[^a-zA-Z0-9._-]+/g, "-");
+          const blob = await upload(`community/media/${Date.now()}-${safeName}`, prepared, {
             access: "public",
             handleUploadUrl: "/api/community/upload",
           });
           mediaUrl = blob.url;
-          contentType = optimized.type;
+          contentType = prepared.type;
         } catch {
           throw new Error(t.photoError);
         }
@@ -185,6 +246,7 @@ export default function Page() {
       setRating(5);
       setText("");
       setFile(null);
+      setFileInputKey((current) => current + 1);
       setConsent(false);
       setStatus("success");
     } catch (error) {
@@ -230,7 +292,7 @@ export default function Page() {
               <label className="grid gap-2"><span className="text-sm font-bold">{t.name}</span><input value={name} onChange={(event) => setName(event.target.value)} maxLength={60} required placeholder={t.namePlaceholder} className="rounded-2xl border border-white/10 bg-black/50 px-4 py-3 outline-none transition focus:border-orange-300/60" /></label>
               <div><span className="text-sm font-bold">{t.rating}</span><div className="mt-2 flex gap-1" aria-label={t.rating}>{[1, 2, 3, 4, 5].map((value) => <button key={value} type="button" onClick={() => setRating(value)} className={`text-3xl transition ${value <= rating ? "text-orange-300" : "text-neutral-700 hover:text-neutral-500"}`} aria-label={`${value} / 5`}>★</button>)}</div></div>
               <label className="grid gap-2"><span className="text-sm font-bold">{t.message}</span><textarea value={text} onChange={(event) => setText(event.target.value)} maxLength={700} rows={5} placeholder={t.messagePlaceholder} className="resize-none rounded-2xl border border-white/10 bg-black/50 px-4 py-3 outline-none transition focus:border-orange-300/60" /><span className="text-right text-xs text-neutral-600">{text.length}/700</span></label>
-              <label className="grid gap-2"><span className="text-sm font-bold">{t.photo}</span><input type="file" accept="image/jpeg,image/png,image/webp,image/heic,image/heif" onChange={(event) => { setFile(event.target.files?.[0] ?? null); setStatus("idle"); setErrorMessage(""); }} className="block w-full rounded-2xl border border-dashed border-white/15 bg-black/40 p-4 text-sm text-neutral-300 file:mr-4 file:rounded-full file:border-0 file:bg-white file:px-4 file:py-2 file:font-bold file:text-black" /><span className="text-xs leading-5 text-neutral-500">{t.photoHint}</span></label>
+              <label className="grid gap-2"><span className="text-sm font-bold">{t.photo}</span><input key={fileInputKey} type="file" accept="image/*" onChange={(event) => { setFile(event.target.files?.[0] ?? null); setStatus("idle"); setErrorMessage(""); }} className="block w-full rounded-2xl border border-dashed border-white/15 bg-black/40 p-4 text-sm text-neutral-300 file:mr-4 file:rounded-full file:border-0 file:bg-white file:px-4 file:py-2 file:font-bold file:text-black" />{file && <span className="text-xs text-orange-200">{file.name}</span>}<span className="text-xs leading-5 text-neutral-500">{t.photoHint}</span></label>
               <label className="flex items-start gap-3 text-sm leading-6 text-neutral-400"><input type="checkbox" checked={consent} onChange={(event) => setConsent(event.target.checked)} required className="mt-1 h-4 w-4 accent-orange-300" /><span>{t.consent}</span></label>
               {status === "success" && <p className="rounded-2xl border border-emerald-500/20 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-200">{t.success}</p>}
               {status === "error" && <p className="rounded-2xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-200">{errorMessage || t.error}</p>}
