@@ -9,7 +9,6 @@ const footerLinks = [
   { href: "/gallery", label: "gallery" },
   { href: "/studio", label: "studio" },
   { href: "/shop", label: "shop" },
-  { href: "/journal", label: "journal" },
   { href: "/community", label: "community" },
   { href: "/about", label: "about" },
   { href: "/contact", label: "contact" },
