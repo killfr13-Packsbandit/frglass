@@ -6,7 +6,7 @@ import { useSiteContent } from "./SiteContentProvider";
 
 function Media({ url, type, className, style }: { url: string; type: string; className: string; style?: CSSProperties }) {
   if (!url) return null;
-  if (type === "video") return <video src={url} muted controls playsInline preload="none" poster="/workshop/me2.jpg" className={className} style={style} />;
+  if (type === "video") return <video src={url} muted controls playsInline preload="none" className={className} style={style} />;
   return <img src={url} alt="FRGLASS workshop" loading="lazy" className={className} style={style} />;
 }
 
@@ -17,7 +17,7 @@ function numeric(value: string, fallback: number) {
 
 export default function Workshop() {
   const { language } = useLanguage();
-  const { get } = useSiteContent();
+  const { get, loading } = useSiteContent();
   const t = translations[language].workshop;
   const lang = language === "de" ? "de" : "en";
   const eyebrow = get(`home.workshop.eyebrow.${lang}`, t.eyebrow);
@@ -36,11 +36,11 @@ export default function Workshop() {
     } as CSSProperties;
   }
 
-  const mainUrl = get("home.workshop.main.url", "/workshop/me2.jpg");
+  const mainUrl = loading ? "" : get("home.workshop.main.url", "/workshop/me2.jpg");
   const mainType = get("home.workshop.main.type", "image");
-  const media1Url = get("home.workshop.media1.url", "/jewelry/Cobald5 x Opaldust Leaf.jpg");
+  const media1Url = loading ? "" : get("home.workshop.media1.url", "/jewelry/Cobald5 x Opaldust Leaf.jpg");
   const media1Type = get("home.workshop.media1.type", "image");
-  const media2Url = get("home.workshop.media2.url", "/workshop/me2.jpg");
+  const media2Url = loading ? "" : get("home.workshop.media2.url", "/workshop/me2.jpg");
   const media2Type = get("home.workshop.media2.type", "image");
   const smallMedia = [
     { url: media1Url, type: media1Type, base: "home.workshop.media1" },

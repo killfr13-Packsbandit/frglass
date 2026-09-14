@@ -13,6 +13,7 @@ import { siteContentValue } from "../siteContent";
 
 type SiteContentContextValue = {
   content: SiteContentMap;
+  loading: boolean;
   get: (key: string, fallback?: string) => string;
   refresh: () => Promise<void>;
 };
@@ -21,6 +22,7 @@ const SiteContentContext = createContext<SiteContentContextValue | null>(null);
 
 export function SiteContentProvider({ children }: { children: React.ReactNode }) {
   const [content, setContent] = useState<SiteContentMap>({});
+  const [loading, setLoading] = useState(true);
 
   const refresh = useCallback(async () => {
     try {
@@ -32,6 +34,8 @@ export function SiteContentProvider({ children }: { children: React.ReactNode })
       }
     } catch {
       // Keep code defaults when the CMS cannot be reached.
+    } finally {
+      setLoading(false);
     }
   }, []);
 
@@ -42,10 +46,11 @@ export function SiteContentProvider({ children }: { children: React.ReactNode })
   const value = useMemo<SiteContentContextValue>(
     () => ({
       content,
+      loading,
       get: (key, fallback = "") => siteContentValue(content, key, fallback),
       refresh,
     }),
-    [content, refresh],
+    [content, loading, refresh],
   );
 
   return (

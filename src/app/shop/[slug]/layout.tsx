@@ -1,5 +1,11 @@
 import type { Metadata } from "next";
+import { cache } from "react";
 import { getProductCatalog } from "../../../lib/productCatalog";
+
+// Product metadata must reflect edits and new uploads without a rebuild.
+export const dynamic = "force-dynamic";
+// Share one catalog read between metadata and the layout within this render.
+const readProducts = cache(getProductCatalog);
 
 const SITE_URL = "https://frglass.at";
 
@@ -35,7 +41,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const products = await getProductCatalog();
+  const products = await readProducts();
   const product = products.find((item) => item.slug === slug);
 
   if (!product) {
@@ -78,7 +84,7 @@ export default async function ProductLayout({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const products = await getProductCatalog();
+  const products = await readProducts();
   const product = products.find((item) => item.slug === slug);
 
   if (!product) return children;
