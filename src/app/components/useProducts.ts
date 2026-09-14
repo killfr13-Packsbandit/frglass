@@ -1,10 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { products as fallbackProducts } from "../products";
 import type { ProductRecord } from "../productTypes";
-
-const initialProducts = fallbackProducts as unknown as ProductRecord[];
 
 // Coalesce simultaneous consumers, but never retain stale catalog results.
 let pendingProducts: Promise<{ products?: ProductRecord[] }> | null = null;
@@ -21,13 +18,17 @@ function fetchProducts() {
 }
 
 export function useProducts() {
-  const [products, setProducts] = useState<ProductRecord[]>(initialProducts);
+  const [products, setProducts] = useState<ProductRecord[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   const refresh = useCallback(async () => {
+    setError(false);
     try {
       const data = await fetchProducts();
       if (Array.isArray(data.products)) setProducts(data.products);
+    } catch {
+      setError(true);
     } finally {
       setLoading(false);
     }
@@ -37,5 +38,5 @@ export function useProducts() {
     refresh().catch(() => setLoading(false));
   }, [refresh]);
 
-  return { products, loading, refresh };
+  return { products, loading, error, refresh };
 }

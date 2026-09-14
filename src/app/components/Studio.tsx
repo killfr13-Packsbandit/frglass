@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { siteConfig } from "../siteConfig";
 import {
-  DEFAULT_STUDIO_MEDIA,
   type StudioMediaItem,
 } from "../studioMediaTypes";
 import { translations, useLanguage } from "./LanguageProvider";
@@ -26,7 +25,7 @@ export default function Studio() {
   const { get } = useSiteContent();
   const t = translations[language].studio;
   const lang = language === "de" ? "de" : "en";
-  const [media, setMedia] = useState<StudioMediaItem[]>(DEFAULT_STUDIO_MEDIA);
+  const [media, setMedia] = useState<StudioMediaItem[]>([]);
 
   useEffect(() => {
     fetch("/api/studio-media", { cache: "no-store" })

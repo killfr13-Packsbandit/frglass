@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { useLanguage } from "../components/LanguageProvider";
 import { useSiteContent } from "../components/SiteContentProvider";
 import {
-  DEFAULT_GALLERY_MEDIA,
   type GalleryMediaItem,
 } from "../galleryMediaTypes";
 
@@ -37,7 +36,7 @@ function mediaStyle(item: GalleryMediaItem) {
 
 export default function Page() {
   const [activeMedia, setActiveMedia] = useState<GalleryMediaItem | null>(null);
-  const [galleryMedia, setGalleryMedia] = useState<GalleryMediaItem[]>(DEFAULT_GALLERY_MEDIA);
+  const [galleryMedia, setGalleryMedia] = useState<GalleryMediaItem[]>([]);
   const { language } = useLanguage();
   const { get } = useSiteContent();
   const t = copy[language];

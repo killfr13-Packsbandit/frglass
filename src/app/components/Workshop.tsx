@@ -7,7 +7,7 @@ import { useSiteContent } from "./SiteContentProvider";
 function Media({ url, type, className, style }: { url: string; type: string; className: string; style?: CSSProperties }) {
   if (!url) return null;
   if (type === "video") return <video src={url} muted controls playsInline preload="none" className={className} style={style} />;
-  return <img src={url} alt="FRGLASS workshop" loading="lazy" className={className} style={style} />;
+  return <img src={url} alt="FRGLASS workshop" loading="lazy" decoding="async" className={className} style={style} />;
 }
 
 function numeric(value: string, fallback: number) {
@@ -47,12 +47,12 @@ export default function Workshop() {
     { url: media2Url, type: media2Type, base: "home.workshop.media2" },
   ].filter((item) => item.url);
 
-  return <section className="relative overflow-hidden bg-black px-4 py-16 text-white sm:px-6 sm:py-24 xl:py-32"><div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,120,30,.15),transparent_60%)]" /><div className="relative mx-auto grid max-w-7xl items-center gap-10 sm:gap-12 xl:grid-cols-2 xl:gap-16">
+  return <section className="relative overflow-hidden bg-black px-4 py-12 text-white sm:px-6 sm:py-14 xl:py-24"><div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,120,30,.15),transparent_60%)]" /><div className="relative mx-auto grid max-w-7xl items-center gap-10 sm:gap-12 xl:grid-cols-2 xl:gap-16">
     <div className="max-w-2xl"><p className="mb-4 text-xs font-bold uppercase tracking-[0.32em] text-orange-300 sm:text-sm sm:tracking-[0.45em]">{eyebrow}</p><h2 className="text-3xl font-black uppercase leading-tight sm:text-5xl">{title}</h2><p className="mt-6 text-base leading-7 text-neutral-300 sm:mt-8 sm:text-lg sm:leading-8">{text}</p></div>
     <div className="min-w-0">
-      <div className="grid grid-cols-[1.12fr_.88fr] grid-rows-2 gap-3 sm:gap-5">
-        {mainUrl && <div className="row-span-2 min-h-[390px] overflow-hidden rounded-2xl border border-white/10 bg-neutral-950 shadow-2xl sm:min-h-[560px] sm:rounded-3xl xl:min-h-[480px]"><Media url={mainUrl} type={mainType} className="h-full w-full" style={crop("home.workshop.main")} /></div>}
-        {smallMedia.map((item, index) => <div key={`${item.url}-${index}`} className="relative min-h-0 overflow-hidden rounded-xl border border-white/10 bg-neutral-950 sm:rounded-2xl"><Media url={item.url} type={item.type} className="h-full w-full" style={crop(item.base)} /></div>)}
+      <div className="grid h-[300px] grid-cols-[1.12fr_.88fr] grid-rows-2 gap-3 sm:h-[380px] sm:gap-4 xl:h-[480px]">
+        {mainUrl && <div className="relative row-span-2 min-h-0 overflow-hidden rounded-2xl border border-white/10 bg-neutral-950 sm:rounded-3xl"><Media url={mainUrl} type={mainType} className="absolute inset-0 h-full w-full" style={crop("home.workshop.main")} /></div>}
+        {smallMedia.map((item, index) => <div key={`${item.url}-${index}`} className="relative min-h-0 overflow-hidden rounded-xl border border-white/10 bg-neutral-950 sm:rounded-2xl"><Media url={item.url} type={item.type} className="absolute inset-0 h-full w-full" style={crop(item.base)} /></div>)}
       </div>
     </div>
   </div></section>;

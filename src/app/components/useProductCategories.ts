@@ -3,12 +3,8 @@
 import { useCallback, useEffect, useState } from "react";
 import type { ProductCategory } from "../productTypes";
 
-const fallback: ProductCategory[] = [
-  { id: "jewelry", name: "Jewelry", nameDe: "Schmuck", visible: true },
-];
-
 export function useProductCategories() {
-  const [categories, setCategories] = useState<ProductCategory[]>(fallback);
+  const [categories, setCategories] = useState<ProductCategory[]>([]);
   const [loading, setLoading] = useState(true);
 
   const refresh = useCallback(async () => {

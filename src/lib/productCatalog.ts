@@ -73,7 +73,7 @@ export async function getProductCatalog(): Promise<ProductRecord[]> {
       : fallbackCatalog();
   } catch (error) {
     console.error("Could not load product catalog", error);
-    return fallbackCatalog();
+    throw error;
   }
 }
 

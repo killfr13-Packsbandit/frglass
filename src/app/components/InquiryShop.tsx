@@ -29,7 +29,7 @@ const copy = {
 export default function InquiryShop() {
   const { language } = useLanguage();
   const { get } = useSiteContent();
-  const { products } = useProducts();
+  const { products, loading: productsLoading, error: productsError, refresh: refreshProducts } = useProducts();
   const { categories } = useProductCategories();
   const [activeCategory, setActiveCategory] = useState("all");
   const t = copy[language];
@@ -90,7 +90,9 @@ export default function InquiryShop() {
           </div>
         )}
 
-        <div className="grid gap-6 sm:grid-cols-2 sm:gap-8 xl:grid-cols-3">
+        {productsLoading && <p role="status" className="py-12 text-center text-neutral-500">{language === "de" ? "Stücke werden geladen …" : "Loading pieces …"}</p>}
+    {productsError && <p role="alert" className="py-8 text-center text-neutral-400">{language === "de" ? "Stücke konnten nicht geladen werden." : "Pieces could not be loaded."} <button type="button" onClick={() => void refreshProducts()} className="underline">{language === "de" ? "Erneut versuchen" : "Retry"}</button></p>}
+    <div className="grid gap-6 sm:grid-cols-2 sm:gap-8 xl:grid-cols-3">
           {shownProducts.map((product) => {
             const name = language === "de" ? product.nameDe : product.name;
             const status = language === "de" ? product.statusDe : product.status;

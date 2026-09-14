@@ -52,7 +52,7 @@ const copy = {
 export default function Page() {
   const params = useParams<{ slug: string }>();
   const { language } = useLanguage();
-  const { products, loading } = useProducts();
+  const { products, loading, error, refresh } = useProducts();
   const t = copy[language];
   const product = products.find((item) => item.slug === params.slug);
   const [activeImage, setActiveImage] = useState<string | null>(null);
@@ -61,6 +61,9 @@ export default function Page() {
     setActiveImage(product?.image ?? null);
   }, [product?.slug, product?.image]);
 
+  if (!product && error) {
+    return <main className="min-h-screen bg-black px-4 py-24 text-white"><p>{language === "de" ? "Das Stück konnte gerade nicht geladen werden." : "The piece could not be loaded."}</p><button type="button" onClick={() => void refresh()} className="mt-4 underline">{language === "de" ? "Erneut versuchen" : "Retry"}</button></main>;
+  }
   if (!product && loading) {
     return <main className="min-h-screen bg-black px-4 py-24 text-neutral-500 sm:px-6 sm:py-32">{t.loading}</main>;
   }

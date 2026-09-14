@@ -147,7 +147,7 @@ export async function getSiteContent(): Promise<SiteContentMap> {
     return normalizeSiteContent(content);
   } catch (error) {
     console.error("Could not load site content", error);
-    return {};
+    throw error;
   }
 }
 
