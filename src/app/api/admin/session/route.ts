@@ -9,5 +9,5 @@ export async function GET() {
     authenticated: await isAdmin(),
     authConfigured: isAdminConfigured(),
     storageConfigured: await checkR2Configured(),
-  });
+  }, { headers: { "Cache-Control": "private, no-store, max-age=0", "Vary": "Cookie" } });
 }
