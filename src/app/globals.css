@@ -30,7 +30,7 @@ h3 {
 }
 
 /* Avoid large continuously composited blur layers on touch devices. */
-@media (hover: none) and (pointer: coarse) {
+@media (any-pointer: coarse) {
   [class*="backdrop-blur"] { -webkit-backdrop-filter: none !important; backdrop-filter: none !important; }
   nav { background-color: rgba(0, 0, 0, 0.96) !important; }
   [class*="pointer-events-none"][class*="blur-"] { display: none; }

@@ -1,12 +1,17 @@
 "use client";
 
-import { useEffect, useState } from "react";
+
 import { siteConfig } from "../siteConfig";
 import {
   type StudioMediaItem,
 } from "../studioMediaTypes";
 import { translations, useLanguage } from "./LanguageProvider";
 import { useSiteContent } from "./SiteContentProvider";
+
+import { publicData, arrayField } from "./publicData";
+import { usePublicData } from "./usePublicData";
+const mediaResource = publicData("/api/studio-media", (value) => arrayField<StudioMediaItem>(value, "items"));
+const emptyMedia: StudioMediaItem[] = [];
 
 function mediaStyle(item: StudioMediaItem) {
   const zoom = item.zoom ?? 1;
@@ -25,16 +30,8 @@ export default function Studio() {
   const { get } = useSiteContent();
   const t = translations[language].studio;
   const lang = language === "de" ? "de" : "en";
-  const [media, setMedia] = useState<StudioMediaItem[]>([]);
-
-  useEffect(() => {
-    fetch("/api/studio-media", { cache: "no-store" })
-      .then((response) => (response.ok ? response.json() : null))
-      .then((data: { items?: StudioMediaItem[] } | null) => {
-        if (Array.isArray(data?.items)) setMedia(data.items);
-      })
-      .catch(() => {});
-  }, []);
+  const { data: loadedMedia, loading: mediaLoading, error: mediaError, refresh: refreshMedia } = usePublicData(mediaResource);
+  const media = loadedMedia ?? emptyMedia;
 
   const eyebrow = get(`studio.eyebrow.${lang}`, t.eyebrow);
   const title = get(`studio.title.${lang}`, t.title);
@@ -56,6 +53,8 @@ export default function Studio() {
         <h2 className="text-center text-4xl font-black uppercase sm:text-5xl">{title}</h2>
         <p className="mx-auto mb-12 mt-6 max-w-3xl text-center text-base leading-7 text-neutral-300 sm:mb-16 sm:mt-8 sm:text-lg sm:leading-8">{intro}</p>
 
+        {mediaLoading && !loadedMedia && <p role="status" className="min-h-80 py-12 text-center text-neutral-400">{language === "de" ? "Bilder werden geladen …" : "Loading images …"}</p>}
+        {mediaError && <p role="alert" className="py-8 text-center text-neutral-400">{language === "de" ? "Bilder konnten nicht geladen werden." : "Images could not be loaded."} <button type="button" onClick={() => void refreshMedia()} className="underline">{language === "de" ? "Erneut versuchen" : "Retry"}</button></p>}
         {media.length > 0 && (
           <div className="grid gap-4 sm:gap-8 md:grid-cols-2">
             {media.map((item) => {

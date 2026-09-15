@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useLanguage } from "../components/LanguageProvider";
 import { useSiteContent } from "../components/SiteContentProvider";
 import {
@@ -22,6 +22,11 @@ const copy = {
   },
 } as const;
 
+import { publicData, arrayField } from "../components/publicData";
+import { usePublicData } from "../components/usePublicData";
+const mediaResource = publicData("/api/gallery-media", (value) => arrayField<GalleryMediaItem>(value, "items"));
+const emptyMedia: GalleryMediaItem[] = [];
+
 function mediaStyle(item: GalleryMediaItem) {
   const zoom = item.zoom ?? 1;
   const focusX = item.focusX ?? 50;
@@ -36,20 +41,12 @@ function mediaStyle(item: GalleryMediaItem) {
 
 export default function Page() {
   const [activeMedia, setActiveMedia] = useState<GalleryMediaItem | null>(null);
-  const [galleryMedia, setGalleryMedia] = useState<GalleryMediaItem[]>([]);
+  const { data: loadedMedia, loading: mediaLoading, error: mediaError, refresh: refreshMedia } = usePublicData(mediaResource);
+  const galleryMedia = loadedMedia ?? emptyMedia;
   const { language } = useLanguage();
   const { get } = useSiteContent();
   const t = copy[language];
   const lang = language === "de" ? "de" : "en";
-
-  useEffect(() => {
-    fetch("/api/gallery-media", { cache: "no-store" })
-      .then((response) => (response.ok ? response.json() : null))
-      .then((data: { items?: GalleryMediaItem[] } | null) => {
-        if (Array.isArray(data?.items)) setGalleryMedia(data.items);
-      })
-      .catch(() => {});
-  }, []);
 
   return (
     <main className="min-h-screen bg-black px-4 py-20 text-white sm:px-6 sm:py-28 lg:py-32">
@@ -58,6 +55,8 @@ export default function Page() {
         <p className="mb-5 text-center text-xs font-bold uppercase tracking-[0.4em] text-orange-300 sm:mb-6 sm:text-sm sm:tracking-[0.5em]">{get(`gallery.eyebrow.${lang}`, t.eyebrow)}</p>
         <p className="mx-auto mb-10 max-w-2xl text-center text-base leading-7 text-neutral-300 sm:mb-14 sm:text-lg sm:leading-8 lg:mb-16">{get(`gallery.intro.${lang}`, t.intro)}</p>
 
+        {mediaLoading && !loadedMedia && <p role="status" className="min-h-80 py-12 text-center text-neutral-400">{language === "de" ? "Bilder werden geladen …" : "Loading images …"}</p>}
+        {mediaError && <p role="alert" className="py-8 text-center text-neutral-400">{language === "de" ? "Bilder konnten nicht geladen werden." : "Images could not be loaded."} <button type="button" onClick={() => void refreshMedia()} className="underline">{language === "de" ? "Erneut versuchen" : "Retry"}</button></p>}
         <div className="grid gap-4 sm:grid-cols-2 sm:gap-6 xl:grid-cols-3">
           {galleryMedia.map((item) => {
             const caption = language === "de" ? item.description || item.descriptionEn : item.descriptionEn || item.description;

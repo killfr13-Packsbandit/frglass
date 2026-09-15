@@ -2,9 +2,10 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import { categoryIdFromName, formatProductPrice, type ProductCategory } from "../productTypes";
+import { categoryIdFromName, formatProductPrice } from "../productTypes";
 import { translations, useLanguage } from "./LanguageProvider";
 import ProductPicture from "./ProductPicture";
+import { useProductCategories } from "./useProductCategories";
 import { useProducts } from "./useProducts";
 import { useSiteContent } from "./SiteContentProvider";
 
@@ -14,14 +15,13 @@ export default function JewelryShowcase() {
   const { get } = useSiteContent();
   const t = translations[language].jewelry;
   const lang = language === "de" ? "de" : "en";
-  const [categories, setCategories] = useState<ProductCategory[]>([]);
+  const { categories } = useProductCategories();
   const [activeIndex, setActiveIndex] = useState(0);
 
-  useEffect(() => { fetch("/api/product-categories", { cache: "no-store" }).then((r) => r.ok ? r.json() : null).then((data) => setCategories(Array.isArray(data?.categories) ? data.categories : [])).catch(() => {}); }, []);
 
   const showcaseCategories = useMemo(() => categories.filter((category) => category.visible && products.some((product) => product.status === "Available" && (product.categoryId || categoryIdFromName(product.category)) === category.id)), [categories, products]);
   useEffect(() => { if (activeIndex >= showcaseCategories.length) setActiveIndex(0); }, [activeIndex, showcaseCategories.length]);
-  useEffect(() => { if (showcaseCategories.length <= 1) return; const timer = window.setInterval(() => setActiveIndex((current) => (current + 1) % showcaseCategories.length), 10000); return () => window.clearInterval(timer); }, [showcaseCategories.length]);
+  useEffect(() => { if (showcaseCategories.length <= 1 || window.matchMedia("(any-pointer: coarse)").matches) return; const timer = window.setInterval(() => setActiveIndex((current) => (current + 1) % showcaseCategories.length), 10000); return () => window.clearInterval(timer); }, [showcaseCategories.length]);
 
   const activeCategory = showcaseCategories[activeIndex];
   const activeId = activeCategory?.id ?? "pendants";

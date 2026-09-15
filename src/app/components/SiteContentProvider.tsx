@@ -8,6 +8,8 @@ import {
   useMemo,
   useState,
 } from "react";
+import { usePathname } from "next/navigation";
+import { clearPublicData } from "./publicData";
 import type { SiteContentMap } from "../siteContent";
 import { siteContentValue } from "../siteContent";
 
@@ -22,6 +24,8 @@ type SiteContentContextValue = {
 const SiteContentContext = createContext<SiteContentContextValue | null>(null);
 
 export function SiteContentProvider({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+  useEffect(() => { if (pathname.startsWith("/admin")) clearPublicData(); }, [pathname]);
   const [content, setContent] = useState<SiteContentMap>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
