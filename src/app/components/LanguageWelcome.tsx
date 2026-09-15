@@ -11,24 +11,28 @@ export default function LanguageWelcome() {
   const [showChooser, setShowChooser] = useState(false);
 
   useEffect(() => {
-    const confirmed = window.localStorage.getItem(CONFIRMED_KEY);
-
-    if (confirmed !== "yes") {
+    try {
+      setShowChooser(window.localStorage.getItem(CONFIRMED_KEY) !== "yes");
+    } catch {
       setShowChooser(true);
     }
   }, []);
 
   function chooseLanguage(language: Language) {
-    window.localStorage.setItem(LANGUAGE_KEY, language);
-    window.localStorage.setItem(CONFIRMED_KEY, "yes");
     setLanguage(language);
+    try {
+      window.localStorage.setItem(LANGUAGE_KEY, language);
+      window.localStorage.setItem(CONFIRMED_KEY, "yes");
+    } catch {
+      // The choice still applies to this visit when browser storage is blocked.
+    }
     setShowChooser(false);
   }
 
   if (!showChooser) return null;
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/95 px-6 backdrop-blur-xl">
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center overflow-y-auto bg-black/95 px-6 py-6 backdrop-blur-xl">
       <div className="w-full max-w-xl text-center text-white">
         <img
           src="/logo.png"
@@ -72,9 +76,6 @@ export default function LanguageWelcome() {
           </button>
         </div>
 
-        <p className="mt-8 text-xs uppercase tracking-[0.2em] text-neutral-600">
-          DE / EN can be changed later in the menu.
-        </p>
       </div>
     </div>
   );

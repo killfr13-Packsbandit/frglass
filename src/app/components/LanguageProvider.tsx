@@ -152,10 +152,14 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [language, setLanguageState] = useState<Language>("de");
 
   useEffect(() => {
-    const saved = window.localStorage.getItem("frglass-language");
-    if (saved === "de" || saved === "en") {
-      setLanguageState(saved);
-      return;
+    try {
+      const saved = window.localStorage.getItem("frglass-language");
+      if (saved === "de" || saved === "en") {
+        setLanguageState(saved);
+        return;
+      }
+    } catch {
+      // Fall back to browser language if persistent storage is unavailable.
     }
 
     const browserLanguage = window.navigator.language.toLowerCase();
@@ -172,7 +176,11 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
 
   const setLanguage = (nextLanguage: Language) => {
     setLanguageState(nextLanguage);
-    window.localStorage.setItem("frglass-language", nextLanguage);
+    try {
+      window.localStorage.setItem("frglass-language", nextLanguage);
+    } catch {
+      // Keep the in-memory language choice usable in restricted browsers.
+    }
   };
 
   const value = useMemo(() => ({ language, setLanguage }), [language]);
