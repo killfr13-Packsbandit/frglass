@@ -1,5 +1,6 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Language, useLanguage } from "./LanguageProvider";
 
@@ -7,16 +8,21 @@ const CONFIRMED_KEY = "frglass-language-confirmed";
 const LANGUAGE_KEY = "frglass-language";
 
 export default function LanguageWelcome() {
+  const pathname = usePathname();
   const { setLanguage } = useLanguage();
   const [showChooser, setShowChooser] = useState(false);
 
   useEffect(() => {
+    if (pathname.startsWith("/admin")) {
+      setShowChooser(false);
+      return;
+    }
     try {
       setShowChooser(window.localStorage.getItem(CONFIRMED_KEY) !== "yes");
     } catch {
       setShowChooser(true);
     }
-  }, []);
+  }, [pathname]);
 
   function chooseLanguage(language: Language) {
     setLanguage(language);
@@ -29,7 +35,7 @@ export default function LanguageWelcome() {
     setShowChooser(false);
   }
 
-  if (!showChooser) return null;
+  if (!showChooser || pathname.startsWith("/admin")) return null;
 
   return (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center overflow-y-auto bg-black/95 px-6 py-6 backdrop-blur-xl">
@@ -75,7 +81,6 @@ export default function LanguageWelcome() {
             </span>
           </button>
         </div>
-
       </div>
     </div>
   );
