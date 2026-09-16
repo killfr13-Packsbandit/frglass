@@ -25,7 +25,6 @@ const SiteContentContext = createContext<SiteContentContextValue | null>(null);
 
 export function SiteContentProvider({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  useEffect(() => { if (pathname.startsWith("/admin")) clearPublicData(); }, [pathname]);
   const [content, setContent] = useState<SiteContentMap>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -49,8 +48,16 @@ export function SiteContentProvider({ children }: { children: React.ReactNode })
   }, []);
 
   useEffect(() => {
-    refresh();
-  }, [refresh]);
+    if (pathname.startsWith("/admin")) {
+      clearPublicData();
+      return;
+    }
+
+    // Refresh on public navigation as well. This is especially important after
+    // editing content in /admin so the user immediately sees the saved version
+    // without needing a hard reload.
+    void refresh();
+  }, [pathname, refresh]);
 
   const value = useMemo<SiteContentContextValue>(
     () => ({
