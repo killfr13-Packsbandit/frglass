@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { siteConfig } from "../siteConfig";
 import { translations, useLanguage } from "./LanguageProvider";
@@ -14,10 +15,13 @@ const navItems = [
 ] as const;
 
 export default function Navbar() {
+  const pathname = usePathname();
   const { language, setLanguage } = useLanguage();
   const [menuOpen, setMenuOpen] = useState(false);
   const t = translations[language];
   const languageLabel = language === "de" ? "Sprache" : "Language";
+
+  if (pathname.startsWith("/admin")) return null;
 
   return (
     <nav className="fixed left-0 top-0 z-50 w-full border-b border-white/10 bg-black/60 backdrop-blur-xl">
