@@ -49,7 +49,7 @@ export default function Page() {
 
   return (
     <main className="min-h-screen bg-black px-4 py-20 text-white sm:px-6 sm:py-28 lg:py-32">
-      <FlexibleTextBlocks page="gallery" placement="beforeGallery" />
+      <FlexibleTextBlocks page="gallery" placement="beforeGallery" embedded />
       <section className="mx-auto max-w-7xl">
         <h1 className="sr-only">{get(`gallery.eyebrow.${lang}`, t.eyebrow)}</h1>
         <p className="mb-5 text-center text-xs font-bold uppercase tracking-[0.4em] text-orange-300 sm:mb-6 sm:text-sm sm:tracking-[0.5em]">{get(`gallery.eyebrow.${lang}`, t.eyebrow)}</p>
@@ -78,7 +78,7 @@ export default function Page() {
           })}
         </div>
       </section>
-      <FlexibleTextBlocks page="gallery" placement="afterGallery" />
+      <FlexibleTextBlocks page="gallery" placement="afterGallery" embedded />
 
       {activeMedia && (
         <div onClick={() => setActiveMedia(null)} className="fixed inset-0 z-[999] flex flex-col items-center justify-center bg-black/90 p-3 sm:p-6">
