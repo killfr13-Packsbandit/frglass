@@ -9,8 +9,31 @@ import type { SiteContentMap } from "../../siteContent";
 
 export const dynamic = "force-dynamic";
 
+function naturalGermanCopy(value: string) {
+  return value
+    .replace(/kleine Workshops und individuelle Sessions/g, "Workshops und individuelle Kurse")
+    .replace(/Einzel-Sessions/g, "Einzelkurse")
+    .replace(/1:1-Sessions/g, "Einzelkurse")
+    .replace(/individuelle Sessions/g, "individuelle Kurse")
+    .replace(/kleine Sessions/g, "kleine Kurse")
+    .replace(/\bSessions\b/g, "Kurse")
+    .replace(/\bSession\b/g, "Kurs")
+    .replace(/Einzeltermine/g, "Einzelkurse")
+    .replace(/individuelle Termine/g, "individuelle Kurse")
+    .replace(/\bTermine\b/g, "Kurse")
+    .replace(/\bTermin\b/g, "Kurs");
+}
+
+function normalizeGermanContent(content: SiteContentMap) {
+  const normalized: SiteContentMap = {};
+  for (const [key, value] of Object.entries(content)) {
+    normalized[key] = key.endsWith(".de") ? naturalGermanCopy(value) : value;
+  }
+  return normalized;
+}
+
 export async function GET() {
-  const content = await getSiteContent();
+  const content = normalizeGermanContent(await getSiteContent());
   return NextResponse.json(
     { content, configured: isSiteContentStorageConfigured() },
     { headers: { "Cache-Control": "no-store, max-age=0" } },
@@ -57,7 +80,7 @@ export async function PUT(request: Request) {
     ) {
       return NextResponse.json({ error: "Invalid content field." }, { status: 400 });
     }
-    content[key] = value;
+    content[key] = key.endsWith(".de") ? naturalGermanCopy(value) : value;
   }
 
   if (JSON.stringify(content).length > 2000000) {
