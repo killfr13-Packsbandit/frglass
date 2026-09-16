@@ -60,9 +60,6 @@ export default function JewelryShowcase() {
           </div>
           <div className="lg:pb-1">
             <p className="max-w-2xl text-base leading-7 text-neutral-400 sm:text-lg sm:leading-8">{intro}</p>
-            <p className="mt-4 text-[10px] font-bold uppercase tracking-[0.28em] text-neutral-600 sm:text-xs">
-              {featuredProducts.length} {language === "de" ? "ausgewählte Stücke" : "selected pieces"}
-            </p>
           </div>
         </div>
 
@@ -111,7 +108,6 @@ export default function JewelryShowcase() {
                 </div>
                 <div className="absolute inset-x-0 bottom-0 z-20 flex items-end justify-between gap-4 p-5 sm:p-6">
                   <div className="min-w-0">
-                    <p className="mb-2 text-[9px] font-bold uppercase tracking-[0.32em] text-orange-300 sm:text-[10px]">FRGLASS</p>
                     <h3 className="break-normal hyphens-none text-xl font-black uppercase tracking-[0.04em] sm:text-2xl">{productName}</h3>
                     {productPrice && <p className="mt-2 text-sm text-neutral-300">{productPrice}</p>}
                   </div>
