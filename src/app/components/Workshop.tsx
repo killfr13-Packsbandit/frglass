@@ -24,6 +24,13 @@ export default function Workshop() {
   const eyebrow = get(`home.workshop.eyebrow.${lang}`, t.eyebrow);
   const title = get(`home.workshop.title.${lang}`, t.title);
   const text = get(`home.workshop.text.${lang}`, t.text);
+  const studioTitle = get(`home.studio.title.${lang}`, language === "de" ? "Der Arbeitsplatz" : "The workspace");
+  const studioText = get(
+    `home.studio.text.${lang}`,
+    language === "de"
+      ? "Ein kleiner Einblick in meinen Arbeitsplatz, die Ausstattung und meine Pläne für spätere Werkstattzeit und kleine Sessions."
+      : "A quick look at my workspace, the setup and my plans for future studio time and small sessions.",
+  );
 
   function crop(base: string) {
     const zoom = numeric(get(`${base}.zoom`, "1"), 1);
@@ -81,6 +88,12 @@ export default function Workshop() {
                 ? "Mich interessiert dabei nicht nur das fertige Stück, sondern auch der Weg dorthin: wie Farbe, Tiefe und Form direkt in der Flamme entstehen und sich während der Arbeit verändern."
                 : "What interests me is not only the finished piece, but also the process: how color, depth and form emerge directly in the flame and keep changing while I work."}
             </p>
+
+            <div className="mt-8 border-t border-white/10 pt-7 sm:mt-10 sm:pt-9">
+              <h3 className="text-xl font-black uppercase tracking-[-0.01em] sm:text-2xl">{studioTitle}</h3>
+              <p className="mt-4 text-base leading-8 text-neutral-400 sm:text-lg sm:leading-9">{studioText}</p>
+            </div>
+
             <Link href="/studio" className="mt-8 inline-flex rounded-full border border-white/15 px-6 py-3 text-xs font-bold uppercase tracking-widest transition hover:border-orange-300 hover:text-orange-300 sm:text-sm">
               {language === "de" ? "Mehr aus der Werkstatt" : "More from the studio"}
             </Link>
