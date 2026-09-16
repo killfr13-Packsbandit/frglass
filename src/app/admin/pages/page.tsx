@@ -2,8 +2,9 @@
 
 import { upload } from "@vercel/blob/client";
 import Link from "next/link";
-import { ChangeEvent, FormEvent, useEffect, useMemo, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import ImageFocusEditor from "../ImageFocusEditor";
+import StudioMediaEditor, { type StudioMediaEditorHandle } from "../StudioMediaEditor";
 import { SITE_CONTENT_DEFAULTS, type SiteContentMap } from "../../siteContent";
 import {
   flexibleTextBlockKey,
@@ -25,7 +26,7 @@ type PageDefinition = {
   description: string;
   fields: Field[];
   placements: Placement[];
-  mediaManager?: "studio" | "gallery";
+  mediaManager?: "gallery";
 };
 
 const MAX_BLOCKS = 30;
@@ -100,8 +101,7 @@ const pages: PageDefinition[] = [
   {
     id: "studio",
     label: "Studio",
-    description: "Alle sichtbaren Studio-Texte. Zusätzliche Inhalte lassen sich direkt zwischen den einzelnen Bereichen einfügen.",
-    mediaManager: "studio",
+    description: "Studio-Texte, Bilder und Videos an einer Stelle. Bilder lassen sich hier direkt verschieben, zoomen, austauschen und in der Reihenfolge ändern.",
     placements: [
       { value: "beforeStudio", label: "Ganz oben vor dem Studio" },
       { value: "afterIntro", label: "Nach Einleitung & großem Bild" },
@@ -140,8 +140,8 @@ const pages: PageDefinition[] = [
       ...localized("studio.card2.text", "Workshops – Text", "Angebote", "textarea"),
       ...localized("studio.card3.title", "Austausch – Titel", "Angebote"),
       ...localized("studio.card3.text", "Austausch – Text", "Angebote", "textarea"),
-      ...localized("studio.card4.title", "Einzel-Sessions – Titel", "Angebote"),
-      ...localized("studio.card4.text", "Einzel-Sessions – Text", "Angebote", "textarea"),
+      ...localized("studio.card4.title", "Studioplatz – Titel", "Angebote"),
+      ...localized("studio.card4.text", "Studioplatz – Text", "Angebote", "textarea"),
 
       ...localized("studio.vision", "Abschlusstext", "Abschluss", "textarea"),
       ...localized("studio.contact.eyebrow", "Kleine Überschrift", "Kontakt"),
@@ -263,6 +263,10 @@ function newBlock(placement: string): FlexibleTextBlock {
   };
 }
 
+function isPage(value: string | null): value is FlexibleTextPage {
+  return Boolean(value && pages.some((page) => page.id === value));
+}
+
 export default function Page() {
   const [session, setSession] = useState<Session | null>(null);
   const [content, setContent] = useState<SiteContentMap>({ ...SITE_CONTENT_DEFAULTS });
@@ -270,10 +274,16 @@ export default function Page() {
   const [editorLanguage, setEditorLanguage] = useState<EditorLanguage>("de");
   const [saving, setSaving] = useState(false);
   const [uploadingKey, setUploadingKey] = useState<string | null>(null);
+  const [studioMediaDirty, setStudioMediaDirty] = useState(false);
+  const [studioMediaBusy, setStudioMediaBusy] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const studioEditorRef = useRef<StudioMediaEditorHandle>(null);
 
   useEffect(() => {
+    const requestedTab = new URLSearchParams(window.location.search).get("tab");
+    if (isPage(requestedTab)) setActivePage(requestedTab);
+
     (async () => {
       try {
         const sessionResponse = await fetch("/api/admin/session", { cache: "no-store" });
@@ -392,6 +402,10 @@ export default function Page() {
     setError("");
     setMessage("");
     try {
+      if (studioEditorRef.current?.isBusy()) {
+        throw new Error("Bitte warte kurz, bis der Studio-Bild-Upload fertig ist.");
+      }
+
       const response = await fetch("/api/site-content", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -400,6 +414,11 @@ export default function Page() {
       const data = (await response.json().catch(() => null)) as { content?: SiteContentMap; error?: string } | null;
       if (!response.ok) throw new Error(data?.error || "Speichern fehlgeschlagen.");
       if (data?.content) setContent(data.content);
+
+      if (studioEditorRef.current?.hasChanges()) {
+        await studioEditorRef.current.save();
+      }
+
       setMessage("Gespeichert ✓ Die Änderung ist direkt auf der Website aktiv.");
     } catch (saveError) {
       setError(saveError instanceof Error ? saveError.message : "Speichern fehlgeschlagen.");
@@ -411,8 +430,9 @@ export default function Page() {
   if (session === null) return <main className="min-h-screen bg-black px-5 py-28 text-white">Laden …</main>;
   if (!session.authenticated) return <main className="min-h-screen bg-black px-5 py-28 text-white"><section className="mx-auto max-w-4xl"><h1 className="text-4xl font-black uppercase">Website-Inhalte</h1><p className="mt-6 text-neutral-400">Bitte zuerst im Adminbereich einloggen.</p><Link href="/admin" className="mt-6 inline-block rounded-full border border-orange-300 px-5 py-3 font-bold text-orange-300">Zum Login</Link></section></main>;
 
-  const managerHref = definition.mediaManager === "studio" ? "/admin/studio" : definition.mediaManager === "gallery" ? "/admin/gallery" : "";
-  const managerLabel = definition.mediaManager === "studio" ? "Studio-Medien verwalten" : definition.mediaManager === "gallery" ? "Galerie-Medien verwalten" : "";
+  const managerHref = definition.mediaManager === "gallery" ? "/admin/gallery" : "";
+  const managerLabel = definition.mediaManager === "gallery" ? "Galerie-Medien verwalten" : "";
+  const saveDisabled = saving || Boolean(uploadingKey) || studioMediaBusy;
 
   return (
     <main className="min-h-screen bg-black px-4 py-24 text-white sm:px-6 sm:py-28">
@@ -425,7 +445,7 @@ export default function Page() {
             <h1 className="text-4xl font-black uppercase sm:text-6xl">Website-Inhalte</h1>
             <p className="mt-4 max-w-3xl leading-7 text-neutral-400">Seite auswählen, bestehende Inhalte ändern oder unten mit + Inhalt einen eigenen Abschnitt aus Text, Bild, Video oder einer Kombination davon hinzufügen.</p>
           </div>
-          <button type="submit" disabled={saving || Boolean(uploadingKey)} className="rounded-full bg-white px-6 py-3 text-sm font-black uppercase tracking-wider text-black disabled:opacity-50">{saving ? "Speichert …" : "Speichern"}</button>
+          <button type="submit" disabled={saveDisabled} className="rounded-full bg-white px-6 py-3 text-sm font-black uppercase tracking-wider text-black disabled:opacity-50">{saving ? "Speichert …" : "Speichern"}</button>
         </div>
 
         {message && <p className="mt-6 rounded-2xl border border-emerald-500/20 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-200">{message}</p>}
@@ -501,6 +521,14 @@ export default function Page() {
             })}
           </div>
         </section>
+
+        <div className={activePage === "studio" ? "" : "hidden"}>
+          <StudioMediaEditor
+            ref={studioEditorRef}
+            onDirtyChange={setStudioMediaDirty}
+            onBusyChange={setStudioMediaBusy}
+          />
+        </div>
 
         <section className="mt-6 rounded-3xl border border-orange-300/20 bg-orange-300/[0.035] p-5 sm:p-8">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -580,8 +608,9 @@ export default function Page() {
           )}
         </section>
 
-        <div className="sticky bottom-4 mt-8 flex justify-end">
-          <button type="submit" disabled={saving || Boolean(uploadingKey)} className="rounded-full bg-orange-300 px-6 py-4 text-sm font-black uppercase tracking-wider text-black shadow-2xl shadow-black disabled:opacity-50">{saving ? "Speichert …" : "Änderungen speichern"}</button>
+        <div className="sticky bottom-4 mt-8 flex items-center justify-end gap-3">
+          {studioMediaDirty && activePage === "studio" && <span className="rounded-full bg-orange-300/10 px-3 py-2 text-xs font-bold text-orange-200">Studio-Bilder geändert</span>}
+          <button type="submit" disabled={saveDisabled} className="rounded-full bg-orange-300 px-6 py-4 text-sm font-black uppercase tracking-wider text-black shadow-2xl shadow-black disabled:opacity-50">{saving ? "Speichert …" : "Änderungen speichern"}</button>
         </div>
       </form>
     </main>
