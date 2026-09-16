@@ -49,13 +49,13 @@ function Media({ item, caption, eager = false }: { item: StudioMediaItem; captio
   );
 }
 
-function MediaFigure({ item, caption, className = "" }: { item: StudioMediaItem; caption: string; className?: string }) {
+function MediaFigure({ item, caption, className = "", showCaption = true }: { item: StudioMediaItem; caption: string; className?: string; showCaption?: boolean }) {
   return (
     <figure className={`overflow-hidden rounded-2xl border border-white/10 bg-neutral-950 sm:rounded-3xl ${className}`}>
       <div className="overflow-hidden bg-black">
         <Media item={item} caption={caption} />
       </div>
-      {caption && <figcaption className="border-t border-white/10 px-5 py-4 text-sm leading-6 text-neutral-400">{caption}</figcaption>}
+      {showCaption && caption && <figcaption className="border-t border-white/10 px-5 py-4 text-sm leading-6 text-neutral-400">{caption}</figcaption>}
     </figure>
   );
 }
@@ -164,6 +164,7 @@ export default function Studio() {
               item={materialMedia}
               caption={captionFor(materialMedia, language === "de" ? "Borosilikatglas in der Werkstatt" : "Borosilicate glass in the studio")}
               className="lg:ml-auto"
+              showCaption={false}
             />
           )}
         </div>
