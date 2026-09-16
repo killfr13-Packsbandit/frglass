@@ -48,6 +48,7 @@ export default function JewelryShowcase() {
   const eyebrow = activeCategory ? (language === "de" ? activeCategory.homeEyebrowDe : activeCategory.homeEyebrow) || categoryName : fallbackEyebrow;
   const title = activeCategory ? (language === "de" ? activeCategory.homeTitleDe : activeCategory.homeTitle) || categoryName : fallbackTitle;
   const intro = activeCategory ? (language === "de" ? activeCategory.homeIntroDe : activeCategory.homeIntro) || categoryIntroFallback : fallbackIntro;
+  const cta = get(`home.hero.cta.${lang}`, language === "de" ? "Arbeiten ansehen" : "See the work");
 
   return (
     <section id="collections" className="relative overflow-hidden bg-black px-4 py-18 text-white sm:px-6 sm:py-24 xl:py-32">
@@ -106,17 +107,24 @@ export default function JewelryShowcase() {
                     className="object-contain p-3 transition duration-700 group-hover:scale-[1.04] sm:p-4"
                   />
                 </div>
-                <div className="absolute inset-x-0 bottom-0 z-20 flex items-end justify-between gap-4 p-5 sm:p-6">
+                <div className="absolute inset-x-0 bottom-0 z-20 flex items-end p-5 sm:p-6">
                   <div className="min-w-0">
                     <h3 className="break-normal hyphens-none text-xl font-black uppercase tracking-[0.04em] sm:text-2xl">{productName}</h3>
                     {productPrice && <p className="mt-2 text-sm text-neutral-300">{productPrice}</p>}
                   </div>
-                  <span className="mb-1 hidden h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/20 text-lg text-white transition group-hover:border-orange-300 group-hover:text-orange-300 sm:flex">↗</span>
                 </div>
               </Link>
             );
           })}
         </div>
+
+        {featuredProducts.length > 0 && cta && (
+          <div className="mt-10 flex justify-center sm:mt-14">
+            <Link href="/shop#shop-categories" className="inline-flex items-center rounded-full bg-orange-300 px-7 py-3.5 text-xs font-black uppercase tracking-[0.14em] text-black transition hover:bg-white sm:px-8 sm:py-4 sm:text-sm">
+              {cta}
+            </Link>
+          </div>
+        )}
       </div>
     </section>
   );
