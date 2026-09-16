@@ -39,11 +39,11 @@ export const translations = {
     workshop: {
       eyebrow: "Workshop",
       title: "At the torch",
-      text: "I make each piece by hand from borosilicate glass in my workshop in Carinthia. Some start with a clear idea, others develop while I work.",
+      text: "I make each piece by hand from borosilicate glass in my workshop in Carinthia. Some pieces start with a clear idea, while others only reveal their direction while I work.",
     },
     studio: {
       eyebrow: "Workspace",
-      title: "The workshop",
+      title: "Fire, glass and craft",
       intro: "My workshop in Carinthia is where glass rods and tubes become jewelry, small objects, experiments and one-off pieces. I work with borosilicate glass (COE 33), heating it to working temperature in an oxygen/gas flame and shaping it directly at the torch. For now the space is mainly set up for my own work; over time I would like to open it up step by step to other people interested in glass.",
       cards: [
         {
@@ -65,7 +65,7 @@ export const translations = {
       ],
       vision: "I would rather let the workshop grow in a useful and safe way than rush into a large course program. That is why I am expanding the equipment, workstations and possibilities step by step while the space remains my own working studio as well.",
       contactEyebrow: "Workshop",
-      contactTitle: "Interested in the space?",
+      contactTitle: "Curious about glass?",
       contactText: "If you are interested in future torch time, a small workshop or an individual session, feel free to get in touch already. It also helps me understand which offers people are actually looking for.",
       sendRequest: "Send a message",
       instagram: "Instagram",
@@ -106,11 +106,11 @@ export const translations = {
     workshop: {
       eyebrow: "Werkstatt",
       title: "Am Brenner",
-      text: "In meiner Werkstatt in Kärnten fertige ich jedes Stück von Hand aus Borosilikatglas am Brenner. Manche Arbeiten sind vorher geplant, andere entwickeln sich erst beim Machen.",
+      text: "In meiner Werkstatt in Kärnten fertige ich jedes Stück von Hand aus Borosilikatglas am Brenner. Manche Arbeiten starten mit einer klaren Idee, andere zeigen erst während der Arbeit, wohin sie sich entwickeln.",
     },
     studio: {
       eyebrow: "Werkstatt",
-      title: "Die Werkstatt",
+      title: "Feuer, Glas und Handwerk",
       intro: "Meine Werkstatt in Kärnten ist der Ort, an dem aus Glasstäben und -röhren Schmuck, kleine Objekte, Experimente und Einzelstücke entstehen. Ich arbeite mit Borosilikatglas (COE 33), das in einer Sauerstoff-/Gasflamme auf Arbeitstemperatur gebracht und direkt am Brenner geformt wird. Im Moment ist der Platz vor allem für meine eigene Arbeit eingerichtet; langfristig möchte ich ihn Schritt für Schritt auch für andere Glasinteressierte öffnen.",
       cards: [
         {
@@ -132,7 +132,7 @@ export const translations = {
       ],
       vision: "Mir ist wichtiger, die Werkstatt sinnvoll und sicher wachsen zu lassen, als möglichst schnell ein großes Kursprogramm anzubieten. Deshalb baue ich Ausstattung, Arbeitsplätze und Möglichkeiten Schritt für Schritt aus – während der Raum weiterhin mein eigener Arbeitsplatz bleibt.",
       contactEyebrow: "Werkstatt",
-      contactTitle: "Interesse am Platz?",
+      contactTitle: "Neugierig auf Glas?",
       contactText: "Wenn du dich für zukünftige Brennerzeit, einen kleinen Workshop oder eine individuelle Session interessierst, kannst du dich gerne schon melden. Dann weiß ich auch besser, welche Angebote später tatsächlich gefragt sind.",
       sendRequest: "Nachricht senden",
       instagram: "Instagram",
