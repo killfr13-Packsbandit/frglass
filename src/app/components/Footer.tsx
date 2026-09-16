@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { siteConfig } from "../siteConfig";
 import { translations, useLanguage } from "./LanguageProvider";
 
@@ -15,8 +16,11 @@ const footerLinks = [
 ] as const;
 
 export default function Footer() {
+  const pathname = usePathname();
   const { language } = useLanguage();
   const t = translations[language];
+
+  if (pathname.startsWith("/admin")) return null;
 
   return (
     <footer className="border-t border-white/10 bg-black px-6 py-16 text-white">
