@@ -4,7 +4,7 @@ import { upload } from "@vercel/blob/client";
 import Link from "next/link";
 import { ChangeEvent, FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import ImageFocusEditor from "../ImageFocusEditor";
-import StudioMediaEditor, { type StudioMediaEditorHandle } from "../StudioMediaEditor";
+import StudioMediaEditor, { StudioMediaSlot, type StudioMediaEditorHandle } from "../StudioMediaEditor";
 import { SITE_CONTENT_DEFAULTS, type SiteContentMap } from "../../siteContent";
 import {
   flexibleTextBlockKey,
@@ -101,7 +101,7 @@ const pages: PageDefinition[] = [
   {
     id: "studio",
     label: "Studio",
-    description: "Studio-Texte, Bilder und Videos an einer Stelle. Bilder lassen sich hier direkt verschieben, zoomen, austauschen und in der Reihenfolge ändern.",
+    description: "Studio-Texte, Bilder und Videos an einer Stelle – in derselben Reihenfolge wie auf der fertigen Studio-Seite.",
     placements: [
       { value: "beforeStudio", label: "Ganz oben vor dem Studio" },
       { value: "afterIntro", label: "Nach Einleitung & großem Bild" },
@@ -434,28 +434,107 @@ export default function Page() {
   const managerLabel = definition.mediaManager === "gallery" ? "Galerie-Medien verwalten" : "";
   const saveDisabled = saving || Boolean(uploadingKey) || studioMediaBusy;
 
+  const fixedContent = (
+    <div className="mt-8 min-w-0 space-y-6">
+      {sections.map((section) => {
+        const workshopLayout = activePage === "home" && section === "Werkstatt";
+        const studioSlot = activePage === "studio"
+          ? section === "Einleitung"
+            ? "hero"
+            : section === "Material"
+              ? "material"
+              : section === "Am Brenner"
+                ? "process"
+                : section === "Einblicke"
+                  ? "gallery"
+                  : null
+          : null;
+
+        return (
+          <div key={section} className="min-w-0 rounded-2xl border border-white/10 bg-black/25 p-3 sm:p-6">
+            <h3 className="break-words text-sm font-black uppercase tracking-[0.18em] text-orange-300 sm:tracking-[0.22em]">{section}</h3>
+            {workshopLayout && <p className="mt-2 text-xs leading-5 text-neutral-500">Die drei Medien sind hier wie auf der Startseite angeordnet: großes Medium oben, zwei kleine darunter.</p>}
+            <div className={`mt-5 grid min-w-0 grid-cols-1 gap-4 sm:gap-5 ${workshopLayout ? "sm:grid-cols-2" : "sm:grid-cols-2"}`}>
+              {visibleFields.filter((field) => field.section === section).map((field) => {
+                if (field.kind === "media") {
+                  const url = content[field.key] ?? "";
+                  const mediaType = content[field.typeKey] ?? "image";
+                  const keys = cropKeys(field);
+                  const zoom = numberValue(content[keys.zoom], 1);
+                  const focusX = numberValue(content[keys.x], 50);
+                  const focusY = numberValue(content[keys.y], 50);
+                  const workshopMain = workshopLayout && field.key.includes("workshop.main");
+                  const workshopSmall = workshopLayout && field.key.includes("workshop.media");
+                  const layoutClass = workshopMain ? "sm:col-span-2" : workshopSmall ? "sm:col-span-1" : "sm:col-span-2";
+                  return (
+                    <div key={field.key} className={`min-w-0 rounded-2xl border border-white/10 bg-black/30 p-3 sm:p-4 ${layoutClass}`}>
+                      <div className="flex min-w-0 flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                        <div className="min-w-0"><p className="break-words font-bold">{field.label}</p><p className="mt-1 text-xs leading-5 text-neutral-500">Medium antippen/ziehen für den Ausschnitt. Max. 100 MB.</p></div>
+                        <label className="inline-flex max-w-full shrink-0 cursor-pointer items-center justify-center rounded-full border border-orange-300 px-3 py-2 text-center text-xs font-bold uppercase tracking-wider text-orange-300">{uploadingKey === field.key ? "Upload …" : url ? "Ersetzen" : "Hochladen"}<input type="file" accept="image/*,video/*" onChange={(event) => uploadMedia(event, field)} disabled={Boolean(uploadingKey)} className="hidden" /></label>
+                      </div>
+                      {url ? (
+                        <div className="mt-4 min-w-0">
+                          <ImageFocusEditor src={url} mediaType={mediaType === "video" ? "video" : "image"} zoom={zoom} focusX={focusX} focusY={focusY} aspectClass={aspectFor(field.key)} onChange={(next) => setContent((current) => ({ ...current, ...(next.zoom !== undefined ? { [keys.zoom]: String(next.zoom) } : {}), ...(next.focusX !== undefined ? { [keys.x]: String(next.focusX) } : {}), ...(next.focusY !== undefined ? { [keys.y]: String(next.focusY) } : {}) }))} />
+                          <button type="button" onClick={() => setContent((current) => ({ ...current, [field.key]: "", [field.typeKey]: "image", [keys.zoom]: "1", [keys.x]: "50", [keys.y]: "50" }))} className="mt-3 text-xs font-bold uppercase tracking-wider text-red-300">Medium entfernen</button>
+                        </div>
+                      ) : <p className="mt-4 rounded-xl border border-dashed border-white/10 p-5 text-center text-sm text-neutral-600">Kein Medium gewählt.</p>}
+                    </div>
+                  );
+                }
+
+                const common = "w-full min-w-0 max-w-full rounded-2xl border border-white/10 bg-black/50 px-3 py-3 outline-none transition focus:border-orange-300/60 sm:px-4";
+                return (
+                  <label key={field.key} className={`grid min-w-0 gap-2 ${workshopLayout || field.kind === "textarea" ? "sm:col-span-2" : ""}`}>
+                    <span className="break-words text-sm font-bold">{field.label}</span>
+                    {field.kind === "textarea" ? <textarea value={content[field.key] ?? ""} onChange={(event) => update(field.key, event.target.value)} rows={5} className={`${common} resize-y`} /> : <input value={content[field.key] ?? ""} onChange={(event) => update(field.key, event.target.value)} className={common} />}
+                  </label>
+                );
+              })}
+            </div>
+            {studioSlot && <StudioMediaSlot slot={studioSlot} />}
+          </div>
+        );
+      })}
+    </div>
+  );
+
   return (
-    <main className="min-h-screen bg-black px-4 py-24 text-white sm:px-6 sm:py-28">
-      <form onSubmit={save} className="mx-auto max-w-6xl">
+    <main className="frglass-admin-pages min-h-screen overflow-x-hidden bg-black px-3 py-24 text-white sm:px-6 sm:py-28">
+      <style>{`
+        @media (max-width: 639px) {
+          .frglass-admin-pages form,
+          .frglass-admin-pages section,
+          .frglass-admin-pages article,
+          .frglass-admin-pages .grid,
+          .frglass-admin-pages .grid > *,
+          .frglass-admin-pages label { min-width: 0; max-width: 100%; }
+          .frglass-admin-pages input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]),
+          .frglass-admin-pages textarea,
+          .frglass-admin-pages select { min-width: 0; max-width: 100%; }
+        }
+      `}</style>
+      <form onSubmit={save} className="mx-auto w-full min-w-0 max-w-6xl">
         <Link href="/admin" className="text-sm text-neutral-500 transition hover:text-white">← Admin</Link>
         <p className="mt-5 text-xs font-bold uppercase tracking-[0.4em] text-orange-300">FRGLASS CMS</p>
 
-        <div className="mt-3 flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
-          <div>
-            <h1 className="text-4xl font-black uppercase sm:text-6xl">Website-Inhalte</h1>
+        <div className="mt-3 flex min-w-0 flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+          <div className="min-w-0">
+            <h1 className="break-words text-4xl font-black uppercase sm:text-6xl">Website-Inhalte</h1>
             <p className="mt-4 max-w-3xl leading-7 text-neutral-400">Seite auswählen, bestehende Inhalte ändern oder unten mit + Inhalt einen eigenen Abschnitt aus Text, Bild, Video oder einer Kombination davon hinzufügen.</p>
           </div>
-          <button type="submit" disabled={saveDisabled} className="rounded-full bg-white px-6 py-3 text-sm font-black uppercase tracking-wider text-black disabled:opacity-50">{saving ? "Speichert …" : "Speichern"}</button>
+          <button type="submit" disabled={saveDisabled} className="max-w-full rounded-full bg-white px-5 py-3 text-sm font-black uppercase tracking-wider text-black disabled:opacity-50 sm:px-6">{saving ? "Speichert …" : "Speichern"}</button>
         </div>
 
         {message && <p className="mt-6 rounded-2xl border border-emerald-500/20 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-200">{message}</p>}
         {error && <p className="mt-6 rounded-2xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-200">{error}</p>}
 
-        <div className="mt-8 grid gap-4 rounded-3xl border border-white/10 bg-white/[0.025] p-4 sm:p-5 lg:grid-cols-[1fr_auto] lg:items-center">
-          <div className="flex gap-2 overflow-x-auto pb-1">
-            {pages.map((page) => (
-              <button key={page.id} type="button" onClick={() => setActivePage(page.id)} className={`whitespace-nowrap rounded-full border px-4 py-2 text-xs font-bold uppercase tracking-wider transition ${activePage === page.id ? "border-orange-300 bg-orange-300 text-black" : "border-white/15 text-neutral-300"}`}>{page.label}</button>
-            ))}
+        <div className="mt-8 grid min-w-0 gap-4 rounded-3xl border border-white/10 bg-white/[0.025] p-3 sm:p-5 lg:grid-cols-[1fr_auto] lg:items-center">
+          <div className="min-w-0 overflow-x-auto pb-1">
+            <div className="flex w-max min-w-full gap-2">
+              {pages.map((page) => (
+                <button key={page.id} type="button" onClick={() => setActivePage(page.id)} className={`whitespace-nowrap rounded-full border px-4 py-2 text-xs font-bold uppercase tracking-wider transition ${activePage === page.id ? "border-orange-300 bg-orange-300 text-black" : "border-white/15 text-neutral-300"}`}>{page.label}</button>
+              ))}
+            </div>
           </div>
           <div className="flex w-fit items-center rounded-full border border-white/15 bg-black/40 p-1 text-xs font-bold">
             <button type="button" onClick={() => setEditorLanguage("de")} className={`rounded-full px-4 py-2 ${editorLanguage === "de" ? "bg-white text-black" : "text-neutral-400"}`}>DE</button>
@@ -463,98 +542,51 @@ export default function Page() {
           </div>
         </div>
 
-        <section className="mt-6 rounded-3xl border border-white/10 bg-white/[0.03] p-5 sm:p-8">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-            <div>
-              <h2 className="text-2xl font-black uppercase sm:text-3xl">{definition.label}</h2>
+        <section className="mt-6 min-w-0 rounded-3xl border border-white/10 bg-white/[0.03] p-3 sm:p-8">
+          <div className="flex min-w-0 flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+            <div className="min-w-0">
+              <h2 className="break-words text-2xl font-black uppercase sm:text-3xl">{definition.label}</h2>
               <p className="mt-3 max-w-3xl text-sm leading-6 text-neutral-400">{definition.description}</p>
             </div>
-            {managerHref && <Link href={managerHref} className="inline-flex shrink-0 rounded-full border border-orange-300 px-4 py-2 text-xs font-bold uppercase tracking-wider text-orange-300">{managerLabel}</Link>}
+            {managerHref && <Link href={managerHref} className="inline-flex max-w-full shrink-0 rounded-full border border-orange-300 px-4 py-2 text-center text-xs font-bold uppercase tracking-wider text-orange-300">{managerLabel}</Link>}
           </div>
 
-          <div className="mt-8 space-y-6">
-            {sections.map((section) => {
-              const workshopLayout = activePage === "home" && section === "Werkstatt";
-              return (
-                <div key={section} className="rounded-2xl border border-white/10 bg-black/25 p-4 sm:p-6">
-                  <h3 className="text-sm font-black uppercase tracking-[0.22em] text-orange-300">{section}</h3>
-                  {workshopLayout && <p className="mt-2 text-xs leading-5 text-neutral-500">Die drei Medien sind hier wie auf der Startseite angeordnet: großes Medium oben, zwei kleine darunter.</p>}
-                  <div className={`mt-5 grid gap-5 ${workshopLayout ? "grid-cols-2 gap-3 sm:gap-5" : "sm:grid-cols-2"}`}>
-                    {visibleFields.filter((field) => field.section === section).map((field) => {
-                      if (field.kind === "media") {
-                        const url = content[field.key] ?? "";
-                        const mediaType = content[field.typeKey] ?? "image";
-                        const keys = cropKeys(field);
-                        const zoom = numberValue(content[keys.zoom], 1);
-                        const focusX = numberValue(content[keys.x], 50);
-                        const focusY = numberValue(content[keys.y], 50);
-                        const workshopMain = workshopLayout && field.key.includes("workshop.main");
-                        const workshopSmall = workshopLayout && field.key.includes("workshop.media");
-                        const layoutClass = workshopMain ? "col-span-2" : workshopSmall ? "col-span-1" : "sm:col-span-2";
-                        return (
-                          <div key={field.key} className={`rounded-2xl border border-white/10 bg-black/30 p-3 sm:p-4 ${layoutClass}`}>
-                            <div className="flex flex-wrap items-center justify-between gap-3">
-                              <div><p className="font-bold">{field.label}</p><p className="mt-1 text-xs text-neutral-500">Medium antippen/ziehen für den Ausschnitt. Max. 100 MB.</p></div>
-                              <label className="cursor-pointer rounded-full border border-orange-300 px-3 py-2 text-xs font-bold uppercase tracking-wider text-orange-300">{uploadingKey === field.key ? "Upload …" : url ? "Ersetzen" : "Hochladen"}<input type="file" accept="image/*,video/*" onChange={(event) => uploadMedia(event, field)} disabled={Boolean(uploadingKey)} className="hidden" /></label>
-                            </div>
-                            {url ? (
-                              <div className="mt-4">
-                                <ImageFocusEditor src={url} mediaType={mediaType === "video" ? "video" : "image"} zoom={zoom} focusX={focusX} focusY={focusY} aspectClass={aspectFor(field.key)} onChange={(next) => setContent((current) => ({ ...current, ...(next.zoom !== undefined ? { [keys.zoom]: String(next.zoom) } : {}), ...(next.focusX !== undefined ? { [keys.x]: String(next.focusX) } : {}), ...(next.focusY !== undefined ? { [keys.y]: String(next.focusY) } : {}) }))} />
-                                <button type="button" onClick={() => setContent((current) => ({ ...current, [field.key]: "", [field.typeKey]: "image", [keys.zoom]: "1", [keys.x]: "50", [keys.y]: "50" }))} className="mt-3 text-xs font-bold uppercase tracking-wider text-red-300">Medium entfernen</button>
-                              </div>
-                            ) : <p className="mt-4 rounded-xl border border-dashed border-white/10 p-5 text-center text-sm text-neutral-600">Kein Medium gewählt.</p>}
-                          </div>
-                        );
-                      }
-
-                      const common = "rounded-2xl border border-white/10 bg-black/50 px-4 py-3 outline-none transition focus:border-orange-300/60";
-                      return (
-                        <label key={field.key} className={`grid gap-2 ${workshopLayout || field.kind === "textarea" ? "col-span-2" : ""}`}>
-                          <span className="text-sm font-bold">{field.label}</span>
-                          {field.kind === "textarea" ? <textarea value={content[field.key] ?? ""} onChange={(event) => update(field.key, event.target.value)} rows={5} className={`${common} resize-y`} /> : <input value={content[field.key] ?? ""} onChange={(event) => update(field.key, event.target.value)} className={common} />}
-                        </label>
-                      );
-                    })}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+          {activePage === "studio" ? (
+            <StudioMediaEditor
+              ref={studioEditorRef}
+              onDirtyChange={setStudioMediaDirty}
+              onBusyChange={setStudioMediaBusy}
+            >
+              {fixedContent}
+            </StudioMediaEditor>
+          ) : fixedContent}
         </section>
 
-        <div className={activePage === "studio" ? "" : "hidden"}>
-          <StudioMediaEditor
-            ref={studioEditorRef}
-            onDirtyChange={setStudioMediaDirty}
-            onBusyChange={setStudioMediaBusy}
-          />
-        </div>
-
-        <section className="mt-6 rounded-3xl border border-orange-300/20 bg-orange-300/[0.035] p-5 sm:p-8">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <p className="text-xs font-bold uppercase tracking-[0.32em] text-orange-300">Zusätzliche Inhalte</p>
-              <h2 className="mt-2 text-2xl font-black uppercase sm:text-3xl">Eigene Inhalte</h2>
+        <section className="mt-6 min-w-0 rounded-3xl border border-orange-300/20 bg-orange-300/[0.035] p-3 sm:p-8">
+          <div className="flex min-w-0 flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="min-w-0">
+              <p className="text-xs font-bold uppercase tracking-[0.28em] text-orange-300 sm:tracking-[0.32em]">Zusätzliche Inhalte</p>
+              <h2 className="mt-2 break-words text-2xl font-black uppercase sm:text-3xl">Eigene Inhalte</h2>
               <p className="mt-2 max-w-3xl text-sm leading-6 text-neutral-400">Ein Block kann nur Text, nur ein Bild/Video oder beides enthalten. Bilder lassen sich direkt hier skalieren und verschieben.</p>
             </div>
-            <button type="button" disabled={blocks.length >= MAX_BLOCKS} onClick={() => writeBlocks([...blocks, newBlock(definition.placements[0].value)])} className="shrink-0 rounded-full bg-orange-300 px-5 py-3 text-xs font-black uppercase tracking-wider text-black disabled:cursor-not-allowed disabled:opacity-30">+ Inhalt</button>
+            <button type="button" disabled={blocks.length >= MAX_BLOCKS} onClick={() => writeBlocks([...blocks, newBlock(definition.placements[0].value)])} className="max-w-full shrink-0 rounded-full bg-orange-300 px-5 py-3 text-xs font-black uppercase tracking-wider text-black disabled:cursor-not-allowed disabled:opacity-30">+ Inhalt</button>
           </div>
 
           {blocks.length === 0 ? (
-            <button type="button" onClick={() => writeBlocks([newBlock(definition.placements[0].value)])} className="mt-7 w-full rounded-2xl border border-dashed border-white/15 p-8 text-center text-sm text-neutral-500 transition hover:border-orange-300/50 hover:text-neutral-300">Noch kein eigener Inhalt. Hier tippen oder oben auf + Inhalt.</button>
+            <button type="button" onClick={() => writeBlocks([newBlock(definition.placements[0].value)])} className="mt-7 w-full rounded-2xl border border-dashed border-white/15 p-6 text-center text-sm text-neutral-500 transition hover:border-orange-300/50 hover:text-neutral-300 sm:p-8">Noch kein eigener Inhalt. Hier tippen oder oben auf + Inhalt.</button>
           ) : (
-            <div className="mt-7 space-y-5">
+            <div className="mt-7 min-w-0 space-y-5">
               {blocks.map((block, index) => {
                 const eyebrowKey = `eyebrow${languageSuffix}` as keyof FlexibleTextBlock;
                 const titleKey = `title${languageSuffix}` as keyof FlexibleTextBlock;
                 const textKey = `text${languageSuffix}` as keyof FlexibleTextBlock;
                 const blockUploadKey = `block:${block.id}`;
                 return (
-                  <article key={block.id} className="rounded-2xl border border-white/10 bg-black/35 p-4 sm:p-6">
-                    <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-                      <div className="flex flex-wrap items-center gap-2">
+                  <article key={block.id} className="min-w-0 rounded-2xl border border-white/10 bg-black/35 p-3 sm:p-6">
+                    <div className="flex min-w-0 flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+                      <div className="flex min-w-0 flex-wrap items-center gap-2">
                         <span className="rounded-full bg-white/5 px-3 py-1.5 text-xs font-bold text-neutral-400">Inhalt {index + 1}</span>
-                        <select value={block.placement} onChange={(event) => patchBlock(block.id, { placement: event.target.value })} className="max-w-full rounded-full border border-white/15 bg-neutral-950 px-3 py-2 text-xs font-bold text-white outline-none">
+                        <select value={block.placement} onChange={(event) => patchBlock(block.id, { placement: event.target.value })} className="max-w-full min-w-0 rounded-full border border-white/15 bg-neutral-950 px-3 py-2 text-xs font-bold text-white outline-none">
                           {definition.placements.map((placement) => <option key={placement.value} value={placement.value}>{placement.label}</option>)}
                         </select>
                         <label className="flex items-center gap-2 text-xs text-neutral-400"><input type="checkbox" checked={block.enabled} onChange={(event) => patchBlock(block.id, { enabled: event.target.checked })} /> sichtbar</label>
@@ -567,17 +599,17 @@ export default function Page() {
                       </div>
                     </div>
 
-                    <div className="mt-5 rounded-2xl border border-white/10 bg-black/25 p-4 sm:p-5">
-                      <div className="flex flex-wrap items-center justify-between gap-3">
-                        <div>
+                    <div className="mt-5 min-w-0 rounded-2xl border border-white/10 bg-black/25 p-3 sm:p-5">
+                      <div className="flex min-w-0 flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                        <div className="min-w-0">
                           <p className="font-bold">Bild / Video</p>
                           <p className="mt-1 text-xs leading-5 text-neutral-500">Optional. Nach dem Upload kannst du Ausschnitt und Zoom genauso wie bei den anderen Seitenbildern einstellen.</p>
                         </div>
-                        <label className="cursor-pointer rounded-full border border-orange-300 px-4 py-2 text-xs font-black uppercase tracking-wider text-orange-300">{uploadingKey === blockUploadKey ? "Upload …" : block.mediaUrl ? "Ersetzen" : "+ Bild / Video"}<input type="file" accept="image/*,video/*" onChange={(event) => uploadBlockMedia(event, block)} disabled={Boolean(uploadingKey)} className="hidden" /></label>
+                        <label className="inline-flex max-w-full cursor-pointer items-center justify-center rounded-full border border-orange-300 px-4 py-2 text-center text-xs font-black uppercase tracking-wider text-orange-300">{uploadingKey === blockUploadKey ? "Upload …" : block.mediaUrl ? "Ersetzen" : "+ Bild / Video"}<input type="file" accept="image/*,video/*" onChange={(event) => uploadBlockMedia(event, block)} disabled={Boolean(uploadingKey)} className="hidden" /></label>
                       </div>
 
                       {block.mediaUrl && (
-                        <div className="mt-4">
+                        <div className="mt-4 min-w-0">
                           <ImageFocusEditor
                             src={block.mediaUrl}
                             mediaType={block.mediaType}
@@ -596,10 +628,10 @@ export default function Page() {
                       )}
                     </div>
 
-                    <div className="mt-5 grid gap-4 sm:grid-cols-2">
-                      <label className="grid gap-2"><span className="text-sm font-bold">Kleine Überschrift</span><input value={String(block[eyebrowKey] ?? "")} onChange={(event) => patchBlock(block.id, { [eyebrowKey]: event.target.value } as Partial<FlexibleTextBlock>)} className="rounded-2xl border border-white/10 bg-black/60 px-4 py-3 outline-none focus:border-orange-300/60" /></label>
-                      <label className="grid gap-2"><span className="text-sm font-bold">Überschrift</span><input value={String(block[titleKey] ?? "")} onChange={(event) => patchBlock(block.id, { [titleKey]: event.target.value } as Partial<FlexibleTextBlock>)} className="rounded-2xl border border-white/10 bg-black/60 px-4 py-3 outline-none focus:border-orange-300/60" /></label>
-                      <label className="grid gap-2 sm:col-span-2"><span className="text-sm font-bold">Text</span><textarea value={String(block[textKey] ?? "")} onChange={(event) => patchBlock(block.id, { [textKey]: event.target.value } as Partial<FlexibleTextBlock>)} rows={6} className="resize-y rounded-2xl border border-white/10 bg-black/60 px-4 py-3 leading-7 outline-none focus:border-orange-300/60" /></label>
+                    <div className="mt-5 grid min-w-0 grid-cols-1 gap-4 sm:grid-cols-2">
+                      <label className="grid min-w-0 gap-2"><span className="text-sm font-bold">Kleine Überschrift</span><input value={String(block[eyebrowKey] ?? "")} onChange={(event) => patchBlock(block.id, { [eyebrowKey]: event.target.value } as Partial<FlexibleTextBlock>)} className="w-full min-w-0 max-w-full rounded-2xl border border-white/10 bg-black/60 px-3 py-3 outline-none focus:border-orange-300/60 sm:px-4" /></label>
+                      <label className="grid min-w-0 gap-2"><span className="text-sm font-bold">Überschrift</span><input value={String(block[titleKey] ?? "")} onChange={(event) => patchBlock(block.id, { [titleKey]: event.target.value } as Partial<FlexibleTextBlock>)} className="w-full min-w-0 max-w-full rounded-2xl border border-white/10 bg-black/60 px-3 py-3 outline-none focus:border-orange-300/60 sm:px-4" /></label>
+                      <label className="grid min-w-0 gap-2 sm:col-span-2"><span className="text-sm font-bold">Text</span><textarea value={String(block[textKey] ?? "")} onChange={(event) => patchBlock(block.id, { [textKey]: event.target.value } as Partial<FlexibleTextBlock>)} rows={6} className="w-full min-w-0 max-w-full resize-y rounded-2xl border border-white/10 bg-black/60 px-3 py-3 leading-7 outline-none focus:border-orange-300/60 sm:px-4" /></label>
                     </div>
                   </article>
                 );
@@ -608,9 +640,9 @@ export default function Page() {
           )}
         </section>
 
-        <div className="sticky bottom-4 mt-8 flex items-center justify-end gap-3">
+        <div className="sticky bottom-4 mt-8 flex min-w-0 flex-wrap items-center justify-end gap-3">
           {studioMediaDirty && activePage === "studio" && <span className="rounded-full bg-orange-300/10 px-3 py-2 text-xs font-bold text-orange-200">Studio-Bilder geändert</span>}
-          <button type="submit" disabled={saveDisabled} className="rounded-full bg-orange-300 px-6 py-4 text-sm font-black uppercase tracking-wider text-black shadow-2xl shadow-black disabled:opacity-50">{saving ? "Speichert …" : "Änderungen speichern"}</button>
+          <button type="submit" disabled={saveDisabled} className="max-w-full rounded-full bg-orange-300 px-5 py-4 text-sm font-black uppercase tracking-wider text-black shadow-2xl shadow-black disabled:opacity-50 sm:px-6">{saving ? "Speichert …" : "Änderungen speichern"}</button>
         </div>
       </form>
     </main>
