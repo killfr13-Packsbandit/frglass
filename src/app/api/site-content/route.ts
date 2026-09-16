@@ -48,11 +48,12 @@ export async function PUT(request: Request) {
 
   const content: SiteContentMap = {};
   for (const [key, value] of entries) {
+    const maxValueLength = key.startsWith("flexTextBlocks.") ? 250000 : 10000;
     if (
       typeof key !== "string" ||
       key.length > 160 ||
       typeof value !== "string" ||
-      value.length > 60000
+      value.length > maxValueLength
     ) {
       return NextResponse.json({ error: "Invalid content field." }, { status: 400 });
     }
