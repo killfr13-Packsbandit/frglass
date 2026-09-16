@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { translations, useLanguage } from "./LanguageProvider";
 import { useSiteContent } from "./SiteContentProvider";
 
@@ -22,7 +21,6 @@ export default function Hero() {
     get(`home.hero.tag2.${lang}`, language === "de" ? "Schmuck" : "Jewelry"),
     get(`home.hero.tag3.${lang}`, language === "de" ? "Objekte" : "Objects"),
   ].filter((tag) => tag.trim().length > 0);
-  const cta = get(`home.hero.cta.${lang}`, t.cta);
   const mediaUrl = loading ? "" : get("home.hero.media.url", "/workshop/me2.jpg");
   const mediaType = get("home.hero.media.type", "image");
   const zoom = numeric(get("home.hero.media.zoom", "1"), 1);
@@ -55,7 +53,6 @@ export default function Hero() {
               </div>
               <h1 className="text-[2.7rem] font-black uppercase leading-none tracking-[-0.045em] text-white sm:text-6xl lg:text-7xl">FRGLASS</h1>
               <div className="h-px min-w-6 flex-1 bg-gradient-to-r from-orange-300/70 via-white/20 to-transparent" />
-              <p className="hidden text-[10px] font-bold uppercase tracking-[0.32em] text-neutral-500 sm:block">2019 — {language === "de" ? "heute" : "today"}</p>
             </div>
 
             <div className="mt-8 sm:mt-10">
@@ -82,12 +79,6 @@ export default function Hero() {
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/25 via-transparent to-black/10" />
           <div className="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-black/35 to-transparent" />
         </div>
-      </div>
-
-      <div className="mx-auto flex max-w-[1680px] justify-center border-t border-white/10 px-5 py-8 sm:px-8 sm:py-10">
-        <Link href="/shop#shop-categories" className="inline-flex items-center rounded-full bg-orange-300 px-6 py-3.5 text-xs font-black uppercase tracking-[0.14em] text-black transition hover:bg-white sm:px-7 sm:text-sm">
-          {cta}
-        </Link>
       </div>
     </section>
   );
