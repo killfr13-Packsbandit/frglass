@@ -20,22 +20,85 @@ const localized = (base: string, label: string, section: string, kind: "text" | 
 const media = (base: string, label: string, section: string): MediaField => ({ kind: "media", key: `${base}.url`, typeKey: `${base}.type`, label, section });
 
 const pages: PageDefinition[] = [
-  { id: "home", label: "Startseite", description: "Die allgemeinen Inhalte deiner Startseite. Texte für Produkt-Kategorien bearbeitest du separat unter Kategorien.", fields: [
-    ...localized("home.hero.subtitle", "Untertitel", "Hero"), ...localized("home.hero.text", "Einleitung", "Hero", "textarea"), ...localized("home.hero.tag1", "Begriff 1", "Hero"), ...localized("home.hero.tag2", "Begriff 2", "Hero"), ...localized("home.hero.tag3", "Begriff 3", "Hero"), ...localized("home.hero.cta", "Button", "Hero"), media("home.hero.media", "Hero Bild / Video", "Hero"),
-    ...localized("home.workshop.eyebrow", "Kleine Überschrift", "Werkstatt"), ...localized("home.workshop.title", "Überschrift", "Werkstatt"), ...localized("home.workshop.text", "Text", "Werkstatt", "textarea"), media("home.workshop.main", "Großes Bild / Video", "Werkstatt"), media("home.workshop.media1", "Kleines Medium 1", "Werkstatt"), media("home.workshop.media2", "Kleines Medium 2", "Werkstatt"),
-    ...localized("home.reviews.eyebrow", "Kleine Überschrift", "Bewertungen"), ...localized("home.reviews.title", "Überschrift", "Bewertungen"), ...localized("home.reviews.button", "Button", "Bewertungen"),
-    ...localized("home.studio.eyebrow", "Kleine Überschrift", "Studio-Teaser"), ...localized("home.studio.title", "Überschrift", "Studio-Teaser"), ...localized("home.studio.text", "Text", "Studio-Teaser", "textarea"), ...localized("home.studio.button", "Button", "Studio-Teaser",), media("home.studio.media", "Bild / Video", "Studio-Teaser"),
+  { id: "home", label: "Startseite", description: "Die festen Inhalte deiner Startseite. Zusätzliche Textbereiche kannst du unter „Freie Textblöcke“ anlegen und verschieben. Produkt-Kategorien bearbeitest du separat unter Kategorien.", fields: [
+    ...localized("home.hero.subtitle", "Untertitel", "Hero"),
+    ...localized("home.hero.text", "Einleitung", "Hero", "textarea"),
+    ...localized("home.hero.tag1", "Begriff 1", "Hero"),
+    ...localized("home.hero.tag2", "Begriff 2", "Hero"),
+    ...localized("home.hero.tag3", "Begriff 3", "Hero"),
+    ...localized("home.hero.cta", "Button", "Hero"),
+    media("home.hero.media", "Hero Bild / Video", "Hero"),
+
+    ...localized("home.workshop.eyebrow", "Kleine Überschrift", "Werkstatt"),
+    ...localized("home.workshop.title", "Überschrift", "Werkstatt"),
+    ...localized("home.workshop.text", "Text 1", "Werkstatt", "textarea"),
+    ...localized("home.workshop.text2", "Text 2", "Werkstatt", "textarea"),
+    ...localized("home.workshop.button", "Button zur Werkstatt", "Werkstatt"),
+    media("home.workshop.main", "Großes Bild / Video", "Werkstatt"),
+    media("home.workshop.media1", "Kleines Medium 1", "Werkstatt"),
+    media("home.workshop.media2", "Kleines Medium 2", "Werkstatt"),
+
+    ...localized("home.studio.title", "Zwischenüberschrift", "Werkstatt – Arbeitsplatz"),
+    ...localized("home.studio.text", "Text", "Werkstatt – Arbeitsplatz", "textarea"),
+
+    ...localized("home.reviews.eyebrow", "Kleine Überschrift", "Bewertungen"),
+    ...localized("home.reviews.title", "Überschrift", "Bewertungen"),
+    ...localized("home.reviews.button", "Button", "Bewertungen"),
   ]},
-  { id: "about", label: "Über mich", description: "Biografie und das große Bild bzw. Video auf der Über-mich-Seite.", fields: [
-    ...localized("about.eyebrow", "Kleine Überschrift", "Kopfbereich"), ...localized("about.p1", "Absatz 1", "Biografie", "textarea"), ...localized("about.p2", "Absatz 2", "Biografie", "textarea"), ...localized("about.p3", "Absatz 3", "Biografie", "textarea"), ...localized("about.p4", "Absatz 4", "Biografie", "textarea"), media("about.media", "Bild / Video", "Medien"),
+  { id: "about", label: "Über mich", description: "Biografie und das große Bild bzw. Video auf der Über-mich-Seite. Zusätzliche Abschnitte kannst du bei den freien Textblöcken ergänzen.", fields: [
+    ...localized("about.eyebrow", "Kleine Überschrift", "Kopfbereich"),
+    ...localized("about.p1", "Absatz 1", "Biografie", "textarea"),
+    ...localized("about.p2", "Absatz 2", "Biografie", "textarea"),
+    ...localized("about.p3", "Absatz 3", "Biografie", "textarea"),
+    ...localized("about.p4", "Absatz 4", "Biografie", "textarea"),
+    media("about.media", "Bild / Video", "Medien"),
   ]},
-  { id: "studio", label: "Studio", description: "Texte der Studio-Seite. Die freie Foto-/Video-Galerie liegt im separaten Medieneditor.", mediaManager: "studio", fields: [
-    ...localized("studio.eyebrow", "Kleine Überschrift", "Einleitung"), ...localized("studio.title", "Hauptüberschrift", "Einleitung"), ...localized("studio.intro", "Einleitungstext", "Einleitung", "textarea"),
-    ...localized("studio.card1.title", "Karte 1 Titel", "Angebote"), ...localized("studio.card1.text", "Karte 1 Text", "Angebote", "textarea"), ...localized("studio.card2.title", "Karte 2 Titel", "Angebote"), ...localized("studio.card2.text", "Karte 2 Text", "Angebote", "textarea"), ...localized("studio.card3.title", "Karte 3 Titel", "Angebote"), ...localized("studio.card3.text", "Karte 3 Text", "Angebote", "textarea"), ...localized("studio.card4.title", "Karte 4 Titel", "Angebote"), ...localized("studio.card4.text", "Karte 4 Text", "Angebote", "textarea"),
-    ...localized("studio.vision", "Abschlusstext", "Abschluss", "textarea"), ...localized("studio.contact.eyebrow", "Kleine Überschrift", "Kontakt"), ...localized("studio.contact.title", "Überschrift", "Kontakt"), ...localized("studio.contact.text", "Text", "Kontakt", "textarea"), ...localized("studio.contact.button", "Button", "Kontakt"),
+  { id: "studio", label: "Studio", description: "Alle sichtbaren Texte der Studio-Seite. Die freie Foto-/Video-Galerie liegt im separaten Medieneditor; zusätzliche Abschnitte kannst du als freie Textblöcke ergänzen.", mediaManager: "studio", fields: [
+    ...localized("studio.eyebrow", "Kleine Überschrift", "Einleitung"),
+    ...localized("studio.title", "Hauptüberschrift", "Einleitung"),
+    ...localized("studio.intro", "Einleitungstext", "Einleitung", "textarea"),
+
+    ...localized("studio.material.eyebrow", "Kleine Überschrift", "Material"),
+    ...localized("studio.material.title", "Überschrift", "Material"),
+    ...localized("studio.material.text1", "Text 1", "Material", "textarea"),
+    ...localized("studio.material.text2", "Text 2", "Material", "textarea"),
+
+    ...localized("studio.process.eyebrow", "Kleine Überschrift", "Am Brenner"),
+    ...localized("studio.process.title", "Überschrift", "Am Brenner"),
+    ...localized("studio.process.text1", "Text 1", "Am Brenner", "textarea"),
+    ...localized("studio.process.text2", "Text 2", "Am Brenner", "textarea"),
+
+    ...localized("studio.gallery.eyebrow", "Kleine Überschrift", "Einblicke"),
+    ...localized("studio.gallery.title", "Überschrift", "Einblicke"),
+
+    ...localized("studio.plans.eyebrow", "Kleine Überschrift", "Werkstattzeit & Workshops"),
+    ...localized("studio.plans.title", "Überschrift", "Werkstattzeit & Workshops"),
+    ...localized("studio.plans.intro", "Einleitung", "Werkstattzeit & Workshops", "textarea"),
+
+    ...localized("studio.card1.title", "Brennerplatz – Titel", "Angebote"),
+    ...localized("studio.card1.text", "Brennerplatz – Text", "Angebote", "textarea"),
+    ...localized("studio.card2.title", "Workshops – Titel", "Angebote"),
+    ...localized("studio.card2.text", "Workshops – Text", "Angebote", "textarea"),
+    ...localized("studio.card3.title", "Austausch – Titel", "Angebote"),
+    ...localized("studio.card3.text", "Austausch – Text", "Angebote", "textarea"),
+    ...localized("studio.card4.title", "Einzel-Sessions – Titel", "Angebote"),
+    ...localized("studio.card4.text", "Einzel-Sessions – Text", "Angebote", "textarea"),
+
+    ...localized("studio.vision", "Abschlusstext", "Abschluss", "textarea"),
+    ...localized("studio.contact.eyebrow", "Kleine Überschrift", "Kontakt"),
+    ...localized("studio.contact.title", "Überschrift", "Kontakt"),
+    ...localized("studio.contact.text", "Text", "Kontakt", "textarea"),
+    ...localized("studio.contact.button", "Button", "Kontakt"),
   ]},
-  { id: "shop", label: "Shop", description: "Nur die allgemeine Shop-Überschrift und Einleitung. Produkte und Kategorien bearbeitest du in den jeweiligen Admin-Bereichen.", fields: [...localized("shop.eyebrow", "Kleine Überschrift", "Shop-Kopf"), ...localized("shop.title", "Hauptüberschrift", "Shop-Kopf"), ...localized("shop.intro", "Einleitung", "Shop-Kopf", "textarea")] },
-  { id: "gallery", label: "Galerie", description: "Nur Überschrift und Einleitung. Bilder und Videos liegen im separaten Galerie-Editor.", mediaManager: "gallery", fields: [...localized("gallery.eyebrow", "Kleine Überschrift", "Galerie-Kopf"), ...localized("gallery.intro", "Einleitung", "Galerie-Kopf", "textarea")] },
+  { id: "shop", label: "Shop", description: "Allgemeine Shop-Überschrift und Einleitung. Produkte und Kategorien bearbeitest du in den jeweiligen Admin-Bereichen; zusätzliche Texte gibt es unter „Freie Textblöcke“.", fields: [
+    ...localized("shop.eyebrow", "Kleine Überschrift", "Shop-Kopf"),
+    ...localized("shop.title", "Hauptüberschrift", "Shop-Kopf"),
+    ...localized("shop.intro", "Einleitung", "Shop-Kopf", "textarea"),
+  ] },
+  { id: "gallery", label: "Galerie", description: "Überschrift und Einleitung. Bilder und Videos liegen im separaten Galerie-Editor; zusätzliche Texte gibt es unter „Freie Textblöcke“.", mediaManager: "gallery", fields: [
+    ...localized("gallery.eyebrow", "Kleine Überschrift", "Galerie-Kopf"),
+    ...localized("gallery.intro", "Einleitung", "Galerie-Kopf", "textarea"),
+  ] },
 ];
 
 async function optimizeImage(file: File) {
@@ -134,7 +197,7 @@ export default function Page() {
 
   return <main className="min-h-screen bg-black px-4 py-24 text-white sm:px-6 sm:py-28"><form onSubmit={save} className="mx-auto max-w-6xl">
     <Link href="/admin" className="text-sm text-neutral-500 transition hover:text-white">← Admin</Link><p className="mt-5 text-xs font-bold uppercase tracking-[0.4em] text-orange-300">FRGLASS CMS</p>
-    <div className="mt-3 flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between"><div><h1 className="text-4xl font-black uppercase sm:text-6xl">Website-Inhalte</h1><p className="mt-4 max-w-3xl leading-7 text-neutral-400">Alle Seitenbilder und Videos kannst du hier direkt im echten Ausschnitt verschieben und zoomen. Das Fadenkreuz funktioniert mit Finger oder Maus.</p></div><button type="submit" disabled={saving || Boolean(uploadingKey)} className="rounded-full bg-white px-6 py-3 text-sm font-black uppercase tracking-wider text-black disabled:opacity-50">{saving ? "Speichert …" : "Speichern"}</button></div>
+    <div className="mt-3 flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between"><div><h1 className="text-4xl font-black uppercase sm:text-6xl">Website-Inhalte</h1><p className="mt-4 max-w-3xl leading-7 text-neutral-400">Hier bearbeitest du alle festen Texte sowie Seitenbilder und Videos. Zusätzliche Textbereiche, die du selbst anordnen möchtest, findest du unter „Freie Textblöcke“.</p></div><div className="flex flex-wrap gap-3"><Link href="/admin/textblocks" className="rounded-full border border-orange-300 px-5 py-3 text-xs font-black uppercase tracking-wider text-orange-300">Freie Textblöcke</Link><button type="submit" disabled={saving || Boolean(uploadingKey)} className="rounded-full bg-white px-6 py-3 text-sm font-black uppercase tracking-wider text-black disabled:opacity-50">{saving ? "Speichert …" : "Speichern"}</button></div></div>
     {message && <p className="mt-6 rounded-2xl border border-emerald-500/20 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-200">{message}</p>}{error && <p className="mt-6 rounded-2xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-200">{error}</p>}
 
     <div className="mt-8 grid gap-4 rounded-3xl border border-white/10 bg-white/[0.025] p-4 sm:p-5 lg:grid-cols-[1fr_auto] lg:items-center"><div className="flex gap-2 overflow-x-auto pb-1">{pages.map((page) => <button key={page.id} type="button" onClick={() => setActivePage(page.id)} className={`whitespace-nowrap rounded-full border px-4 py-2 text-xs font-bold uppercase tracking-wider transition ${activePage === page.id ? "border-orange-300 bg-orange-300 text-black" : "border-white/15 text-neutral-300"}`}>{page.label}</button>)}</div><div className="flex w-fit items-center rounded-full border border-white/15 bg-black/40 p-1 text-xs font-bold"><button type="button" onClick={() => setEditorLanguage("de")} className={`rounded-full px-4 py-2 ${editorLanguage === "de" ? "bg-white text-black" : "text-neutral-400"}`}>DE</button><button type="button" onClick={() => setEditorLanguage("en")} className={`rounded-full px-4 py-2 ${editorLanguage === "en" ? "bg-white text-black" : "text-neutral-400"}`}>EN</button></div></div>
