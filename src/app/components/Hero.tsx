@@ -65,12 +65,6 @@ export default function Hero() {
                 </span>
               ))}
             </div>
-
-            <div className="mt-8 sm:mt-10">
-              <a href="#collections" className="inline-flex items-center rounded-full bg-orange-300 px-6 py-3.5 text-xs font-black uppercase tracking-[0.14em] text-black transition hover:bg-white sm:px-7 sm:text-sm">
-                {cta}
-              </a>
-            </div>
           </div>
         </div>
 
@@ -83,6 +77,12 @@ export default function Hero() {
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/25 via-transparent to-black/10" />
           <div className="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-black/35 to-transparent" />
         </div>
+      </div>
+
+      <div className="mx-auto flex max-w-[1680px] justify-center border-t border-white/10 px-5 py-8 sm:px-8 sm:py-10">
+        <a href="#collections" className="inline-flex items-center rounded-full bg-orange-300 px-6 py-3.5 text-xs font-black uppercase tracking-[0.14em] text-black transition hover:bg-white sm:px-7 sm:text-sm">
+          {cta}
+        </a>
       </div>
     </section>
   );
