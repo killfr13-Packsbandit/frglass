@@ -49,7 +49,7 @@ export default function Page() {
   return (
     <main className="min-h-screen overflow-hidden bg-black px-4 pb-20 pt-28 text-white sm:px-6 sm:pb-28 sm:pt-36">
       <h1 className="sr-only">{language === "de" ? "Über mich" : "About FRGLASS"}</h1>
-      <FlexibleTextBlocks page="about" placement="beforeBiography" />
+      <FlexibleTextBlocks page="about" placement="beforeBiography" embedded />
       <section className="mx-auto max-w-7xl">
         <div className="grid gap-6 border-b border-white/10 pb-8 sm:pb-10 lg:grid-cols-[1.15fr_.85fr] lg:items-end lg:gap-12">
           <div>
@@ -105,7 +105,7 @@ export default function Page() {
           </div>
         </div>
       </section>
-      <FlexibleTextBlocks page="about" placement="afterBiography" />
+      <FlexibleTextBlocks page="about" placement="afterBiography" embedded />
     </main>
   );
 }
