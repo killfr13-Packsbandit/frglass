@@ -41,12 +41,76 @@ export default function Page() {
     transform: `scale(${zoom})`,
     transformOrigin: `${x}% ${y}%`,
   } as const;
+  const facts = language === "de"
+    ? [["Seit", "2019"], ["Basis", "Kärnten"], ["Material", "Borosilikat"]]
+    : [["Since", "2019"], ["Based", "Carinthia"], ["Material", "Borosilicate"]];
 
-  return <main className="min-h-screen bg-black px-4 py-24 text-white sm:px-6 sm:py-32">
-    <h1 className="sr-only">{language === "de" ? "Über mich" : "About FRGLASS"}</h1>
-    <section className="mx-auto grid max-w-7xl gap-10 sm:gap-16 md:grid-cols-2 md:items-center">
-      <div><p className="mb-6 text-xs font-bold uppercase tracking-[0.4em] text-orange-300 sm:mb-8 sm:text-sm sm:tracking-[0.5em]">{get(`about.eyebrow.${lang}`, t.eyebrow)}</p>{[1,2,3,4].map((number) => { const fallback = t[`p${number}` as keyof typeof t]; return <p key={number} className={`${number > 1 ? "mt-5 sm:mt-6" : ""} text-base leading-7 text-neutral-300 sm:text-lg sm:leading-8`}>{get(`about.p${number}.${lang}`, fallback)}</p>; })}</div>
-      <div className="relative h-[460px] overflow-hidden rounded-2xl border border-white/10 bg-neutral-950 sm:h-[600px] sm:rounded-3xl md:h-[720px]">{mediaUrl && (mediaType === "video" ? <video src={mediaUrl} muted controls playsInline preload="none" poster="/workshop/me2.jpg" className="h-full w-full" style={mediaStyle} /> : <img src={mediaUrl} alt={language === "de" ? "Arbeit am Glasbrenner" : "Working at the glass torch"} loading="lazy" className="h-full w-full" style={mediaStyle} />)}</div>
-    </section>
-  </main>;
+  return (
+    <main className="min-h-screen overflow-hidden bg-black px-4 pb-20 pt-28 text-white sm:px-6 sm:pb-28 sm:pt-36">
+      <h1 className="sr-only">{language === "de" ? "Über mich" : "About FRGLASS"}</h1>
+      <section className="mx-auto max-w-7xl">
+        <div className="grid gap-6 border-b border-white/10 pb-8 sm:pb-10 lg:grid-cols-[1.15fr_.85fr] lg:items-end lg:gap-12">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-[0.38em] text-orange-300 sm:text-sm sm:tracking-[0.5em]">{get(`about.eyebrow.${lang}`, t.eyebrow)}</p>
+            <p className="mt-4 text-5xl font-black uppercase leading-[0.9] tracking-[-0.05em] sm:text-7xl lg:text-8xl">Florian<br />Robatsch</p>
+          </div>
+          <div className="lg:pb-2">
+            <p className="max-w-xl text-sm uppercase leading-6 tracking-[0.16em] text-neutral-500 sm:text-base sm:leading-7">
+              {language === "de" ? "Glaskunst · Lampworking · Borosilikatglas" : "Glass art · Lampworking · Borosilicate glass"}
+            </p>
+          </div>
+        </div>
+
+        <div className="mt-8 grid gap-10 sm:mt-12 sm:gap-14 lg:grid-cols-[1.05fr_.95fr] lg:items-start lg:gap-16">
+          <div className="relative overflow-hidden rounded-[1.5rem] border border-white/10 bg-neutral-950 sm:rounded-[2rem] lg:sticky lg:top-28">
+            <div className="relative h-[470px] overflow-hidden sm:h-[650px] lg:h-[760px]">
+              {mediaUrl && (mediaType === "video" ? (
+                <video src={mediaUrl} muted controls playsInline preload="none" poster="/workshop/me2.jpg" className="h-full w-full" style={mediaStyle} />
+              ) : (
+                <img src={mediaUrl} alt={language === "de" ? "Florian Robatsch bei der Arbeit am Glasbrenner" : "Florian Robatsch working at the glass torch"} loading="lazy" className="h-full w-full" style={mediaStyle} />
+              ))}
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+              <div className="absolute bottom-5 left-5 right-5 flex items-end justify-between gap-4 sm:bottom-7 sm:left-7 sm:right-7">
+                <div>
+                  <p className="text-[10px] font-bold uppercase tracking-[0.32em] text-orange-300 sm:text-xs">FRGLASS / PORTRAIT</p>
+                  <p className="mt-2 text-sm uppercase tracking-[0.14em] text-white/80">{language === "de" ? "Kärnten, Österreich" : "Carinthia, Austria"}</p>
+                </div>
+                <div className="hidden h-px w-24 bg-white/30 sm:block" />
+              </div>
+            </div>
+          </div>
+
+          <div className="lg:pt-4">
+            <div className="grid grid-cols-3 gap-2 border-b border-white/10 pb-8 sm:gap-3 sm:pb-10">
+              {facts.map(([label, value]) => (
+                <div key={label} className="rounded-2xl border border-white/10 bg-white/[0.025] p-3 sm:p-4">
+                  <p className="text-[9px] font-bold uppercase tracking-[0.22em] text-neutral-600 sm:text-[10px]">{label}</p>
+                  <p className="mt-2 text-sm font-bold uppercase tracking-[0.08em] text-white sm:text-base">{value}</p>
+                </div>
+              ))}
+            </div>
+
+            <div className="pt-8 sm:pt-10">
+              {[1, 2, 3, 4].map((number) => {
+                const fallback = t[`p${number}` as keyof typeof t];
+                return (
+                  <div key={number} className={`${number > 1 ? "mt-8 border-t border-white/10 pt-8 sm:mt-10 sm:pt-10" : ""} grid grid-cols-[auto_1fr] gap-4 sm:gap-6`}>
+                    <span className="pt-1 text-[10px] font-bold tracking-[0.24em] text-orange-300 sm:text-xs">0{number}</span>
+                    <p className={`${number === 1 ? "text-lg leading-8 text-white sm:text-xl sm:leading-9" : "text-base leading-7 text-neutral-300 sm:text-lg sm:leading-8"}`}>
+                      {get(`about.p${number}.${lang}`, fallback)}
+                    </p>
+                  </div>
+                );
+              })}
+            </div>
+
+            <div className="mt-10 flex items-center gap-4 border-t border-white/10 pt-8 sm:mt-12 sm:pt-10">
+              <div className="h-px flex-1 bg-gradient-to-r from-orange-300/60 to-transparent" />
+              <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-neutral-600 sm:text-xs">FRGLASS · {language === "de" ? "Handgemacht" : "Handmade"}</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  );
 }
