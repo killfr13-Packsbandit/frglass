@@ -48,7 +48,7 @@ export async function PUT(request: Request) {
 
   const content: SiteContentMap = {};
   for (const [key, value] of entries) {
-    const maxValueLength = key.startsWith("flexTextBlocks.") ? 250000 : 10000;
+    const maxValueLength = key.startsWith("flexTextBlocks.") ? 400000 : 10000;
     if (
       typeof key !== "string" ||
       key.length > 160 ||
@@ -60,7 +60,7 @@ export async function PUT(request: Request) {
     content[key] = value;
   }
 
-  if (JSON.stringify(content).length > 350000) {
+  if (JSON.stringify(content).length > 2000000) {
     return NextResponse.json({ error: "Site content is too large." }, { status: 400 });
   }
 
