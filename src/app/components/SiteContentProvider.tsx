@@ -23,6 +23,16 @@ type SiteContentContextValue = {
 
 const SiteContentContext = createContext<SiteContentContextValue | null>(null);
 
+function naturalGermanCopy(value: string) {
+  return value
+    .replace(/Einzel-Sessions/g, "Einzeltermine")
+    .replace(/1:1-Sessions/g, "Einzeltermine")
+    .replace(/individuelle Sessions/g, "individuelle Termine")
+    .replace(/kleine Sessions/g, "kleine Workshops")
+    .replace(/\bSessions\b/g, "Termine")
+    .replace(/\bSession\b/g, "Termin");
+}
+
 export function SiteContentProvider({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const [content, setContent] = useState<SiteContentMap>({});
@@ -67,7 +77,8 @@ export function SiteContentProvider({ children }: { children: React.ReactNode })
       get: (key, fallback = "") => {
         // No historical text or image is displayed before the CMS responds.
         if (loading || error) return /\.(zoom|focusX|focusY|type)$/.test(key) ? fallback : "";
-        return siteContentValue(content, key, fallback);
+        const resolved = siteContentValue(content, key, fallback);
+        return key.endsWith(".de") ? naturalGermanCopy(resolved) : resolved;
       },
       refresh,
     }),
