@@ -66,11 +66,10 @@ export default function Hero() {
               ))}
             </div>
 
-            <div className="mt-8 flex flex-wrap items-center gap-5 sm:mt-10">
+            <div className="mt-8 sm:mt-10">
               <a href="#collections" className="inline-flex items-center rounded-full bg-orange-300 px-6 py-3.5 text-xs font-black uppercase tracking-[0.14em] text-black transition hover:bg-white sm:px-7 sm:text-sm">
                 {cta}
               </a>
-              <span className="text-xs uppercase tracking-[0.18em] text-neutral-600">{language === "de" ? "Handgemacht in Kärnten" : "Handmade in Carinthia"}</span>
             </div>
           </div>
         </div>
@@ -81,15 +80,8 @@ export default function Hero() {
           ) : (
             <video src={mediaUrl} muted controls playsInline preload="none" className="absolute inset-0 h-full w-full" style={mediaStyle} />
           ))}
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/35 via-transparent to-black/10" />
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-44 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
-          <div className="absolute bottom-6 left-5 right-5 flex items-end justify-between gap-4 sm:bottom-8 sm:left-8 sm:right-8">
-            <div>
-              <p className="text-[10px] font-bold uppercase tracking-[0.32em] text-orange-300 sm:text-xs">FRGLASS / 01</p>
-              <p className="mt-2 text-sm uppercase tracking-[0.16em] text-white/80 sm:text-base">{language === "de" ? "Arbeit an der Flamme" : "Work at the flame"}</p>
-            </div>
-            <div className="hidden h-px w-28 bg-white/35 sm:block" />
-          </div>
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/25 via-transparent to-black/10" />
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-black/35 to-transparent" />
         </div>
       </div>
     </section>
