@@ -28,6 +28,7 @@ export default function Page() {
     setSession(nextSession);
     return nextSession;
   }
+
   useEffect(() => {
     let active = true;
     readSession().then((value) => { if (active) setSession(value); }).catch(() => {
@@ -40,7 +41,9 @@ export default function Page() {
   }, []);
 
   async function login(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault(); setLoading(true); setError("");
+    event.preventDefault();
+    setLoading(true);
+    setError("");
     try {
       const response = await fetch("/api/admin/login", { method: "POST", credentials: "same-origin", cache: "no-store", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ password }) });
       if (!response.ok) {
@@ -53,10 +56,17 @@ export default function Page() {
         return;
       }
       setPassword("");
-    } catch { setError("Login konnte nicht geladen werden."); } finally { setLoading(false); }
+    } catch {
+      setError("Login konnte nicht geladen werden.");
+    } finally {
+      setLoading(false);
+    }
   }
 
-  async function logout() { await fetch("/api/admin/logout", { method: "POST" }); await refreshSession(); }
+  async function logout() {
+    await fetch("/api/admin/logout", { method: "POST" });
+    await refreshSession();
+  }
 
   return <main className="min-h-screen bg-black px-4 py-24 text-white sm:px-8 sm:py-28"><section className="mx-auto max-w-5xl">
     <p className="text-xs font-bold uppercase tracking-[0.4em] text-orange-300">FRGLASS</p><h1 className="mt-4 text-4xl font-black uppercase sm:text-6xl">Admin</h1>
@@ -64,8 +74,7 @@ export default function Page() {
     {session && !session.authenticated && <form onSubmit={login} className="mt-10 max-w-lg rounded-3xl border border-white/10 bg-white/[0.04] p-6 sm:p-8"><h2 className="text-xl font-black">Login</h2><p className="mt-2 text-sm leading-6 text-neutral-400">Verwaltung für Produkte, Website-Inhalte, Bilder und Bewertungen.</p><input type="password" name="password" autoComplete="current-password" value={password} onChange={(event) => setPassword(event.target.value)} placeholder="Passwort" required className="mt-6 w-full rounded-2xl border border-white/10 bg-black/50 px-4 py-3 outline-none focus:border-orange-300/60" />{error && <p className="mt-3 text-sm text-red-300">{error}</p>}<button type="submit" disabled={loading} className="mt-5 w-full rounded-full bg-white px-5 py-3 font-black uppercase tracking-wider text-black disabled:opacity-50">{loading ? "Login …" : "Einloggen"}</button></form>}
     {session?.authenticated && <div className="mt-10"><p className="max-w-2xl leading-7 text-neutral-400">Die Bereiche, die du für die Website wirklich brauchst.</p><div className="mt-8 grid gap-5 sm:grid-cols-2">
       <Card href="/admin/products" icon="◆" title="Produkte" text="Zuerst Kategorie wählen, danach die passenden Stücke anlegen und bearbeiten." accent />
-      <Card href="/admin/pages" icon="✎" title="Website-Inhalte" text="Feste Texte und Seitenbilder für Startseite, Über mich, Studio, Shop, Galerie und Kontakt." />
-      <Card href="/admin/textblocks" icon="↕" title="Freie Textblöcke" text="Zusätzliche Texte anlegen, auf der Seite platzieren und ihre Reihenfolge ändern." />
+      <Card href="/admin/pages" icon="✎" title="Website-Inhalte" text="Texte, Seitenbilder und zusätzliche frei platzierbare Textbereiche für alle wichtigen Seiten." />
       <Card href="/admin/gallery" icon="▧" title="Bilder" text="Galerie-Bilder verwalten, austauschen, ausrichten und beschreiben." />
       <Card href="/admin/community" icon="★" title="Bewertungen" text="Community-Bewertungen ansehen, freigeben und löschen." />
     </div><button onClick={logout} className="mt-8 text-sm text-neutral-500 transition hover:text-white">Ausloggen</button></div>}
