@@ -15,9 +15,13 @@ export default function Hero() {
   const { get, loading } = useSiteContent();
   const t = translations[language].hero;
   const lang = language === "de" ? "de" : "en";
-  const tags = language === "de" ? ["Lampworking", "Schmuck", "Objekte"] : ["Lampworking", "Jewelry", "Objects"];
   const subtitle = get(`home.hero.subtitle.${lang}`, t.subtitle);
   const text = get(`home.hero.text.${lang}`, t.text);
+  const tags = [
+    get(`home.hero.tag1.${lang}`, "Lampworking"),
+    get(`home.hero.tag2.${lang}`, language === "de" ? "Schmuck" : "Jewelry"),
+    get(`home.hero.tag3.${lang}`, language === "de" ? "Objekte" : "Objects"),
+  ].filter((tag) => tag.trim().length > 0);
   const cta = get(`home.hero.cta.${lang}`, t.cta);
   const mediaUrl = loading ? "" : get("home.hero.media.url", "/workshop/me2.jpg");
   const mediaType = get("home.hero.media.type", "image");
@@ -37,7 +41,7 @@ export default function Hero() {
         <div className="relative flex items-center border-b border-white/10 px-5 py-12 sm:px-8 sm:py-16 lg:px-12 xl:border-b-0 xl:border-r xl:px-16 2xl:px-24">
           <div className="pointer-events-none absolute -left-24 top-1/4 h-72 w-72 rounded-full bg-orange-400/10 blur-[120px]" />
           <div className="relative z-10 mx-auto w-full max-w-2xl xl:mx-0 xl:max-w-xl">
-            <div className="flex items-center gap-4 sm:gap-6">
+            <div className="flex items-center gap-5 sm:gap-7">
               <div className="relative h-24 w-16 shrink-0 overflow-hidden sm:h-32 sm:w-20">
                 <Image
                   src="/logo.png"
@@ -49,18 +53,19 @@ export default function Hero() {
                   className="scale-110 object-cover object-center drop-shadow-[0_0_24px_rgba(253,186,116,0.14)]"
                 />
               </div>
-              <h1 className="shrink-0 text-[2.65rem] font-black uppercase leading-none tracking-[-0.05em] text-white sm:text-6xl lg:text-7xl">FRGLASS</h1>
-              <div className="hidden h-px min-w-8 flex-1 bg-gradient-to-r from-orange-300/70 via-white/20 to-transparent sm:block" />
+              <h1 className="text-[2.7rem] font-black uppercase leading-none tracking-[-0.045em] text-white sm:text-6xl lg:text-7xl">FRGLASS</h1>
+              <div className="h-px min-w-6 flex-1 bg-gradient-to-r from-orange-300/70 via-white/20 to-transparent" />
+              <p className="hidden text-[10px] font-bold uppercase tracking-[0.32em] text-neutral-500 sm:block">2019 — {language === "de" ? "heute" : "today"}</p>
             </div>
 
-            <div className="mt-6 sm:mt-8">
+            <div className="mt-8 sm:mt-10">
               <p className="text-xs font-bold uppercase tracking-[0.3em] text-orange-300 sm:text-sm sm:tracking-[0.42em]">{subtitle}</p>
               <p className="mt-7 max-w-xl text-base leading-7 text-neutral-300 sm:mt-9 sm:text-lg sm:leading-8">{text}</p>
             </div>
 
             <div className="mt-7 flex flex-wrap gap-2 sm:mt-9">
-              {tags.map((tag) => (
-                <span key={tag} className="rounded-full border border-white/12 bg-white/[0.025] px-3.5 py-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-neutral-400 sm:text-[11px]">
+              {tags.map((tag, index) => (
+                <span key={`${tag}-${index}`} className="rounded-full border border-white/12 bg-white/[0.025] px-3.5 py-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-neutral-400 sm:text-[11px]">
                   {tag}
                 </span>
               ))}
