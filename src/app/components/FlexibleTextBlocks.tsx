@@ -32,12 +32,45 @@ export default function FlexibleTextBlocks({
         const eyebrow = language === "de" ? block.eyebrowDe : block.eyebrowEn;
         const title = language === "de" ? block.titleDe : block.titleEn;
         const body = language === "de" ? block.textDe : block.textEn;
-        if (!eyebrow && !title && !body) return null;
+        const hasText = Boolean(eyebrow || title || body);
+        const hasMedia = Boolean(block.mediaUrl);
+        if (!hasText && !hasMedia) return null;
+
+        const mediaStyle = {
+          objectFit: block.mediaZoom < 1 ? "contain" : "cover",
+          objectPosition: `${block.mediaFocusX}% ${block.mediaFocusY}%`,
+          transform: `scale(${block.mediaZoom})`,
+          transformOrigin: `${block.mediaFocusX}% ${block.mediaFocusY}%`,
+        } as const;
+
         return (
-          <article key={block.id} className="max-w-3xl border-t border-white/10 pt-8 sm:pt-10">
-            {eyebrow && <p className="text-xs font-bold uppercase tracking-[0.38em] text-orange-300 sm:text-sm sm:tracking-[0.46em]">{eyebrow}</p>}
-            {title && <h2 className="mt-4 text-3xl font-black uppercase leading-tight tracking-[-0.025em] sm:text-5xl">{title}</h2>}
-            {body && <p className="mt-6 whitespace-pre-line text-base leading-8 text-neutral-300 sm:text-lg sm:leading-9">{body}</p>}
+          <article key={block.id} className={`${hasMedia ? "max-w-5xl" : "max-w-3xl"} border-t border-white/10 pt-8 sm:pt-10`}>
+            {hasMedia && (
+              <div className="mb-8 overflow-hidden rounded-2xl border border-white/10 bg-neutral-950 sm:mb-10 sm:rounded-3xl">
+                <div className="aspect-[4/3] overflow-hidden sm:aspect-[16/10]">
+                  {block.mediaType === "video" ? (
+                    <video src={block.mediaUrl} controls playsInline preload="metadata" className="h-full w-full" style={mediaStyle} />
+                  ) : (
+                    <img
+                      src={block.mediaUrl}
+                      alt={title || eyebrow || (language === "de" ? "FRGLASS Bild" : "FRGLASS image")}
+                      loading="lazy"
+                      decoding="async"
+                      className="h-full w-full"
+                      style={mediaStyle}
+                    />
+                  )}
+                </div>
+              </div>
+            )}
+
+            {hasText && (
+              <div className="max-w-3xl">
+                {eyebrow && <p className="text-xs font-bold uppercase tracking-[0.38em] text-orange-300 sm:text-sm sm:tracking-[0.46em]">{eyebrow}</p>}
+                {title && <h2 className="mt-4 text-3xl font-black uppercase leading-tight tracking-[-0.025em] sm:text-5xl">{title}</h2>}
+                {body && <p className="mt-6 whitespace-pre-line text-base leading-8 text-neutral-300 sm:text-lg sm:leading-9">{body}</p>}
+              </div>
+            )}
           </article>
         );
       })}
