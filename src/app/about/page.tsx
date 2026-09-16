@@ -71,14 +71,7 @@ export default function Page() {
               ) : (
                 <img src={mediaUrl} alt={language === "de" ? "Florian Robatsch bei der Arbeit am Glasbrenner" : "Florian Robatsch working at the glass torch"} loading="lazy" className="h-full w-full" style={mediaStyle} />
               ))}
-              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-              <div className="absolute bottom-5 left-5 right-5 flex items-end justify-between gap-4 sm:bottom-7 sm:left-7 sm:right-7">
-                <div>
-                  <p className="text-[10px] font-bold uppercase tracking-[0.32em] text-orange-300 sm:text-xs">FRGLASS / PORTRAIT</p>
-                  <p className="mt-2 text-sm uppercase tracking-[0.14em] text-white/80">{language === "de" ? "Kärnten, Österreich" : "Carinthia, Austria"}</p>
-                </div>
-                <div className="hidden h-px w-24 bg-white/30 sm:block" />
-              </div>
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
             </div>
           </div>
 
@@ -96,9 +89,8 @@ export default function Page() {
               {[1, 2, 3, 4].map((number) => {
                 const fallback = t[`p${number}` as keyof typeof t];
                 return (
-                  <div key={number} className={`${number > 1 ? "mt-8 border-t border-white/10 pt-8 sm:mt-10 sm:pt-10" : ""} grid grid-cols-[auto_1fr] gap-4 sm:gap-6`}>
-                    <span className="pt-1 text-[10px] font-bold tracking-[0.24em] text-orange-300 sm:text-xs">0{number}</span>
-                    <p className={`${number === 1 ? "text-lg leading-8 text-white sm:text-xl sm:leading-9" : "text-base leading-7 text-neutral-300 sm:text-lg sm:leading-8"}`}>
+                  <div key={number} className={number > 1 ? "mt-8 border-t border-white/10 pt-8 sm:mt-10 sm:pt-10" : ""}>
+                    <p className={number === 1 ? "text-lg leading-8 text-white sm:text-xl sm:leading-9" : "text-base leading-7 text-neutral-300 sm:text-lg sm:leading-8"}>
                       {get(`about.p${number}.${lang}`, fallback)}
                     </p>
                   </div>
