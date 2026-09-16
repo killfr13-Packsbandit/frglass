@@ -66,6 +66,13 @@ export default function InquiryShop() {
             (product.categoryId || categoryIdFromName(product.category)) === activeCategory,
         );
 
+  const selectCategory = (categoryId: string) => {
+    setActiveCategory(categoryId);
+    window.requestAnimationFrame(() => {
+      document.getElementById("shop-products")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  };
+
   return (
     <section className="bg-black px-4 py-20 text-white sm:px-6 sm:py-28 lg:py-32">
       <div className="mx-auto max-w-7xl">
@@ -79,20 +86,22 @@ export default function InquiryShop() {
           {get(`shop.intro.${lang}`, t.intro)}
         </p>
 
-        {visibleCategories.length > 1 && (
-          <div className="mx-auto mb-12 flex max-w-4xl flex-wrap justify-center gap-2 sm:mb-16">
-            <button type="button" onClick={() => setActiveCategory("all")} className={`rounded-full border px-4 py-2 text-xs font-bold uppercase tracking-wider transition ${activeCategory === "all" ? "border-orange-300 bg-orange-300 text-black" : "border-white/15 text-neutral-300 hover:border-orange-300 hover:text-orange-300"}`}>{t.all}</button>
-            {visibleCategories.map((category) => (
-              <button key={category.id} type="button" onClick={() => setActiveCategory(category.id)} className={`rounded-full border px-4 py-2 text-xs font-bold uppercase tracking-wider transition ${activeCategory === category.id ? "border-orange-300 bg-orange-300 text-black" : "border-white/15 text-neutral-300 hover:border-orange-300 hover:text-orange-300"}`}>
-                {language === "de" ? category.nameDe : category.name}
-              </button>
-            ))}
-          </div>
-        )}
+        <div id="shop-categories" className="scroll-mt-28">
+          {visibleCategories.length > 1 && (
+            <div className="mx-auto mb-12 flex max-w-4xl flex-wrap justify-center gap-2 sm:mb-16">
+              <button type="button" onClick={() => selectCategory("all")} className={`rounded-full border px-4 py-2 text-xs font-bold uppercase tracking-wider transition ${activeCategory === "all" ? "border-orange-300 bg-orange-300 text-black" : "border-white/15 text-neutral-300 hover:border-orange-300 hover:text-orange-300"}`}>{t.all}</button>
+              {visibleCategories.map((category) => (
+                <button key={category.id} type="button" onClick={() => selectCategory(category.id)} className={`rounded-full border px-4 py-2 text-xs font-bold uppercase tracking-wider transition ${activeCategory === category.id ? "border-orange-300 bg-orange-300 text-black" : "border-white/15 text-neutral-300 hover:border-orange-300 hover:text-orange-300"}`}>
+                  {language === "de" ? category.nameDe : category.name}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
 
         {productsLoading && <p role="status" className="py-12 text-center text-neutral-500">{language === "de" ? "Stücke werden geladen …" : "Loading pieces …"}</p>}
-    {productsError && <p role="alert" className="py-8 text-center text-neutral-400">{language === "de" ? "Stücke konnten nicht geladen werden." : "Pieces could not be loaded."} <button type="button" onClick={() => void refreshProducts()} className="underline">{language === "de" ? "Erneut versuchen" : "Retry"}</button></p>}
-    <div className="grid gap-6 sm:grid-cols-2 sm:gap-8 xl:grid-cols-3">
+        {productsError && <p role="alert" className="py-8 text-center text-neutral-400">{language === "de" ? "Stücke konnten nicht geladen werden." : "Pieces could not be loaded."} <button type="button" onClick={() => void refreshProducts()} className="underline">{language === "de" ? "Erneut versuchen" : "Retry"}</button></p>}
+        <div id="shop-products" className="scroll-mt-28 grid gap-6 sm:grid-cols-2 sm:gap-8 xl:grid-cols-3">
           {shownProducts.map((product) => {
             const name = language === "de" ? product.nameDe : product.name;
             const status = language === "de" ? product.statusDe : product.status;
