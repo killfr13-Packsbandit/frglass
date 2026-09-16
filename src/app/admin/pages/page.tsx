@@ -238,8 +238,8 @@ function numberValue(value: string | undefined, fallback: number) {
 
 function aspectFor(key: string) {
   if (key.startsWith("about.")) return "aspect-[3/4]";
-  if (key.includes("workshop.main")) return "h-[390px] sm:h-[560px] xl:h-[480px]";
-  if (key.includes("workshop.media")) return "h-[190px] sm:h-[270px] xl:h-[230px]";
+  if (key.includes("workshop.main")) return "aspect-square sm:aspect-[7/5] lg:aspect-[21/20]";
+  if (key.includes("workshop.media")) return "aspect-[7/6] sm:aspect-[5/3] lg:aspect-[3/2]";
   if (key.includes("hero.media")) return "aspect-[4/3] sm:aspect-[16/10]";
   return "aspect-[4/3]";
 }
@@ -458,8 +458,8 @@ export default function Page() {
               return (
                 <div key={section} className="rounded-2xl border border-white/10 bg-black/25 p-4 sm:p-6">
                   <h3 className="text-sm font-black uppercase tracking-[0.22em] text-orange-300">{section}</h3>
-                  {workshopLayout && <p className="mt-2 text-xs leading-5 text-neutral-500">Die drei Medien sind hier wie auf der Startseite angeordnet: großes Medium links, zwei kleine rechts.</p>}
-                  <div className={`mt-5 grid gap-5 ${workshopLayout ? "grid-cols-[1.12fr_.88fr] gap-3 sm:gap-5" : "sm:grid-cols-2"}`}>
+                  {workshopLayout && <p className="mt-2 text-xs leading-5 text-neutral-500">Die drei Medien sind hier wie auf der Startseite angeordnet: großes Medium oben, zwei kleine darunter.</p>}
+                  <div className={`mt-5 grid gap-5 ${workshopLayout ? "grid-cols-2 gap-3 sm:gap-5" : "sm:grid-cols-2"}`}>
                     {visibleFields.filter((field) => field.section === section).map((field) => {
                       if (field.kind === "media") {
                         const url = content[field.key] ?? "";
@@ -470,7 +470,7 @@ export default function Page() {
                         const focusY = numberValue(content[keys.y], 50);
                         const workshopMain = workshopLayout && field.key.includes("workshop.main");
                         const workshopSmall = workshopLayout && field.key.includes("workshop.media");
-                        const layoutClass = workshopMain ? "row-span-2 col-span-1" : workshopSmall ? "col-span-1" : "sm:col-span-2";
+                        const layoutClass = workshopMain ? "col-span-2" : workshopSmall ? "col-span-1" : "sm:col-span-2";
                         return (
                           <div key={field.key} className={`rounded-2xl border border-white/10 bg-black/30 p-3 sm:p-4 ${layoutClass}`}>
                             <div className="flex flex-wrap items-center justify-between gap-3">
