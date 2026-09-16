@@ -111,6 +111,9 @@ export default function Studio() {
       : "I enjoy working with organic shapes, transparent depth, color and inclusions. Not every piece is planned from beginning to end — often the best idea develops while I am working.",
   );
 
+  const galleryEyebrow = get(`studio.gallery.eyebrow.${lang}`, language === "de" ? "Einblicke" : "Inside the studio");
+  const galleryTitle = get(`studio.gallery.title.${lang}`, language === "de" ? "Aus der Werkstatt" : "From the studio");
+
   const plansEyebrow = get(`studio.plans.eyebrow.${lang}`, language === "de" ? "Werkstattzeit & Workshops" : "Studio time & workshops");
   const plansTitle = get(`studio.plans.title.${lang}`, language === "de" ? "Die Werkstatt soll sich weiter öffnen" : "The studio is meant to open up further");
   const plansIntro = get(
@@ -202,8 +205,8 @@ export default function Studio() {
 
         {galleryMedia.length > 0 && (
           <div className="mt-20 sm:mt-28">
-            <p className="text-xs font-bold uppercase tracking-[0.42em] text-orange-300 sm:text-sm">{language === "de" ? "Einblicke" : "Inside the studio"}</p>
-            <h3 className="mt-4 text-3xl font-black uppercase leading-tight sm:text-5xl">{language === "de" ? "Aus der Werkstatt" : "From the studio"}</h3>
+            <p className="text-xs font-bold uppercase tracking-[0.42em] text-orange-300 sm:text-sm">{galleryEyebrow}</p>
+            <h3 className="mt-4 text-3xl font-black uppercase leading-tight sm:text-5xl">{galleryTitle}</h3>
             <div className="mt-10 grid gap-5 md:grid-cols-2 sm:mt-14 sm:gap-6">
               {galleryMedia.map((item) => (
                 <MediaFigure
