@@ -12,6 +12,7 @@ const navItems = [
   { href: "/shop", label: "shop" },
   { href: "/community", label: "community" },
   { href: "/about", label: "about" },
+  { href: "/contact", label: "contact" },
 ] as const;
 
 export default function Navbar() {
