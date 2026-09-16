@@ -1,4 +1,4 @@
-export type FlexibleTextPage = "home" | "about" | "studio" | "shop" | "gallery";
+export type FlexibleTextPage = "home" | "about" | "studio" | "shop" | "gallery" | "contact";
 
 export type FlexibleTextBlock = {
   id: string;
