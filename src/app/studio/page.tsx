@@ -19,7 +19,7 @@ export default function Page() {
   return (
     <main className="bg-black">
       <h1 className="sr-only">FRGLASS Glaswerkstatt in Kärnten</h1>
-      <FlexibleTextBlocks page="studio" placement="beforeStudio" />
+      <FlexibleTextBlocks page="studio" placement="beforeStudio" topOffset />
       <Studio />
       <FlexibleTextBlocks page="studio" placement="afterStudio" />
     </main>
