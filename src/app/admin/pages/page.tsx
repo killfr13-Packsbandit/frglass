@@ -34,13 +34,20 @@ const localized = (base: string, label: string, section: string, kind: "text" | 
   { kind, key: `${base}.de`, label, language: "de", section },
   { kind, key: `${base}.en`, label, language: "en", section },
 ];
-const media = (base: string, label: string, section: string): MediaField => ({ kind: "media", key: `${base}.url`, typeKey: `${base}.type`, label, section });
+
+const media = (base: string, label: string, section: string): MediaField => ({
+  kind: "media",
+  key: `${base}.url`,
+  typeKey: `${base}.type`,
+  label,
+  section,
+});
 
 const pages: PageDefinition[] = [
   {
     id: "home",
     label: "Startseite",
-    description: "Feste Inhalte der Startseite bearbeiten. Unten kannst du mit + Textbereich zusätzliche Abschnitte anlegen und an eine passende Stelle setzen.",
+    description: "Feste Inhalte der Startseite bearbeiten. Unten kannst du mit + Inhalt zusätzliche Texte, Bilder oder Videos anlegen und an eine passende Stelle setzen.",
     placements: [
       { value: "afterHero", label: "Nach dem Headerbild" },
       { value: "afterProducts", label: "Nach den Produkten" },
@@ -76,7 +83,7 @@ const pages: PageDefinition[] = [
   {
     id: "about",
     label: "Über mich",
-    description: "Biografie und das große Bild bzw. Video. Zusätzliche Texte kannst du direkt unten ergänzen.",
+    description: "Biografie und das große Bild bzw. Video. Zusätzliche Inhalte kannst du direkt unten ergänzen.",
     placements: [
       { value: "beforeBiography", label: "Vor der Biografie" },
       { value: "afterBiography", label: "Nach der Biografie" },
@@ -93,7 +100,7 @@ const pages: PageDefinition[] = [
   {
     id: "studio",
     label: "Studio",
-    description: "Alle sichtbaren Studio-Texte. Zusätzliche Abschnitte lassen sich direkt zwischen den einzelnen Bereichen einfügen.",
+    description: "Alle sichtbaren Studio-Texte. Zusätzliche Inhalte lassen sich direkt zwischen den einzelnen Bereichen einfügen.",
     mediaManager: "studio",
     placements: [
       { value: "beforeStudio", label: "Ganz oben vor dem Studio" },
@@ -146,7 +153,7 @@ const pages: PageDefinition[] = [
   {
     id: "shop",
     label: "Shop",
-    description: "Shop-Überschrift und Einleitung. Zusätzliche Textbereiche kannst du direkt unten ergänzen.",
+    description: "Shop-Überschrift und Einleitung. Zusätzliche Inhalte kannst du direkt unten ergänzen.",
     placements: [
       { value: "beforeShop", label: "Vor dem Shop" },
       { value: "afterShop", label: "Nach den Produkten" },
@@ -160,7 +167,7 @@ const pages: PageDefinition[] = [
   {
     id: "gallery",
     label: "Galerie",
-    description: "Überschrift und Einleitung der Galerie. Zusätzliche Textbereiche kannst du direkt unten ergänzen.",
+    description: "Überschrift und Einleitung der Galerie. Zusätzliche Inhalte kannst du direkt unten ergänzen.",
     mediaManager: "gallery",
     placements: [
       { value: "beforeGallery", label: "Vor der Galerie" },
@@ -174,7 +181,7 @@ const pages: PageDefinition[] = [
   {
     id: "contact",
     label: "Kontakt",
-    description: "Texte der Kontaktseite und die Themenliste. Zusätzliche Textbereiche kannst du direkt unten ergänzen.",
+    description: "Texte der Kontaktseite und die Themenliste. Zusätzliche Inhalte kannst du direkt unten ergänzen.",
     placements: [
       { value: "beforeContact", label: "Vor dem Kontaktformular" },
       { value: "afterContact", label: "Nach dem Kontaktbereich" },
@@ -248,6 +255,11 @@ function newBlock(placement: string): FlexibleTextBlock {
     titleEn: "",
     textDe: "",
     textEn: "",
+    mediaUrl: "",
+    mediaType: "image",
+    mediaZoom: 1,
+    mediaFocusX: 50,
+    mediaFocusY: 50,
   };
 }
 
@@ -315,6 +327,16 @@ export default function Page() {
     writeBlocks(next);
   }
 
+  async function prepareUpload(file: File, folder: string) {
+    const prepared = file.type.startsWith("image/") ? await optimizeImage(file) : file;
+    const safeName = prepared.name.replace(/[^a-zA-Z0-9._-]+/g, "-");
+    const blob = await upload(`${folder}/${Date.now()}-${safeName}`, prepared, {
+      access: "public",
+      handleUploadUrl: "/api/site-content/upload",
+    });
+    return { prepared, url: blob.url };
+  }
+
   async function uploadMedia(event: ChangeEvent<HTMLInputElement>, field: MediaField) {
     const file = event.target.files?.[0];
     event.target.value = "";
@@ -323,13 +345,11 @@ export default function Page() {
     setError("");
     setMessage("");
     try {
-      const prepared = file.type.startsWith("image/") ? await optimizeImage(file) : file;
-      const safeName = prepared.name.replace(/[^a-zA-Z0-9._-]+/g, "-");
-      const blob = await upload(`site/media/${Date.now()}-${safeName}`, prepared, { access: "public", handleUploadUrl: "/api/site-content/upload" });
+      const { prepared, url } = await prepareUpload(file, "site/media");
       const keys = cropKeys(field);
       setContent((current) => ({
         ...current,
-        [field.key]: blob.url,
+        [field.key]: url,
         [field.typeKey]: prepared.type.startsWith("video/") ? "video" : "image",
         [keys.zoom]: "1",
         [keys.x]: "50",
@@ -337,6 +357,30 @@ export default function Page() {
       }));
     } catch {
       setError("Upload hat nicht geklappt.");
+    } finally {
+      setUploadingKey(null);
+    }
+  }
+
+  async function uploadBlockMedia(event: ChangeEvent<HTMLInputElement>, block: FlexibleTextBlock) {
+    const file = event.target.files?.[0];
+    event.target.value = "";
+    if (!file) return;
+    const uploadKey = `block:${block.id}`;
+    setUploadingKey(uploadKey);
+    setError("");
+    setMessage("");
+    try {
+      const { prepared, url } = await prepareUpload(file, "site/content");
+      patchBlock(block.id, {
+        mediaUrl: url,
+        mediaType: prepared.type.startsWith("video/") ? "video" : "image",
+        mediaZoom: 1,
+        mediaFocusX: 50,
+        mediaFocusY: 50,
+      });
+    } catch {
+      setError("Bild oder Video konnte nicht hochgeladen werden.");
     } finally {
       setUploadingKey(null);
     }
@@ -375,10 +419,11 @@ export default function Page() {
       <form onSubmit={save} className="mx-auto max-w-6xl">
         <Link href="/admin" className="text-sm text-neutral-500 transition hover:text-white">← Admin</Link>
         <p className="mt-5 text-xs font-bold uppercase tracking-[0.4em] text-orange-300">FRGLASS CMS</p>
+
         <div className="mt-3 flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <h1 className="text-4xl font-black uppercase sm:text-6xl">Website-Inhalte</h1>
-            <p className="mt-4 max-w-3xl leading-7 text-neutral-400">Seite auswählen, bestehende Inhalte ändern oder unten mit + Textbereich einen neuen Abschnitt hinzufügen. Alles wird gemeinsam gespeichert.</p>
+            <p className="mt-4 max-w-3xl leading-7 text-neutral-400">Seite auswählen, bestehende Inhalte ändern oder unten mit + Inhalt einen eigenen Abschnitt aus Text, Bild, Video oder einer Kombination davon hinzufügen.</p>
           </div>
           <button type="submit" disabled={saving || Boolean(uploadingKey)} className="rounded-full bg-white px-6 py-3 text-sm font-black uppercase tracking-wider text-black disabled:opacity-50">{saving ? "Speichert …" : "Speichern"}</button>
         </div>
@@ -461,25 +506,26 @@ export default function Page() {
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <p className="text-xs font-bold uppercase tracking-[0.32em] text-orange-300">Zusätzliche Inhalte</p>
-              <h2 className="mt-2 text-2xl font-black uppercase sm:text-3xl">Eigene Textbereiche</h2>
-              <p className="mt-2 max-w-3xl text-sm leading-6 text-neutral-400">Hier kannst du zusätzliche Abschnitte für {definition.label} hinzufügen. Position auswählen, Text schreiben und speichern.</p>
+              <h2 className="mt-2 text-2xl font-black uppercase sm:text-3xl">Eigene Inhalte</h2>
+              <p className="mt-2 max-w-3xl text-sm leading-6 text-neutral-400">Ein Block kann nur Text, nur ein Bild/Video oder beides enthalten. Bilder lassen sich direkt hier skalieren und verschieben.</p>
             </div>
-            <button type="button" disabled={blocks.length >= MAX_BLOCKS} onClick={() => writeBlocks([...blocks, newBlock(definition.placements[0].value)])} className="shrink-0 rounded-full bg-orange-300 px-5 py-3 text-xs font-black uppercase tracking-wider text-black disabled:cursor-not-allowed disabled:opacity-30">+ Textbereich</button>
+            <button type="button" disabled={blocks.length >= MAX_BLOCKS} onClick={() => writeBlocks([...blocks, newBlock(definition.placements[0].value)])} className="shrink-0 rounded-full bg-orange-300 px-5 py-3 text-xs font-black uppercase tracking-wider text-black disabled:cursor-not-allowed disabled:opacity-30">+ Inhalt</button>
           </div>
 
           {blocks.length === 0 ? (
-            <button type="button" onClick={() => writeBlocks([newBlock(definition.placements[0].value)])} className="mt-7 w-full rounded-2xl border border-dashed border-white/15 p-8 text-center text-sm text-neutral-500 transition hover:border-orange-300/50 hover:text-neutral-300">Noch kein eigener Textbereich. Hier tippen oder oben auf + Textbereich.</button>
+            <button type="button" onClick={() => writeBlocks([newBlock(definition.placements[0].value)])} className="mt-7 w-full rounded-2xl border border-dashed border-white/15 p-8 text-center text-sm text-neutral-500 transition hover:border-orange-300/50 hover:text-neutral-300">Noch kein eigener Inhalt. Hier tippen oder oben auf + Inhalt.</button>
           ) : (
             <div className="mt-7 space-y-5">
               {blocks.map((block, index) => {
                 const eyebrowKey = `eyebrow${languageSuffix}` as keyof FlexibleTextBlock;
                 const titleKey = `title${languageSuffix}` as keyof FlexibleTextBlock;
                 const textKey = `text${languageSuffix}` as keyof FlexibleTextBlock;
+                const blockUploadKey = `block:${block.id}`;
                 return (
                   <article key={block.id} className="rounded-2xl border border-white/10 bg-black/35 p-4 sm:p-6">
                     <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                       <div className="flex flex-wrap items-center gap-2">
-                        <span className="rounded-full bg-white/5 px-3 py-1.5 text-xs font-bold text-neutral-400">Text {index + 1}</span>
+                        <span className="rounded-full bg-white/5 px-3 py-1.5 text-xs font-bold text-neutral-400">Inhalt {index + 1}</span>
                         <select value={block.placement} onChange={(event) => patchBlock(block.id, { placement: event.target.value })} className="max-w-full rounded-full border border-white/15 bg-neutral-950 px-3 py-2 text-xs font-bold text-white outline-none">
                           {definition.placements.map((placement) => <option key={placement.value} value={placement.value}>{placement.label}</option>)}
                         </select>
@@ -491,6 +537,35 @@ export default function Page() {
                         <button type="button" onClick={() => duplicateBlock(block, index)} disabled={blocks.length >= MAX_BLOCKS} className="rounded-full border border-white/15 px-3 py-2 text-xs font-bold text-neutral-300 disabled:opacity-30">Duplizieren</button>
                         <button type="button" onClick={() => writeBlocks(blocks.filter((item) => item.id !== block.id))} className="rounded-full border border-red-400/30 px-3 py-2 text-xs font-bold text-red-300">Löschen</button>
                       </div>
+                    </div>
+
+                    <div className="mt-5 rounded-2xl border border-white/10 bg-black/25 p-4 sm:p-5">
+                      <div className="flex flex-wrap items-center justify-between gap-3">
+                        <div>
+                          <p className="font-bold">Bild / Video</p>
+                          <p className="mt-1 text-xs leading-5 text-neutral-500">Optional. Nach dem Upload kannst du Ausschnitt und Zoom genauso wie bei den anderen Seitenbildern einstellen.</p>
+                        </div>
+                        <label className="cursor-pointer rounded-full border border-orange-300 px-4 py-2 text-xs font-black uppercase tracking-wider text-orange-300">{uploadingKey === blockUploadKey ? "Upload …" : block.mediaUrl ? "Ersetzen" : "+ Bild / Video"}<input type="file" accept="image/*,video/*" onChange={(event) => uploadBlockMedia(event, block)} disabled={Boolean(uploadingKey)} className="hidden" /></label>
+                      </div>
+
+                      {block.mediaUrl && (
+                        <div className="mt-4">
+                          <ImageFocusEditor
+                            src={block.mediaUrl}
+                            mediaType={block.mediaType}
+                            zoom={block.mediaZoom}
+                            focusX={block.mediaFocusX}
+                            focusY={block.mediaFocusY}
+                            aspectClass="aspect-[4/3] sm:aspect-[16/10]"
+                            onChange={(next) => patchBlock(block.id, {
+                              ...(next.zoom !== undefined ? { mediaZoom: next.zoom } : {}),
+                              ...(next.focusX !== undefined ? { mediaFocusX: next.focusX } : {}),
+                              ...(next.focusY !== undefined ? { mediaFocusY: next.focusY } : {}),
+                            })}
+                          />
+                          <button type="button" onClick={() => patchBlock(block.id, { mediaUrl: "", mediaType: "image", mediaZoom: 1, mediaFocusX: 50, mediaFocusY: 50 })} className="mt-3 text-xs font-bold uppercase tracking-wider text-red-300">Medium entfernen</button>
+                        </div>
+                      )}
                     </div>
 
                     <div className="mt-5 grid gap-4 sm:grid-cols-2">
@@ -505,7 +580,9 @@ export default function Page() {
           )}
         </section>
 
-        <div className="sticky bottom-4 mt-8 flex justify-end"><button type="submit" disabled={saving || Boolean(uploadingKey)} className="rounded-full bg-orange-300 px-6 py-4 text-sm font-black uppercase tracking-wider text-black shadow-2xl shadow-black disabled:opacity-50">{saving ? "Speichert …" : "Änderungen speichern"}</button></div>
+        <div className="sticky bottom-4 mt-8 flex justify-end">
+          <button type="submit" disabled={saving || Boolean(uploadingKey)} className="rounded-full bg-orange-300 px-6 py-4 text-sm font-black uppercase tracking-wider text-black shadow-2xl shadow-black disabled:opacity-50">{saving ? "Speichert …" : "Änderungen speichern"}</button>
+        </div>
       </form>
     </main>
   );
