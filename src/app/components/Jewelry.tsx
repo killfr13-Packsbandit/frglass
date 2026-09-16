@@ -111,7 +111,7 @@ export default function JewelryShowcase() {
                 </div>
                 <div className="absolute inset-x-0 bottom-0 z-20 flex items-end justify-between gap-4 p-5 sm:p-6">
                   <div className="min-w-0">
-                    <p className="mb-2 text-[9px] font-bold uppercase tracking-[0.32em] text-orange-300 sm:text-[10px]">FRGLASS / {String(index + 1).padStart(2, "0")}</p>
+                    <p className="mb-2 text-[9px] font-bold uppercase tracking-[0.32em] text-orange-300 sm:text-[10px]">FRGLASS</p>
                     <h3 className="break-normal hyphens-none text-xl font-black uppercase tracking-[0.04em] sm:text-2xl">{productName}</h3>
                     {productPrice && <p className="mt-2 text-sm text-neutral-300">{productPrice}</p>}
                   </div>
