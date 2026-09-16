@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <main className="bg-black">
-      <FlexibleTextBlocks page="shop" placement="beforeShop" />
+      <FlexibleTextBlocks page="shop" placement="beforeShop" topOffset />
       <InquiryShop />
       <FlexibleTextBlocks page="shop" placement="afterShop" />
     </main>
