@@ -9,16 +9,16 @@ const copy = {
   en: {
     eyebrow: "Contact",
     title: "Get in touch.",
-    intro: "Interested in a piece, a custom idea or the future workshop setup? Send me a message here. Your inquiry is sent directly to me by email, and I can reply to you personally.",
+    intro: "Interested in a piece, a custom idea or the future studio setup? Send me a message here. Your inquiry is sent directly to me by email, and I can reply to you personally.",
     vision: "You can ask me about",
-    items: ["Available pieces", "Custom ideas", "Future torch rental", "Small workshops or workshop time"],
+    items: ["Available pieces", "Custom ideas", "Future torch or studio time", "Small workshops"],
   },
   de: {
     eyebrow: "Kontakt",
     title: "Meld dich.",
     intro: "Du interessierst dich für ein Stück, eine eigene Idee oder die spätere Werkstatt-Nutzung? Schreib mir hier direkt. Deine Anfrage wird direkt per E-Mail an mich geschickt und ich kann dir persönlich antworten.",
     vision: "Du kannst mich fragen wegen",
-    items: ["Verfügbaren Stücken", "Eigener Ideen und Anfragen", "Späterer Brennermietung", "Kleinen Workshops oder Werkstattzeit"],
+    items: ["Verfügbaren Stücken", "Eigener Ideen und Anfragen", "Späterer Brenner- oder Werkstattzeit", "Kleinen Workshops"],
   },
 } as const;
 
