@@ -11,9 +11,11 @@ import {
 export default function FlexibleTextBlocks({
   page,
   placement,
+  topOffset = false,
 }: {
   page: FlexibleTextPage;
   placement: string;
+  topOffset?: boolean;
 }) {
   const { language } = useLanguage();
   const { get } = useSiteContent();
@@ -23,7 +25,7 @@ export default function FlexibleTextBlocks({
   if (!blocks.length) return null;
 
   return (
-    <section className="bg-black px-4 py-14 text-white sm:px-6 sm:py-20">
+    <section className={`bg-black px-4 text-white sm:px-6 ${topOffset ? "pb-14 pt-28 sm:pb-20 sm:pt-32" : "py-14 sm:py-20"}`}>
       <div className="mx-auto max-w-7xl space-y-14 sm:space-y-20">
         {blocks.map((block) => {
           const eyebrow = language === "de" ? block.eyebrowDe : block.eyebrowEn;
