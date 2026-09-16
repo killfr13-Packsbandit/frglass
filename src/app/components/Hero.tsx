@@ -37,7 +37,7 @@ export default function Hero() {
         <div className="relative flex items-center border-b border-white/10 px-5 py-12 sm:px-8 sm:py-16 lg:px-12 xl:border-b-0 xl:border-r xl:px-16 2xl:px-24">
           <div className="pointer-events-none absolute -left-24 top-1/4 h-72 w-72 rounded-full bg-orange-400/10 blur-[120px]" />
           <div className="relative z-10 mx-auto w-full max-w-2xl xl:mx-0 xl:max-w-xl">
-            <div className="flex items-center gap-5 sm:gap-7">
+            <div className="flex items-center gap-4 sm:gap-6">
               <div className="relative h-24 w-16 shrink-0 overflow-hidden sm:h-32 sm:w-20">
                 <Image
                   src="/logo.png"
@@ -49,13 +49,12 @@ export default function Hero() {
                   className="scale-110 object-cover object-center drop-shadow-[0_0_24px_rgba(253,186,116,0.14)]"
                 />
               </div>
-              <div className="h-px flex-1 bg-gradient-to-r from-orange-300/70 via-white/20 to-transparent" />
-              <p className="hidden text-[10px] font-bold uppercase tracking-[0.32em] text-neutral-500 sm:block">2019 — {language === "de" ? "heute" : "today"}</p>
+              <h1 className="shrink-0 text-[2.65rem] font-black uppercase leading-none tracking-[-0.05em] text-white sm:text-6xl lg:text-7xl">FRGLASS</h1>
+              <div className="hidden h-px min-w-8 flex-1 bg-gradient-to-r from-orange-300/70 via-white/20 to-transparent sm:block" />
             </div>
 
-            <div className="mt-8 sm:mt-10">
+            <div className="mt-6 sm:mt-8">
               <p className="text-xs font-bold uppercase tracking-[0.3em] text-orange-300 sm:text-sm sm:tracking-[0.42em]">{subtitle}</p>
-              <h1 className="mt-4 text-[3.2rem] font-black uppercase leading-[0.88] tracking-[-0.055em] text-white sm:text-7xl lg:text-8xl">FRGLASS</h1>
               <p className="mt-7 max-w-xl text-base leading-7 text-neutral-300 sm:mt-9 sm:text-lg sm:leading-8">{text}</p>
             </div>
 
