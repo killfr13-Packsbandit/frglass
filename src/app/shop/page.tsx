@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import FlexibleTextBlocks from "../components/FlexibleTextBlocks";
 import InquiryShop from "../components/InquiryShop";
 
 export const metadata: Metadata = {
@@ -17,7 +18,9 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <main className="bg-black">
+      <FlexibleTextBlocks page="shop" placement="beforeShop" />
       <InquiryShop />
+      <FlexibleTextBlocks page="shop" placement="afterShop" />
     </main>
   );
 }
