@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { siteConfig } from "../siteConfig";
 import { translations, useLanguage } from "./LanguageProvider";
@@ -15,60 +14,14 @@ const navItems = [
   { href: "/contact", label: "contact" },
 ] as const;
 
-const adminItems = [
-  { href: "/admin", label: "Admin" },
-  { href: "/admin/products", label: "Produkte" },
-  { href: "/admin/pages", label: "Inhalte" },
-  { href: "/admin/gallery", label: "Bilder" },
-  { href: "/admin/community", label: "Bewertungen" },
-] as const;
-
 export default function Navbar() {
-  const pathname = usePathname();
   const { language, setLanguage } = useLanguage();
   const [menuOpen, setMenuOpen] = useState(false);
   const t = translations[language];
   const languageLabel = language === "de" ? "Sprache" : "Language";
 
-  if (pathname.startsWith("/admin")) {
-    return (
-      <nav className="fixed left-0 top-0 z-50 w-full border-b border-white/10 bg-black/90 text-white backdrop-blur-xl">
-        <div className="mx-auto flex h-16 max-w-7xl items-center gap-3 px-3 sm:gap-5 sm:px-6">
-          <Link href="/admin" className="flex shrink-0 items-center gap-2.5">
-            <span className="relative h-8 w-7 overflow-hidden">
-              <img src="/logo.png" alt="" aria-hidden="true" className="absolute inset-0 h-full w-full scale-125 object-cover object-center" />
-            </span>
-            <span className="hidden text-sm font-black tracking-[0.2em] sm:block">FRGLASS</span>
-          </Link>
-
-          <div className="min-w-0 flex-1 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-            <div className="flex w-max items-center gap-1 rounded-full border border-white/10 bg-white/[0.035] p-1">
-              {adminItems.map((item) => {
-                const active = item.href === "/admin" ? pathname === "/admin" : pathname.startsWith(item.href);
-                return (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className={`whitespace-nowrap rounded-full px-3 py-2 text-[11px] font-bold uppercase tracking-[0.12em] transition sm:px-4 sm:text-xs ${active ? "bg-orange-300 text-black" : "text-neutral-300 hover:bg-white/10 hover:text-white"}`}
-                  >
-                    {item.label}
-                  </Link>
-                );
-              })}
-            </div>
-          </div>
-
-          <Link href="/" className="shrink-0 rounded-full border border-white/15 px-3 py-2 text-[11px] font-bold uppercase tracking-wider text-neutral-300 transition hover:border-orange-300 hover:text-orange-300 sm:px-4 sm:text-xs">
-            <span className="sm:hidden">↗</span>
-            <span className="hidden sm:inline">Website ↗</span>
-          </Link>
-        </div>
-      </nav>
-    );
-  }
-
   return (
-    <nav className="fixed left-0 top-0 z-50 w-full border-b border-white/10 bg-black/60 backdrop-blur-xl">
+    <nav className="fixed left-0 top-0 z-50 w-full border-b border-white/10 bg-black/60 text-white backdrop-blur-xl">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3.5 sm:px-6 sm:py-4 lg:px-6 xl:px-8 xl:py-5">
         <Link
           href="/"
