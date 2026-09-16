@@ -52,7 +52,7 @@ export async function PUT(request: Request) {
       typeof key !== "string" ||
       key.length > 160 ||
       typeof value !== "string" ||
-      value.length > 10000
+      value.length > 60000
     ) {
       return NextResponse.json({ error: "Invalid content field." }, { status: 400 });
     }
