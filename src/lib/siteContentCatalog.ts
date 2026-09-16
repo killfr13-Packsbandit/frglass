@@ -88,11 +88,19 @@ const STALE_COPY: Record<string, { old: string; next: string }[]> = {
       old: "A closer look at the place where I work with borosilicate glass, test ideas and gradually develop the studio further.",
       next: "A quick look at my workspace, the setup and my plans for future studio time and small sessions.",
     },
+    {
+      old: "A quick look at my workspace, the setup and my plans for future studio time and small sessions.",
+      next: "A quick look at my workspace, the setup and my plans for future torch time, workshops and a possible studio spot.",
+    },
   ],
   "home.studio.text.de": [
     {
       old: "Ein genauerer Blick auf den Ort, an dem ich mit Borosilikatglas arbeite, Ideen ausprobiere und die Werkstatt Schritt für Schritt weiterentwickle.",
       next: "Ein kleiner Einblick in meinen Arbeitsplatz, die Ausstattung und meine Pläne für spätere Werkstattzeit und kleine Sessions.",
+    },
+    {
+      old: "Ein kleiner Einblick in meinen Arbeitsplatz, die Ausstattung und meine Pläne für spätere Werkstattzeit und kleine Sessions.",
+      next: "Ein kleiner Einblick in meinen Arbeitsplatz, die Ausstattung und meine Pläne für Brennerzeit, Workshops und einen möglichen Studioplatz.",
     },
   ],
   "studio.intro.en": [
@@ -113,11 +121,19 @@ const STALE_COPY: Record<string, { old: string; next: string }[]> = {
   "studio.card1.text.de": [
     { old: "Später möchte ich einen gut ausgestatteten Brennerplatz nach Absprache auch Glasarbeitern mit eigener Erfahrung zur Verfügung stellen, die selbstständig arbeiten möchten.", next: "Geplant ist später ein nutzbarer Brennerplatz für Menschen, die bereits Erfahrung mit Lampworking haben. Brenner, Gas und Sauerstoff, Absaugung und grundlegende Werkstattausstattung sollen dabei vor Ort vorhanden sein." },
   ],
+  "studio.card2.title.en": [
+    { old: "Small workshops", next: "Workshops" },
+  ],
+  "studio.card2.title.de": [
+    { old: "Kleine Workshops", next: "Workshops" },
+  ],
   "studio.card2.text.en": [
     { old: "For beginners I am planning small, personal sessions that focus on the material, safe handling at the torch and the first steps toward a piece of their own.", next: "For beginners I would like to offer small, personal sessions covering the material, the flame and the first basic movements, with the chance to shape a small glass piece under guidance." },
+    { old: "For beginners I would like to offer small, personal sessions covering the material, the flame and the first basic movements, with the chance to shape a small glass piece under guidance.", next: "For beginners or anyone who wants to focus on a specific technique, I would like to offer small workshops and individual sessions. Content and length depend on experience and goals — from first contact with material and flame to making a small glass piece of your own." },
   ],
   "studio.card2.text.de": [
     { old: "Für Einsteiger sind kleine, persönliche Sessions geplant, bei denen das Material, der sichere Umgang am Brenner und die ersten Schritte zum eigenen Stück im Mittelpunkt stehen.", next: "Für Einsteiger möchte ich kleine, persönliche Sessions anbieten, in denen man Material, Flamme und die ersten Grundbewegungen kennenlernt und unter Anleitung ein kleines eigenes Glasstück formt." },
+    { old: "Für Einsteiger möchte ich kleine, persönliche Sessions anbieten, in denen man Material, Flamme und die ersten Grundbewegungen kennenlernt und unter Anleitung ein kleines eigenes Glasstück formt.", next: "Für Einsteiger oder wenn du gezielt an einer Technik arbeiten möchtest, möchte ich kleine Workshops und individuelle Sessions anbieten. Inhalt und Umfang richten sich nach Erfahrung und Ziel – vom ersten Kontakt mit Material und Flamme bis zum eigenen kleinen Glasstück." },
   ],
   "studio.card3.text.en": [
     { old: "The studio should also be a place for meeting other glassworkers, sharing techniques and ideas, and sometimes simply working next to each other.", next: "I do not want the workshop to be only a production space. It should also leave room for meeting other glassworkers, working together, sharing techniques and learning from one another." },
@@ -125,11 +141,19 @@ const STALE_COPY: Record<string, { old: string; next: string }[]> = {
   "studio.card3.text.de": [
     { old: "Die Werkstatt soll auch Raum für Austausch mit anderen Glasarbeitern bieten – für Techniken, Ideen und manchmal einfach für gemeinsames Arbeiten am Brenner.", next: "Die Werkstatt soll nicht nur Produktionsort sein. Ich möchte auch Raum für Austausch mit anderen Glasleuten, gemeinsames Arbeiten, neue Techniken und gegenseitige Inspiration schaffen." },
   ],
+  "studio.card4.title.en": [
+    { old: "One-to-one sessions", next: "Studio space" },
+  ],
+  "studio.card4.title.de": [
+    { old: "Einzel-Sessions", next: "Studioplatz" },
+  ],
   "studio.card4.text.en": [
     { old: "Depending on time, setup and experience, individual sessions or focused projects may also become possible later on.", next: "For anyone who wants to focus on a specific technique or get a first look without a larger group, individual one-to-one sessions could become possible later. The content would depend on experience and goals." },
+    { old: "For anyone who wants to focus on a specific technique or get a first look without a larger group, individual one-to-one sessions could become possible later. The content would depend on experience and goals.", next: "Do you already work with glass and need a place to work? There is enough room in my studio for another workspace. If you are looking for a regular or permanent studio spot, get in touch and we can see if it is a good fit." },
   ],
   "studio.card4.text.de": [
     { old: "Je nach Zeit, Ausstattung und Erfahrung sollen später auch individuelle Sessions oder gezielte Projekte möglich werden.", next: "Wer gezielt an einer Technik arbeiten oder einen ersten Einblick ohne größere Gruppe bekommen möchte, könnte später individuelle 1:1-Sessions anfragen. Umfang und Inhalt richten sich dann nach Erfahrung und Ziel." },
+    { old: "Wer gezielt an einer Technik arbeiten oder einen ersten Einblick ohne größere Gruppe bekommen möchte, könnte später individuelle 1:1-Sessions anfragen. Umfang und Inhalt richten sich dann nach Erfahrung und Ziel.", next: "Du arbeitest selbst mit Glas und suchst einen Platz zum Arbeiten? In meiner Werkstatt ist genug Raum für einen weiteren Arbeitsplatz. Wenn du einen regelmäßigen oder festen Studioplatz suchst, meld dich gerne – dann schauen wir gemeinsam, ob es passt." },
   ],
   "studio.vision.en": [
     { old: "The studio is not meant to become a fixed concept overnight. I am building it up step by step, learning what works and leaving enough space for it to grow naturally.", next: "I would rather let the workshop grow in a useful and safe way than rush into a large course program. That is why I am expanding the equipment, workstations and possibilities step by step while the space remains my own working studio as well." },
@@ -139,9 +163,17 @@ const STALE_COPY: Record<string, { old: string; next: string }[]> = {
   ],
   "studio.contact.text.en": [
     { old: "If torch time, a future workshop or simply an exchange about borosilicate glass interests you, send me a message. We can work out the details personally.", next: "If you are interested in future torch time, a small workshop or an individual session, feel free to get in touch already. It also helps me understand which offers people are actually looking for." },
+    { old: "If you are interested in future torch time, a small workshop or an individual session, feel free to get in touch already. It also helps me understand which offers people are actually looking for.", next: "If you are interested in torch time, a workshop or a studio space, feel free to get in touch. We can work out the details personally." },
   ],
   "studio.contact.text.de": [
     { old: "Wenn dich Werkstattzeit, ein späterer Workshop oder einfach der Austausch über Borosilikatglas interessiert, schreib mir. Alles Weitere können wir persönlich besprechen.", next: "Wenn du dich für zukünftige Brennerzeit, einen kleinen Workshop oder eine individuelle Session interessierst, kannst du dich gerne schon melden. Dann weiß ich auch besser, welche Angebote später tatsächlich gefragt sind." },
+    { old: "Wenn du dich für zukünftige Brennerzeit, einen kleinen Workshop oder eine individuelle Session interessierst, kannst du dich gerne schon melden. Dann weiß ich auch besser, welche Angebote später tatsächlich gefragt sind.", next: "Wenn du dich für Brennerzeit, einen Workshop oder einen Studioplatz interessierst, meld dich gerne. Alles Weitere können wir persönlich besprechen." },
+  ],
+  "contact.item4.en": [
+    { old: "Small workshops", next: "Workshops" },
+  ],
+  "contact.item4.de": [
+    { old: "Kleinen Workshops", next: "Workshops" },
   ],
   "shop.intro.en": [
     {
