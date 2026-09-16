@@ -2,6 +2,7 @@
 
 import { siteConfig } from "../siteConfig";
 import { type StudioMediaItem } from "../studioMediaTypes";
+import FlexibleTextBlocks from "./FlexibleTextBlocks";
 import { translations, useLanguage } from "./LanguageProvider";
 import { useSiteContent } from "./SiteContentProvider";
 import { publicData, arrayField } from "./publicData";
@@ -113,7 +114,6 @@ export default function Studio() {
 
   const galleryEyebrow = get(`studio.gallery.eyebrow.${lang}`, language === "de" ? "Einblicke" : "Inside the studio");
   const galleryTitle = get(`studio.gallery.title.${lang}`, language === "de" ? "Aus der Werkstatt" : "From the studio");
-
   const plansEyebrow = get(`studio.plans.eyebrow.${lang}`, language === "de" ? "Werkstattzeit & Workshops" : "Studio time & workshops");
   const plansTitle = get(`studio.plans.title.${lang}`, language === "de" ? "Die Werkstatt soll sich weiter öffnen" : "The studio is meant to open up further");
   const plansIntro = get(
@@ -154,6 +154,10 @@ export default function Studio() {
         )}
       </div>
 
+      <div className="mx-auto max-w-7xl px-4 sm:px-6">
+        <FlexibleTextBlocks page="studio" placement="afterIntro" embedded />
+      </div>
+
       <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-28">
         <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:gap-16">
           <div className="max-w-xl">
@@ -172,6 +176,7 @@ export default function Studio() {
           )}
         </div>
 
+        <FlexibleTextBlocks page="studio" placement="afterMaterial" embedded />
         <div className="my-20 h-px bg-white/10 sm:my-28" />
 
         <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:gap-16">
@@ -189,6 +194,8 @@ export default function Studio() {
             <p className="mt-5 text-base leading-8 text-neutral-400 sm:text-lg">{processText2}</p>
           </div>
         </div>
+
+        <FlexibleTextBlocks page="studio" placement="afterProcess" embedded />
 
         {mediaLoading && !loadedMedia && (
           <p role="status" className="min-h-60 py-16 text-center text-neutral-400">{language === "de" ? "Bilder werden geladen …" : "Loading images …"}</p>
@@ -219,6 +226,8 @@ export default function Studio() {
           </div>
         )}
 
+        <FlexibleTextBlocks page="studio" placement="beforePlans" embedded />
+
         <div className="mt-20 sm:mt-28">
           <div className="max-w-3xl">
             <p className="text-xs font-bold uppercase tracking-[0.42em] text-orange-300 sm:text-sm">{plansEyebrow}</p>
@@ -239,9 +248,14 @@ export default function Studio() {
         <div className="mx-auto mt-20 max-w-4xl border-l-2 border-orange-300/70 pl-6 sm:mt-28 sm:pl-10">
           <p className="text-xl leading-9 text-white/85 sm:text-2xl sm:leading-10">{vision}</p>
         </div>
+
+        <FlexibleTextBlocks page="studio" placement="afterPlans" embedded />
       </div>
 
       <div className="px-4 pb-16 sm:px-6 sm:pb-24">
+        <div className="mx-auto max-w-6xl">
+          <FlexibleTextBlocks page="studio" placement="beforeContact" embedded />
+        </div>
         <div id="contact" className="mx-auto max-w-6xl border-t border-white/10 py-14 text-left sm:py-20">
           <p className="text-xs font-bold uppercase tracking-[0.4em] text-orange-300 sm:text-sm sm:tracking-[0.5em]">{contactEyebrow}</p>
           <h2 className="mt-4 max-w-3xl text-3xl font-black uppercase leading-tight sm:text-5xl">{contactTitle}</h2>
