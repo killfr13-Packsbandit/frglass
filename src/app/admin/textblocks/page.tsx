@@ -20,6 +20,8 @@ type PageOption = {
   placements: { value: string; label: string }[];
 };
 
+const MAX_BLOCKS = 30;
+
 const pages: PageOption[] = [
   { id: "home", label: "Startseite", placements: [
     { value: "afterHero", label: "Nach dem Headerbild" },
@@ -32,8 +34,14 @@ const pages: PageOption[] = [
     { value: "afterBiography", label: "Nach der Biografie" },
   ] },
   { id: "studio", label: "Studio", placements: [
-    { value: "beforeStudio", label: "Vor dem Studio-Inhalt" },
-    { value: "afterStudio", label: "Nach dem Studio-Inhalt" },
+    { value: "beforeStudio", label: "Ganz oben vor dem Studio" },
+    { value: "afterIntro", label: "Nach Einleitung & großem Bild" },
+    { value: "afterMaterial", label: "Nach „Warum Borosilikatglas?“" },
+    { value: "afterProcess", label: "Nach „Am Brenner“" },
+    { value: "beforePlans", label: "Vor Werkstattzeit & Workshops" },
+    { value: "afterPlans", label: "Nach Werkstattzeit & Workshops" },
+    { value: "beforeContact", label: "Vor dem Kontaktbereich" },
+    { value: "afterStudio", label: "Ganz unten nach dem Studio" },
   ] },
   { id: "shop", label: "Shop", placements: [
     { value: "beforeShop", label: "Vor dem Shop" },
@@ -104,6 +112,14 @@ export default function Page() {
     writeBlocks(next);
   }
 
+  function duplicateBlock(block: FlexibleTextBlock, index: number) {
+    if (blocks.length >= MAX_BLOCKS) return;
+    const duplicate = { ...block, id: `block-${Date.now()}-${Math.random().toString(36).slice(2, 7)}` };
+    const next = [...blocks];
+    next.splice(index + 1, 0, duplicate);
+    writeBlocks(next);
+  }
+
   async function save(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setSaving(true); setError(""); setMessage("");
@@ -152,8 +168,8 @@ export default function Page() {
 
         <section className="mt-6 rounded-3xl border border-white/10 bg-white/[0.03] p-5 sm:p-8">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <div><h2 className="text-2xl font-black uppercase sm:text-3xl">{definition.label}</h2><p className="mt-2 text-sm leading-6 text-neutral-400">Du kannst bis zu 30 freie Textblöcke pro Seite anlegen.</p></div>
-            <button type="button" onClick={() => writeBlocks([...blocks, newBlock(definition.placements[0].value)])} className="rounded-full border border-orange-300 px-5 py-3 text-xs font-black uppercase tracking-wider text-orange-300">+ Textblock</button>
+            <div><h2 className="text-2xl font-black uppercase sm:text-3xl">{definition.label}</h2><p className="mt-2 text-sm leading-6 text-neutral-400">Bis zu {MAX_BLOCKS} freie Textblöcke pro Seite. Auf der Studio-Seite kannst du sie jetzt auch direkt zwischen den einzelnen Bereichen einsetzen.</p></div>
+            <button type="button" disabled={blocks.length >= MAX_BLOCKS} onClick={() => writeBlocks([...blocks, newBlock(definition.placements[0].value)])} className="rounded-full border border-orange-300 px-5 py-3 text-xs font-black uppercase tracking-wider text-orange-300 disabled:cursor-not-allowed disabled:opacity-30">+ Textblock</button>
           </div>
 
           {blocks.length === 0 ? <p className="mt-8 rounded-2xl border border-dashed border-white/10 p-8 text-center text-neutral-500">Noch keine freien Textblöcke auf dieser Seite.</p> : <div className="mt-8 space-y-5">{blocks.map((block, index) => {
@@ -169,9 +185,10 @@ export default function Page() {
                   </select>
                   <label className="flex items-center gap-2 text-xs text-neutral-400"><input type="checkbox" checked={block.enabled} onChange={(event) => patchBlock(block.id, { enabled: event.target.checked })} /> sichtbar</label>
                 </div>
-                <div className="flex gap-2">
+                <div className="flex flex-wrap gap-2">
                   <button type="button" onClick={() => moveBlock(index, -1)} disabled={index === 0} className="rounded-full border border-white/15 px-3 py-2 text-xs disabled:opacity-30">↑</button>
                   <button type="button" onClick={() => moveBlock(index, 1)} disabled={index === blocks.length - 1} className="rounded-full border border-white/15 px-3 py-2 text-xs disabled:opacity-30">↓</button>
+                  <button type="button" onClick={() => duplicateBlock(block, index)} disabled={blocks.length >= MAX_BLOCKS} className="rounded-full border border-white/15 px-3 py-2 text-xs font-bold text-neutral-300 disabled:opacity-30">Duplizieren</button>
                   <button type="button" onClick={() => writeBlocks(blocks.filter((item) => item.id !== block.id))} className="rounded-full border border-red-400/30 px-3 py-2 text-xs font-bold text-red-300">Löschen</button>
                 </div>
               </div>
