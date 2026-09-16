@@ -42,9 +42,6 @@ export default function Page() {
     transform: `scale(${zoom})`,
     transformOrigin: `${x}% ${y}%`,
   } as const;
-  const facts = language === "de"
-    ? [["Seit", "2019"], ["Basis", "Kärnten"], ["Material", "Borosilikat"]]
-    : [["Since", "2019"], ["Based", "Carinthia"], ["Material", "Borosilicate"]];
 
   return (
     <main className="min-h-screen overflow-hidden bg-black px-4 pb-20 pt-28 text-white sm:px-6 sm:pb-28 sm:pt-36">
@@ -76,16 +73,7 @@ export default function Page() {
           </div>
 
           <div className="lg:pt-4">
-            <div className="grid grid-cols-3 gap-2 border-b border-white/10 pb-8 sm:gap-3 sm:pb-10">
-              {facts.map(([label, value]) => (
-                <div key={label} className="rounded-2xl border border-white/10 bg-white/[0.025] p-3 sm:p-4">
-                  <p className="text-[9px] font-bold uppercase tracking-[0.22em] text-neutral-600 sm:text-[10px]">{label}</p>
-                  <p className="mt-2 text-sm font-bold uppercase tracking-[0.08em] text-white sm:text-base">{value}</p>
-                </div>
-              ))}
-            </div>
-
-            <div className="pt-8 sm:pt-10">
+            <div>
               {[1, 2, 3, 4].map((number) => {
                 const fallback = t[`p${number}` as keyof typeof t];
                 return (
