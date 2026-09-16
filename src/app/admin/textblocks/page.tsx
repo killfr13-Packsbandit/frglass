@@ -51,6 +51,10 @@ const pages: PageOption[] = [
     { value: "beforeGallery", label: "Vor der Galerie" },
     { value: "afterGallery", label: "Nach der Galerie" },
   ] },
+  { id: "contact", label: "Kontakt", placements: [
+    { value: "beforeContact", label: "Vor dem Kontaktformular" },
+    { value: "afterContact", label: "Nach dem Kontaktbereich" },
+  ] },
 ];
 
 function newBlock(placement: string): FlexibleTextBlock {
@@ -168,7 +172,7 @@ export default function Page() {
 
         <section className="mt-6 rounded-3xl border border-white/10 bg-white/[0.03] p-5 sm:p-8">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <div><h2 className="text-2xl font-black uppercase sm:text-3xl">{definition.label}</h2><p className="mt-2 text-sm leading-6 text-neutral-400">Bis zu {MAX_BLOCKS} freie Textblöcke pro Seite. Auf der Studio-Seite kannst du sie jetzt auch direkt zwischen den einzelnen Bereichen einsetzen.</p></div>
+            <div><h2 className="text-2xl font-black uppercase sm:text-3xl">{definition.label}</h2><p className="mt-2 text-sm leading-6 text-neutral-400">Bis zu {MAX_BLOCKS} freie Textblöcke pro Seite. Auf der Studio-Seite kannst du sie auch direkt zwischen den einzelnen Bereichen einsetzen.</p></div>
             <button type="button" disabled={blocks.length >= MAX_BLOCKS} onClick={() => writeBlocks([...blocks, newBlock(definition.placements[0].value)])} className="rounded-full border border-orange-300 px-5 py-3 text-xs font-black uppercase tracking-wider text-orange-300 disabled:cursor-not-allowed disabled:opacity-30">+ Textblock</button>
           </div>
 
