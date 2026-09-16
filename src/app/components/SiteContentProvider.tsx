@@ -25,12 +25,17 @@ const SiteContentContext = createContext<SiteContentContextValue | null>(null);
 
 function naturalGermanCopy(value: string) {
   return value
-    .replace(/Einzel-Sessions/g, "Einzeltermine")
-    .replace(/1:1-Sessions/g, "Einzeltermine")
-    .replace(/individuelle Sessions/g, "individuelle Termine")
-    .replace(/kleine Sessions/g, "kleine Workshops")
-    .replace(/\bSessions\b/g, "Termine")
-    .replace(/\bSession\b/g, "Termin");
+    .replace(/kleine Workshops und individuelle Sessions/g, "Workshops und individuelle Kurse")
+    .replace(/Einzel-Sessions/g, "Einzelkurse")
+    .replace(/1:1-Sessions/g, "Einzelkurse")
+    .replace(/individuelle Sessions/g, "individuelle Kurse")
+    .replace(/kleine Sessions/g, "kleine Kurse")
+    .replace(/\bSessions\b/g, "Kurse")
+    .replace(/\bSession\b/g, "Kurs")
+    .replace(/Einzeltermine/g, "Einzelkurse")
+    .replace(/individuelle Termine/g, "individuelle Kurse")
+    .replace(/\bTermine\b/g, "Kurse")
+    .replace(/\bTermin\b/g, "Kurs");
 }
 
 export function SiteContentProvider({ children }: { children: React.ReactNode }) {
