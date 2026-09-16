@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import type { CSSProperties } from "react";
 import { translations, useLanguage } from "./LanguageProvider";
 import { useSiteContent } from "./SiteContentProvider";
@@ -47,13 +48,45 @@ export default function Workshop() {
     { url: media2Url, type: media2Type, base: "home.workshop.media2" },
   ].filter((item) => item.url);
 
-  return <section className="relative overflow-hidden bg-black px-4 py-12 text-white sm:px-6 sm:py-14 xl:py-24"><div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,120,30,.15),transparent_60%)]" /><div className="relative mx-auto grid max-w-7xl items-center gap-10 sm:gap-12 xl:grid-cols-2 xl:gap-16">
-    <div className="max-w-2xl"><p className="mb-4 text-xs font-bold uppercase tracking-[0.32em] text-orange-300 sm:text-sm sm:tracking-[0.45em]">{eyebrow}</p><h2 className="text-3xl font-black uppercase leading-tight sm:text-5xl">{title}</h2><p className="mt-6 text-base leading-7 text-neutral-300 sm:mt-8 sm:text-lg sm:leading-8">{text}</p></div>
-    <div className="min-w-0">
-      <div className="grid h-[300px] grid-cols-[1.12fr_.88fr] grid-rows-2 gap-3 sm:h-[380px] sm:gap-4 xl:h-[480px]">
-        {mainUrl && <div className="relative row-span-2 min-h-0 overflow-hidden rounded-2xl border border-white/10 bg-neutral-950 sm:rounded-3xl"><Media url={mainUrl} type={mainType} className="absolute inset-0 h-full w-full" style={crop("home.workshop.main")} /></div>}
-        {smallMedia.map((item, index) => <div key={`${item.url}-${index}`} className="relative min-h-0 overflow-hidden rounded-xl border border-white/10 bg-neutral-950 sm:rounded-2xl"><Media url={item.url} type={item.type} className="absolute inset-0 h-full w-full" style={crop(item.base)} /></div>)}
+  return (
+    <section className="bg-black px-4 py-16 text-white sm:px-6 sm:py-24">
+      <div className="mx-auto max-w-7xl">
+        <div className="grid gap-10 lg:grid-cols-[1.08fr_0.92fr] lg:items-center lg:gap-16">
+          <div className="order-1 min-w-0">
+            <div className="overflow-hidden rounded-2xl border border-white/10 bg-neutral-950 sm:rounded-3xl">
+              {mainUrl && (
+                <div className="relative h-[360px] overflow-hidden sm:h-[520px] lg:h-[620px]">
+                  <Media url={mainUrl} type={mainType} className="absolute inset-0 h-full w-full" style={crop("home.workshop.main")} />
+                </div>
+              )}
+            </div>
+
+            {smallMedia.length > 0 && (
+              <div className="mt-3 grid grid-cols-2 gap-3 sm:mt-4 sm:gap-4">
+                {smallMedia.map((item, index) => (
+                  <div key={`${item.url}-${index}`} className="relative h-[150px] overflow-hidden rounded-xl border border-white/10 bg-neutral-950 sm:h-[210px] sm:rounded-2xl">
+                    <Media url={item.url} type={item.type} className="absolute inset-0 h-full w-full" style={crop(item.base)} />
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <div className="order-2 max-w-2xl lg:pl-2">
+            <p className="text-xs font-bold uppercase tracking-[0.4em] text-orange-300 sm:text-sm sm:tracking-[0.48em]">{eyebrow}</p>
+            <h2 className="mt-4 text-3xl font-black uppercase leading-tight sm:text-5xl">{title}</h2>
+            <p className="mt-6 text-base leading-8 text-neutral-300 sm:text-lg sm:leading-9">{text}</p>
+            <p className="mt-5 text-base leading-8 text-neutral-400 sm:text-lg sm:leading-9">
+              {language === "de"
+                ? "Mich interessiert dabei nicht nur das fertige Stück, sondern auch der Weg dorthin: wie Farbe, Tiefe und Form direkt in der Flamme entstehen und sich während der Arbeit verändern."
+                : "What interests me is not only the finished piece, but also the process: how color, depth and form emerge directly in the flame and keep changing while I work."}
+            </p>
+            <Link href="/studio" className="mt-8 inline-flex rounded-full border border-white/15 px-6 py-3 text-xs font-bold uppercase tracking-widest transition hover:border-orange-300 hover:text-orange-300 sm:text-sm">
+              {language === "de" ? "Mehr aus der Werkstatt" : "More from the studio"}
+            </Link>
+          </div>
+        </div>
       </div>
-    </div>
-  </div></section>;
+    </section>
+  );
 }
