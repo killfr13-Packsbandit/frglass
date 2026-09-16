@@ -99,6 +99,16 @@ const pages: PageDefinition[] = [
     ...localized("gallery.eyebrow", "Kleine Überschrift", "Galerie-Kopf"),
     ...localized("gallery.intro", "Einleitung", "Galerie-Kopf", "textarea"),
   ] },
+  { id: "contact", label: "Kontakt", description: "Texte der Kontaktseite und die Themenliste. Zusätzliche Abschnitte kannst du unter „Freie Textblöcke“ ergänzen.", fields: [
+    ...localized("contact.eyebrow", "Kleine Überschrift", "Kopfbereich"),
+    ...localized("contact.title", "Hauptüberschrift", "Kopfbereich"),
+    ...localized("contact.intro", "Einleitung", "Kopfbereich", "textarea"),
+    ...localized("contact.listTitle", "Überschrift Themenliste", "Themenliste"),
+    ...localized("contact.item1", "Punkt 1", "Themenliste"),
+    ...localized("contact.item2", "Punkt 2", "Themenliste"),
+    ...localized("contact.item3", "Punkt 3", "Themenliste"),
+    ...localized("contact.item4", "Punkt 4", "Themenliste"),
+  ] },
 ];
 
 async function optimizeImage(file: File) {
