@@ -140,6 +140,23 @@ export const SITE_CONTENT_DEFAULTS: SiteContentMap = {
   "gallery.eyebrow.de": "Galerie",
   "gallery.intro.en": "A selection of jewelry, objects and experiments made in the workshop.",
   "gallery.intro.de": "Eine Auswahl an Schmuck, Objekten und Experimenten aus der Werkstatt.",
+
+  "contact.eyebrow.en": "Contact",
+  "contact.eyebrow.de": "Kontakt",
+  "contact.title.en": "Get in touch.",
+  "contact.title.de": "Meld dich.",
+  "contact.intro.en": "Interested in a piece, a custom idea or the future studio setup? Send me a message here. Your inquiry is sent directly to me by email, and I can reply personally.",
+  "contact.intro.de": "Du interessierst dich für ein Stück, eine eigene Idee oder die spätere Werkstatt-Nutzung? Schreib mir hier direkt. Deine Anfrage wird per E-Mail an mich geschickt und ich kann dir persönlich antworten.",
+  "contact.listTitle.en": "You can ask me about",
+  "contact.listTitle.de": "Du kannst mich fragen wegen",
+  "contact.item1.en": "Available pieces",
+  "contact.item1.de": "Verfügbaren Stücken",
+  "contact.item2.en": "Custom ideas and commissions",
+  "contact.item2.de": "Eigener Ideen und Anfragen",
+  "contact.item3.en": "Future torch or studio time",
+  "contact.item3.de": "Späterer Brenner- oder Werkstattzeit",
+  "contact.item4.en": "Small workshops",
+  "contact.item4.de": "Kleinen Workshops",
 };
 
 export function siteContentValue(
