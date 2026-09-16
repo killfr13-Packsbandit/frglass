@@ -72,7 +72,7 @@ export default function Workshop() {
           <div className="order-1 min-w-0">
             <div className="overflow-hidden rounded-2xl border border-white/10 bg-neutral-950 sm:rounded-3xl">
               {mainUrl && (
-                <div className="relative h-[360px] overflow-hidden sm:h-[520px] lg:h-[620px]">
+                <div className="relative aspect-square overflow-hidden sm:aspect-[7/5] lg:aspect-[21/20]">
                   <Media url={mainUrl} type={mainType} className="absolute inset-0 h-full w-full" style={crop("home.workshop.main")} />
                 </div>
               )}
@@ -81,7 +81,7 @@ export default function Workshop() {
             {smallMedia.length > 0 && (
               <div className="mt-3 grid grid-cols-2 gap-3 sm:mt-4 sm:gap-4">
                 {smallMedia.map((item, index) => (
-                  <div key={`${item.url}-${index}`} className="relative h-[150px] overflow-hidden rounded-xl border border-white/10 bg-neutral-950 sm:h-[210px] sm:rounded-2xl">
+                  <div key={`${item.url}-${index}`} className="relative aspect-[7/6] overflow-hidden rounded-xl border border-white/10 bg-neutral-950 sm:aspect-[5/3] sm:rounded-2xl lg:aspect-[3/2]">
                     <Media url={item.url} type={item.type} className="absolute inset-0 h-full w-full" style={crop(item.base)} />
                   </div>
                 ))}
