@@ -50,13 +50,12 @@ function Media({ item, caption, eager = false }: { item: StudioMediaItem; captio
   );
 }
 
-function MediaFigure({ item, caption, className = "", showCaption = true }: { item: StudioMediaItem; caption: string; className?: string; showCaption?: boolean }) {
+function MediaFigure({ item, caption, className = "" }: { item: StudioMediaItem; caption: string; className?: string }) {
   return (
     <figure className={`overflow-hidden rounded-2xl border border-white/10 bg-neutral-950 sm:rounded-3xl ${className}`}>
       <div className="overflow-hidden bg-black">
         <Media item={item} caption={caption} />
       </div>
-      {showCaption && caption && <figcaption className="border-t border-white/10 px-5 py-4 text-sm leading-6 text-neutral-400">{caption}</figcaption>}
     </figure>
   );
 }
@@ -147,7 +146,6 @@ export default function Studio() {
             <div className="h-[52svh] min-h-[380px] sm:h-[66vh] sm:min-h-[520px]">
               <Media item={heroMedia} caption={captionFor(heroMedia, language === "de" ? "FRGLASS Glaswerkstatt in Kärnten" : "FRGLASS glass studio in Carinthia")} eager />
             </div>
-            {captionFor(heroMedia) && <figcaption className="border-t border-white/10 px-5 py-4 text-sm leading-6 text-neutral-400 sm:px-7">{captionFor(heroMedia)}</figcaption>}
           </figure>
         ) : (
           <div className="h-[46svh] min-h-[340px] rounded-[1.5rem] border border-white/10 bg-[radial-gradient(circle_at_70%_25%,rgba(251,146,60,.17),transparent_32%),linear-gradient(145deg,#171717,#050505_65%)] sm:rounded-[2.25rem]" />
@@ -171,7 +169,6 @@ export default function Studio() {
               item={materialMedia}
               caption={captionFor(materialMedia, language === "de" ? "Borosilikatglas in der Werkstatt" : "Borosilicate glass in the studio")}
               className="lg:ml-auto"
-              showCaption={false}
             />
           )}
         </div>
