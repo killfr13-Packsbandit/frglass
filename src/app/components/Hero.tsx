@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { translations, useLanguage } from "./LanguageProvider";
 import { useSiteContent } from "./SiteContentProvider";
 
@@ -80,9 +81,9 @@ export default function Hero() {
       </div>
 
       <div className="mx-auto flex max-w-[1680px] justify-center border-t border-white/10 px-5 py-8 sm:px-8 sm:py-10">
-        <a href="#collections" className="inline-flex items-center rounded-full bg-orange-300 px-6 py-3.5 text-xs font-black uppercase tracking-[0.14em] text-black transition hover:bg-white sm:px-7 sm:text-sm">
+        <Link href="/shop#shop-categories" className="inline-flex items-center rounded-full bg-orange-300 px-6 py-3.5 text-xs font-black uppercase tracking-[0.14em] text-black transition hover:bg-white sm:px-7 sm:text-sm">
           {cta}
-        </a>
+        </Link>
       </div>
     </section>
   );
