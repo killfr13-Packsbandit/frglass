@@ -80,8 +80,10 @@ export function SiteContentProvider({ children }: { children: React.ReactNode })
       loading,
       error,
       get: (key, fallback = "") => {
-        // No historical text or image is displayed before the CMS responds.
-        if (loading || error) return /\.(zoom|focusX|focusY|type)$/.test(key) ? fallback : "";
+        // Keep meaningful fallback content in the server-rendered HTML.
+        // This prevents crawlers from seeing an almost empty homepage before
+        // the client-side CMS request finishes (which can trigger a Soft 404).
+        if (loading || error) return fallback;
         const resolved = siteContentValue(content, key, fallback);
         return key.endsWith(".de") ? naturalGermanCopy(resolved) : resolved;
       },
