@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import FlexibleTextBlocks from "../components/FlexibleTextBlocks";
 import InquiryShop from "../components/InquiryShop";
+import { getProductCatalog } from "../../lib/productCatalog";
+
+// The catalog is managed at runtime and must be fresh on every request.
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Borosilikatglas Shop – verfügbare Einzelstücke",
@@ -15,11 +19,13 @@ export const metadata: Metadata = {
   },
 };
 
-export default function Page() {
+export default async function Page() {
+  const products = await getProductCatalog();
+
   return (
     <main className="bg-black">
       <FlexibleTextBlocks page="shop" placement="beforeShop" topOffset />
-      <InquiryShop />
+      <InquiryShop initialProducts={products} />
       <FlexibleTextBlocks page="shop" placement="afterShop" />
     </main>
   );

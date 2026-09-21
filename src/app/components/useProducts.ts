@@ -4,7 +4,7 @@ import { publicData, arrayField } from "./publicData";
 import { usePublicData } from "./usePublicData";
 const resource = publicData("/api/products", (value) => arrayField<ProductRecord>(value, "products"));
 const empty: ProductRecord[] = [];
-export function useProducts() {
-  const { data, ...state } = usePublicData(resource);
+export function useProducts(initialProducts?: ProductRecord[]) {
+  const { data, ...state } = usePublicData(resource, initialProducts);
   return { products: data ?? empty, ...state };
 }

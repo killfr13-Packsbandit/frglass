@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import { categoryIdFromName, formatProductPrice } from "../productTypes";
+import { categoryIdFromName, formatProductPrice, type ProductRecord } from "../productTypes";
 import { useLanguage } from "./LanguageProvider";
 import ProductPicture from "./ProductPicture";
 import { useProductCategories } from "./useProductCategories";
@@ -26,10 +26,10 @@ const copy = {
   },
 } as const;
 
-export default function InquiryShop() {
+export default function InquiryShop({ initialProducts }: { initialProducts: ProductRecord[] }) {
   const { language } = useLanguage();
   const { get } = useSiteContent();
-  const { products, loading: productsLoading, error: productsError, refresh: refreshProducts } = useProducts();
+  const { products, loading: productsLoading, error: productsError, refresh: refreshProducts } = useProducts(initialProducts);
   const { categories } = useProductCategories();
   const [activeCategory, setActiveCategory] = useState("all");
   const t = copy[language];

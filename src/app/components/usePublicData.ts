@@ -1,9 +1,12 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
 
-export function usePublicData<T>(resource: { read: () => T | null; load: (force?: boolean) => Promise<T> }) {
-  const [data, setData] = useState<T | null>(() => resource.read());
-  const [loading, setLoading] = useState(() => resource.read() === null);
+export function usePublicData<T>(
+  resource: { read: () => T | null; load: (force?: boolean) => Promise<T> },
+  initialData?: T,
+) {
+  const [data, setData] = useState<T | null>(() => resource.read() ?? initialData ?? null);
+  const [loading, setLoading] = useState(() => resource.read() === null && initialData === undefined);
   const [error, setError] = useState(false);
   const sequence = useRef(0);
   const load = useCallback(async (force: boolean) => {
@@ -20,10 +23,13 @@ export function usePublicData<T>(resource: { read: () => T | null; load: (force?
     }
   }, [resource]);
   useEffect(() => {
+    // Server-rendered data is already fresh for this navigation. A manual
+    // refresh can still force an API request when needed.
+    if (initialData !== undefined) return;
     void load(false);
     // A completed request may populate the shared cache, but cannot update a departed page.
     return () => { sequence.current++; };
-  }, [load]);
+  }, [initialData, load]);
   const refresh = useCallback(() => load(true), [load]);
   return { data, loading, error, refresh };
 }
