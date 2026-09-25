@@ -1,6 +1,13 @@
 "use client";
 
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useSyncExternalStore,
+} from "react";
 
 export type Language = "de" | "en";
 
@@ -10,6 +17,40 @@ type LanguageContextValue = {
 };
 
 const LanguageContext = createContext<LanguageContextValue | undefined>(undefined);
+
+export const LANGUAGE_KEY = "frglass-language";
+export const LANGUAGE_CHANGE_EVENT = "frglass-language-change";
+let memoryLanguage: Language | null = null;
+
+function readLanguage(): Language {
+  if (memoryLanguage) return memoryLanguage;
+
+  try {
+    const saved = window.localStorage.getItem(LANGUAGE_KEY);
+    if (saved === "de" || saved === "en") return saved;
+  } catch {
+    // Fall through to the browser language when storage is unavailable.
+  }
+
+  return window.navigator.language.toLowerCase().startsWith("de") ? "de" : "en";
+}
+
+function subscribeToLanguageChange(callback: () => void) {
+  const handleStorage = () => {
+    memoryLanguage = null;
+    callback();
+  };
+  window.addEventListener("storage", handleStorage);
+  window.addEventListener(LANGUAGE_CHANGE_EVENT, callback);
+  return () => {
+    window.removeEventListener("storage", handleStorage);
+    window.removeEventListener(LANGUAGE_CHANGE_EVENT, callback);
+  };
+}
+
+function serverLanguage(): Language {
+  return "de";
+}
 
 export const translations = {
   en: {
@@ -149,41 +190,27 @@ export const translations = {
 } as const;
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  const [language, setLanguageState] = useState<Language>("de");
-
-  useEffect(() => {
-    try {
-      const saved = window.localStorage.getItem("frglass-language");
-      if (saved === "de" || saved === "en") {
-        setLanguageState(saved);
-        return;
-      }
-    } catch {
-      // Fall back to browser language if persistent storage is unavailable.
-    }
-
-    const browserLanguage = window.navigator.language.toLowerCase();
-    if (browserLanguage.startsWith("de")) {
-      setLanguageState("de");
-    } else {
-      setLanguageState("en");
-    }
-  }, []);
+  const language = useSyncExternalStore(
+    subscribeToLanguageChange,
+    readLanguage,
+    serverLanguage,
+  );
 
   useEffect(() => {
     document.documentElement.lang = language === "de" ? "de-AT" : "en";
   }, [language]);
 
-  const setLanguage = (nextLanguage: Language) => {
-    setLanguageState(nextLanguage);
+  const setLanguage = useCallback((nextLanguage: Language) => {
+    memoryLanguage = nextLanguage;
     try {
-      window.localStorage.setItem("frglass-language", nextLanguage);
+      window.localStorage.setItem(LANGUAGE_KEY, nextLanguage);
     } catch {
       // Keep the in-memory language choice usable in restricted browsers.
     }
-  };
+    window.dispatchEvent(new Event(LANGUAGE_CHANGE_EVENT));
+  }, []);
 
-  const value = useMemo(() => ({ language, setLanguage }), [language]);
+  const value = useMemo(() => ({ language, setLanguage }), [language, setLanguage]);
 
   return <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>;
 }

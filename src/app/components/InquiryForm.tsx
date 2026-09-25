@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { FormEvent, useEffect, useMemo, useState } from "react";
+import { FormEvent, useMemo, useState } from "react";
 import { useLanguage } from "./LanguageProvider";
 import { siteConfig } from "../siteConfig";
 
@@ -72,19 +72,17 @@ export default function InquiryForm({ productName, productSlug }: Props) {
   const t = copy[language];
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
+  // null means the untouched, language-aware product template is shown.
+  // Once the visitor types, their own text is preserved across language changes.
+  const [customMessage, setCustomMessage] = useState<string | null>(null);
   const [company, setCompany] = useState("");
   const [consent, setConsent] = useState(false);
   const [sending, setSending] = useState(false);
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState("");
 
-  useEffect(() => {
-    if (!productName) return;
-    setMessage((current) =>
-      current.trim() ? current : copy[language].productMessage(productName),
-    );
-  }, [productName, language]);
+  const message =
+    customMessage ?? (productName ? t.productMessage(productName) : "");
 
   const fallbackHref = useMemo(() => {
     const subject = productName
@@ -140,7 +138,7 @@ export default function InquiryForm({ productName, productSlug }: Props) {
 
       setName("");
       setEmail("");
-      setMessage("");
+      setCustomMessage(null);
       setCompany("");
       setConsent(false);
       setStatus("success");
@@ -203,7 +201,7 @@ export default function InquiryForm({ productName, productSlug }: Props) {
           <span className="text-sm font-bold">{t.message}</span>
           <textarea
             value={message}
-            onChange={(event) => setMessage(event.target.value)}
+            onChange={(event) => setCustomMessage(event.target.value)}
             maxLength={2000}
             required
             rows={6}

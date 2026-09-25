@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Bewertungen & Community – FRGLASS",
+  title: "Bewertungen & Community",
   description:
     "Bewertungen, Fotos und Erfahrungen von Menschen mit FRGLASS Arbeiten. Handgemachte Borosilikatglas-Kunst und Schmuck aus Österreich.",
   alternates: { canonical: "/community" },

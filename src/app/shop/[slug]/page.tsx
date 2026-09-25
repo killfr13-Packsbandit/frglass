@@ -13,5 +13,5 @@ export default async function Page({
 
   if (!product) notFound();
 
-  return <ProductPageClient product={product} products={products} />;
+  return <ProductPageClient key={product.slug} product={product} products={products} />;
 }

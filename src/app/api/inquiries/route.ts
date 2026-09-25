@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { consumeRateLimit, requestRateLimitKey } from "../../../lib/rateLimit";
 import { siteConfig } from "../../siteConfig";
 
 export const dynamic = "force-dynamic";
@@ -40,6 +41,22 @@ export async function POST(request: Request) {
 
   // Honeypot for simple bots. Pretend success without sending anything.
   if (company) return NextResponse.json({ ok: true });
+
+  const allowed = await consumeRateLimit(
+    "INQUIRY_RATE_LIMITER",
+    requestRateLimitKey(request),
+  );
+  if (!allowed) {
+    return NextResponse.json(
+      {
+        error:
+          language === "de"
+            ? "Bitte warte kurz, bevor du eine weitere Anfrage sendest."
+            : "Please wait a moment before sending another inquiry.",
+      },
+      { status: 429, headers: { "Retry-After": "60" } },
+    );
+  }
 
   if (!name || !validEmail(email) || !message) {
     return NextResponse.json(

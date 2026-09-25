@@ -37,7 +37,7 @@ export default function Footer() {
           >
             <span className="relative block h-8 w-8 overflow-hidden rounded-full">
               <Image
-                src="/logo.png"
+                src="/logo-mark.webp"
                 alt=""
                 fill
                 sizes="32px"

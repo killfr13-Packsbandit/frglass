@@ -42,13 +42,12 @@ export default function Hero() {
             <div className="flex items-center gap-5 sm:gap-7">
               <div className="relative h-24 w-16 shrink-0 overflow-hidden sm:h-32 sm:w-20">
                 <Image
-                  src="/logo.png"
+                  src="/logo-mark.webp"
                   alt="FRGLASS Logo"
                   fill
                   sizes="160px"
-                  quality={100}
                   priority
-                  className="scale-110 object-cover object-center drop-shadow-[0_0_24px_rgba(253,186,116,0.14)]"
+                  className="object-contain object-center drop-shadow-[0_0_24px_rgba(253,186,116,0.14)]"
                 />
               </div>
               <h1 className="text-[2.7rem] font-black uppercase leading-none tracking-[-0.045em] text-white sm:text-6xl lg:text-7xl">FRGLASS</h1>

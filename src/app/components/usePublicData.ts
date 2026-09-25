@@ -26,9 +26,14 @@ export function usePublicData<T>(
     // Server-rendered data is already fresh for this navigation. A manual
     // refresh can still force an API request when needed.
     if (initialData !== undefined) return;
+    const request = sequence.current + 1;
+    // Loading this external resource is the synchronization purpose of this effect.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     void load(false);
     // A completed request may populate the shared cache, but cannot update a departed page.
-    return () => { sequence.current++; };
+    return () => {
+      if (sequence.current === request) sequence.current += 1;
+    };
   }, [initialData, load]);
   const refresh = useCallback(() => load(true), [load]);
   return { data, loading, error, refresh };

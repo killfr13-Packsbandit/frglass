@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import ProductPicture from "../../components/ProductPicture";
 import { useLanguage } from "../../components/LanguageProvider";
 import { categoryIdFromName, formatProductPrice, type ProductRecord } from "../../productTypes";
@@ -52,13 +52,9 @@ export default function ProductPageClient({
 }) {
   const { language } = useLanguage();
   const t = copy[language];
-  const [activeImage, setActiveImage] = useState<string | null>(null);
+  const [activeImage, setActiveImage] = useState(product.image);
 
-  useEffect(() => {
-    setActiveImage(product?.image ?? null);
-  }, [product?.slug, product?.image]);
-
-  const currentImage = activeImage ?? product.image;
+  const currentImage = activeImage;
   const currentIndex = Math.max(0, product.images.indexOf(currentImage));
   const hasMultipleImages = product.images.length > 1;
   const isAvailable = product.status === "Available";

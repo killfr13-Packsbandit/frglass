@@ -365,7 +365,7 @@ const StudioMediaEditor = forwardRef<StudioMediaEditorHandle, Props>(function St
     markDirty(items.filter((entry) => entry.id !== item.id));
   }
 
-  const contextValue = useMemo<StudioMediaContextValue>(() => ({
+  const contextValue: StudioMediaContextValue = {
     items,
     loading,
     busy,
@@ -376,7 +376,7 @@ const StudioMediaEditor = forwardRef<StudioMediaEditorHandle, Props>(function St
     updateItem,
     move,
     remove,
-  }), [items, loading, busy, uploading, replacingId]);
+  };
 
   return (
     <StudioMediaContext.Provider value={contextValue}>

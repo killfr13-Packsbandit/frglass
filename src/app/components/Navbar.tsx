@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { siteConfig } from "../siteConfig";
@@ -29,10 +30,12 @@ export default function Navbar() {
           onClick={() => setMenuOpen(false)}
         >
           <span className="relative h-8 w-7 shrink-0 overflow-hidden sm:h-9 sm:w-8">
-            <img
-              src="/logo.png"
+            <Image
+              src="/logo-mark.webp"
               alt=""
               aria-hidden="true"
+              fill
+              sizes="32px"
               className="absolute inset-0 h-full w-full scale-125 object-cover object-center"
             />
           </span>

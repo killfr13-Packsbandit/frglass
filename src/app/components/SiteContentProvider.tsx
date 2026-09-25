@@ -71,6 +71,7 @@ export function SiteContentProvider({ children }: { children: React.ReactNode })
     // Refresh on public navigation as well. This is especially important after
     // editing content in /admin so the user immediately sees the saved version
     // without needing a hard reload.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     void refresh();
   }, [pathname, refresh]);
 

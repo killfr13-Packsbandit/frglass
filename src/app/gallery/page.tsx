@@ -46,6 +46,17 @@ export default function Page() {
   const { get } = useSiteContent();
   const t = copy[language];
   const lang = language === "de" ? "de" : "en";
+  const activeMediaIndex = activeMedia
+    ? galleryMedia.findIndex((item) => item.id === activeMedia.id)
+    : -1;
+  const activeMediaCaption = activeMedia
+    ? language === "de"
+      ? activeMedia.description || activeMedia.descriptionEn
+      : activeMedia.descriptionEn || activeMedia.description
+    : "";
+  const activeMediaAlt =
+    activeMediaCaption ||
+    `${t.imageAlt}${activeMediaIndex >= 0 ? ` ${activeMediaIndex + 1}` : ""}`;
 
   return (
     <main className="min-h-screen bg-black px-4 py-20 text-white sm:px-6 sm:py-28 lg:py-32">
@@ -58,10 +69,11 @@ export default function Page() {
         {mediaLoading && !loadedMedia && <p role="status" className="min-h-80 py-12 text-center text-neutral-400">{language === "de" ? "Bilder werden geladen …" : "Loading images …"}</p>}
         {mediaError && <p role="alert" className="py-8 text-center text-neutral-400">{language === "de" ? "Bilder konnten nicht geladen werden." : "Images could not be loaded."} <button type="button" onClick={() => void refreshMedia()} className="underline">{language === "de" ? "Erneut versuchen" : "Retry"}</button></p>}
         <div className="grid gap-4 sm:grid-cols-2 sm:gap-6 xl:grid-cols-3">
-          {galleryMedia.map((item) => {
+          {galleryMedia.map((item, index) => {
             const caption = language === "de" ? item.description || item.descriptionEn : item.descriptionEn || item.description;
+            const fallbackAlt = `${t.imageAlt} ${index + 1}`;
             return (
-              <button key={item.id} type="button" onClick={() => setActiveMedia(item)} className="group overflow-hidden rounded-2xl border border-white/10 bg-neutral-950 text-left sm:rounded-3xl">
+              <button key={item.id} type="button" aria-label={caption || fallbackAlt} onClick={() => setActiveMedia(item)} className="group overflow-hidden rounded-2xl border border-white/10 bg-neutral-950 text-left sm:rounded-3xl">
                 <div className="relative flex h-[330px] items-center justify-center overflow-hidden p-2 sm:h-[400px] sm:p-3 lg:h-[430px] xl:h-[460px]">
                   {item.mediaType === "video" ? (
                     <>
@@ -69,7 +81,7 @@ export default function Page() {
                       <span className="pointer-events-none absolute bottom-4 right-4 rounded-full bg-black/70 px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-white">Video</span>
                     </>
                   ) : (
-                    <img src={item.mediaUrl} alt={caption || t.imageAlt} loading="lazy" decoding="async" className="h-full w-full transition duration-700" style={mediaStyle(item)} />
+                    <img src={item.mediaUrl} alt={caption || fallbackAlt} loading="lazy" decoding="async" className="h-full w-full transition duration-700" style={mediaStyle(item)} />
                   )}
                 </div>
                 {caption && <p className="border-t border-white/10 px-5 py-4 text-sm leading-6 text-neutral-400">{caption}</p>}
@@ -86,7 +98,7 @@ export default function Page() {
             {activeMedia.mediaType === "video" ? (
               <video src={activeMedia.mediaUrl} controls playsInline preload="metadata" className="max-h-full max-w-full" />
             ) : (
-              <img src={activeMedia.mediaUrl} alt={(language === "de" ? activeMedia.description || activeMedia.descriptionEn : activeMedia.descriptionEn || activeMedia.description) || t.imageAlt} className="max-h-full max-w-full object-contain" />
+              <img src={activeMedia.mediaUrl} alt={activeMediaAlt} className="max-h-full max-w-full object-contain" />
             )}
           </div>
 

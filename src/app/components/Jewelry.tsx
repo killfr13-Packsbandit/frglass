@@ -24,16 +24,13 @@ export default function JewelryShowcase() {
   );
 
   useEffect(() => {
-    if (activeIndex >= showcaseCategories.length) setActiveIndex(0);
-  }, [activeIndex, showcaseCategories.length]);
-
-  useEffect(() => {
     if (showcaseCategories.length <= 1 || window.matchMedia("(any-pointer: coarse)").matches) return;
     const timer = window.setInterval(() => setActiveIndex((current) => (current + 1) % showcaseCategories.length), 10000);
     return () => window.clearInterval(timer);
   }, [showcaseCategories.length]);
 
-  const activeCategory = showcaseCategories[activeIndex];
+  const selectedIndex = activeIndex < showcaseCategories.length ? activeIndex : 0;
+  const activeCategory = showcaseCategories[selectedIndex];
   const activeId = activeCategory?.id ?? "pendants";
   const featuredProducts = products.filter((product) => product.status === "Available" && (product.categoryId || categoryIdFromName(product.category)) === activeId).slice(0, 5);
   const fallbackEyebrow = get(`home.jewelry.eyebrow.${lang}`, t.eyebrow);
@@ -71,7 +68,7 @@ export default function JewelryShowcase() {
                 key={category.id}
                 type="button"
                 onClick={() => setActiveIndex(index)}
-                className={`rounded-full border px-4 py-2.5 text-[10px] font-bold uppercase tracking-[0.16em] transition sm:text-xs ${index === activeIndex ? "border-orange-300 bg-orange-300 text-black" : "border-white/10 bg-white/[0.02] text-neutral-500 hover:border-white/25 hover:text-white"}`}
+                className={`rounded-full border px-4 py-2.5 text-[10px] font-bold uppercase tracking-[0.16em] transition sm:text-xs ${index === selectedIndex ? "border-orange-300 bg-orange-300 text-black" : "border-white/10 bg-white/[0.02] text-neutral-500 hover:border-white/25 hover:text-white"}`}
               >
                 {language === "de" ? category.nameDe : category.name}
               </button>

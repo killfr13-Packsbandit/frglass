@@ -3,7 +3,7 @@ import FlexibleTextBlocks from "../components/FlexibleTextBlocks";
 import Studio from "../components/Studio";
 
 export const metadata: Metadata = {
-  title: "Glaswerkstatt in Kärnten – FRGLASS Studio",
+  title: "Glaswerkstatt in Kärnten",
   description:
     "Einblick in die FRGLASS Glaswerkstatt in Kärnten, Österreich: Borosilikatglas, Lampworking sowie geplante Werkstattzeit und kleine Workshops.",
   alternates: { canonical: "/studio" },

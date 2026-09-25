@@ -10,8 +10,11 @@ const readProducts = cache(getProductCatalog);
 const SITE_URL = "https://frglass.at";
 
 function absoluteUrl(value: string) {
-  if (/^https?:\/\//i.test(value)) return value;
-  return `${SITE_URL}${value.startsWith("/") ? value : `/${value}`}`;
+  try {
+    return new URL(value, `${SITE_URL}/`).href;
+  } catch {
+    return `${SITE_URL}${value.startsWith("/") ? value : `/${value}`}`;
+  }
 }
 
 function numericPrice(value: string) {
@@ -46,7 +49,7 @@ export async function generateMetadata({
 
   if (!product) {
     return {
-      title: "Stück nicht gefunden | FRGLASS",
+      title: "Stück nicht gefunden",
       robots: { index: false, follow: false },
     };
   }

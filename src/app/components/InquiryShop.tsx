@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { categoryIdFromName, formatProductPrice, type ProductRecord } from "../productTypes";
 import { useLanguage } from "./LanguageProvider";
 import ProductPicture from "./ProductPicture";
@@ -49,21 +49,18 @@ export default function InquiryShop({ initialProducts }: { initialProducts: Prod
     [categories, availableProducts],
   );
 
-  useEffect(() => {
-    if (
-      activeCategory !== "all" &&
-      !visibleCategories.some((category) => category.id === activeCategory)
-    ) {
-      setActiveCategory("all");
-    }
-  }, [activeCategory, visibleCategories]);
+  const selectedCategory =
+    activeCategory === "all" ||
+    visibleCategories.some((category) => category.id === activeCategory)
+      ? activeCategory
+      : "all";
 
   const shownProducts =
-    activeCategory === "all"
+    selectedCategory === "all"
       ? availableProducts
       : availableProducts.filter(
           (product) =>
-            (product.categoryId || categoryIdFromName(product.category)) === activeCategory,
+            (product.categoryId || categoryIdFromName(product.category)) === selectedCategory,
         );
 
   const selectCategory = (categoryId: string) => {
@@ -89,9 +86,9 @@ export default function InquiryShop({ initialProducts }: { initialProducts: Prod
         <div id="shop-categories" className="scroll-mt-28">
           {visibleCategories.length > 1 && (
             <div className="mx-auto mb-12 flex max-w-4xl flex-wrap justify-center gap-2 sm:mb-16">
-              <button type="button" onClick={() => selectCategory("all")} className={`rounded-full border px-4 py-2 text-xs font-bold uppercase tracking-wider transition ${activeCategory === "all" ? "border-orange-300 bg-orange-300 text-black" : "border-white/15 text-neutral-300 hover:border-orange-300 hover:text-orange-300"}`}>{t.all}</button>
+              <button type="button" onClick={() => selectCategory("all")} className={`rounded-full border px-4 py-2 text-xs font-bold uppercase tracking-wider transition ${selectedCategory === "all" ? "border-orange-300 bg-orange-300 text-black" : "border-white/15 text-neutral-300 hover:border-orange-300 hover:text-orange-300"}`}>{t.all}</button>
               {visibleCategories.map((category) => (
-                <button key={category.id} type="button" onClick={() => selectCategory(category.id)} className={`rounded-full border px-4 py-2 text-xs font-bold uppercase tracking-wider transition ${activeCategory === category.id ? "border-orange-300 bg-orange-300 text-black" : "border-white/15 text-neutral-300 hover:border-orange-300 hover:text-orange-300"}`}>
+                <button key={category.id} type="button" onClick={() => selectCategory(category.id)} className={`rounded-full border px-4 py-2 text-xs font-bold uppercase tracking-wider transition ${selectedCategory === category.id ? "border-orange-300 bg-orange-300 text-black" : "border-white/15 text-neutral-300 hover:border-orange-300 hover:text-orange-300"}`}>
                   {language === "de" ? category.nameDe : category.name}
                 </button>
               ))}

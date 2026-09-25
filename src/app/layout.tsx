@@ -28,7 +28,7 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1, "max-video-preview": -1 } },
   openGraph: { type: "website", siteName: siteConfig.name, title: "FRGLASS | Glaskunst & Borosilikatglas aus Kärnten", description, url: "/", locale: "de_AT", alternateLocale: ["en_US"], images: [{ url: "/workshop/me2.jpg", width: 1200, height: 630, alt: "FRGLASS – handgemachte Borosilikatglas-Kunst aus Kärnten" }] },
   twitter: { card: "summary_large_image", title: "FRGLASS | Glaskunst & Borosilikatglas aus Kärnten", description, images: ["/workshop/me2.jpg"] },
-  icons: { icon: "/favicon.png?v=5", shortcut: "/favicon.png?v=5", apple: "/logo.png" },
+  icons: { icon: "/favicon.png?v=5", shortcut: "/favicon.png?v=5", apple: "/favicon.png?v=5" },
 };
 
 const structuredData = {

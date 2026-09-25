@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Kontakt – FRGLASS Borosilikatglas aus Österreich",
+  title: "Kontakt – Borosilikatglas aus Österreich",
   description:
     "Kontakt zu FRGLASS für verfügbare Borosilikatglas-Einzelstücke, individuelle Ideen, Anfragen und zukünftige Workshop-Angebote in Österreich.",
   alternates: { canonical: "/contact" },

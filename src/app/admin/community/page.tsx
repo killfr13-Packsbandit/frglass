@@ -14,6 +14,66 @@ type Review = {
   recordUrl?: string;
 };
 
+function ReviewCard({
+  review,
+  pendingReview,
+  busy,
+  onApprove,
+  onRemove,
+}: {
+  review: Review;
+  pendingReview: boolean;
+  busy: string;
+  onApprove: (review: Review) => void;
+  onRemove: (review: Review) => void;
+}) {
+  const actionRunning = Boolean(busy);
+  return (
+    <article className="overflow-hidden rounded-3xl border border-white/10 bg-white/[0.04]">
+      {review.mediaUrl && (
+        <div className="aspect-[4/3] overflow-hidden bg-neutral-950">
+          <img src={review.mediaUrl} alt="" className="h-full w-full object-cover" />
+        </div>
+      )}
+      <div className="p-5">
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <p className="font-black">{review.name}</p>
+            <p className="mt-1 text-xs text-neutral-500">
+              {new Date(review.createdAt).toLocaleString("de-AT")}
+            </p>
+          </div>
+          <span className="text-orange-300">
+            {"★".repeat(review.rating)}
+            {"☆".repeat(5 - review.rating)}
+          </span>
+        </div>
+        {review.text && (
+          <p className="mt-4 whitespace-pre-wrap leading-7 text-neutral-300">{review.text}</p>
+        )}
+        <div className="mt-5 flex gap-3">
+          {pendingReview && (
+            <button
+              onClick={() => onApprove(review)}
+              disabled={actionRunning}
+              className="rounded-full bg-white px-4 py-2 text-sm font-black text-black disabled:opacity-50"
+            >
+              {busy === review.id ? "Freigabe …" : "Freigeben"}
+            </button>
+          )}
+          <button
+            onClick={() => onRemove(review)}
+            disabled={actionRunning}
+            className="rounded-full border border-red-400/25 px-4 py-2 text-sm font-bold text-red-300 disabled:opacity-50"
+          >
+            {busy === review.id ? "Bitte warten …" : "Löschen"}
+          </button>
+        </div>
+      </div>
+    </article>
+  );
+}
+
 export default function Page() {
   const [authenticated, setAuthenticated] = useState<boolean | null>(null);
   const [pending, setPending] = useState<Review[]>([]);
@@ -37,6 +97,8 @@ export default function Page() {
   }
 
   useEffect(() => {
+    // Fetching the remote moderation state is the synchronization purpose of this effect.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     load().catch((loadError) => {
       setError(loadError instanceof Error ? loadError.message : "Bewertungen konnten nicht geladen werden.");
       setAuthenticated(false);
@@ -84,47 +146,6 @@ export default function Page() {
     }
   }
 
-  function ReviewCard({ review, pendingReview }: { review: Review; pendingReview: boolean }) {
-    const actionRunning = Boolean(busy);
-    return (
-      <article className="overflow-hidden rounded-3xl border border-white/10 bg-white/[0.04]">
-        {review.mediaUrl && (
-          <div className="aspect-[4/3] overflow-hidden bg-neutral-950">
-            <img src={review.mediaUrl} alt="" className="h-full w-full object-cover" />
-          </div>
-        )}
-        <div className="p-5">
-          <div className="flex items-start justify-between gap-4">
-            <div>
-              <p className="font-black">{review.name}</p>
-              <p className="mt-1 text-xs text-neutral-500">{new Date(review.createdAt).toLocaleString("de-AT")}</p>
-            </div>
-            <span className="text-orange-300">{"★".repeat(review.rating)}{"☆".repeat(5 - review.rating)}</span>
-          </div>
-          {review.text && <p className="mt-4 whitespace-pre-wrap leading-7 text-neutral-300">{review.text}</p>}
-          <div className="mt-5 flex gap-3">
-            {pendingReview && (
-              <button
-                onClick={() => approve(review)}
-                disabled={actionRunning}
-                className="rounded-full bg-white px-4 py-2 text-sm font-black text-black disabled:opacity-50"
-              >
-                {busy === review.id ? "Freigabe …" : "Freigeben"}
-              </button>
-            )}
-            <button
-              onClick={() => remove(review)}
-              disabled={actionRunning}
-              className="rounded-full border border-red-400/25 px-4 py-2 text-sm font-bold text-red-300 disabled:opacity-50"
-            >
-              {busy === review.id ? "Bitte warten …" : "Löschen"}
-            </button>
-          </div>
-        </div>
-      </article>
-    );
-  }
-
   if (authenticated === null) {
     return <main className="min-h-screen bg-black px-5 py-28 text-neutral-500">Laden …</main>;
   }
@@ -162,7 +183,16 @@ export default function Page() {
             <p className="mt-5 text-neutral-500">Gerade nichts offen.</p>
           ) : (
             <div className="mt-6 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-              {pending.map((review) => <ReviewCard key={review.id} review={review} pendingReview />)}
+              {pending.map((review) => (
+                <ReviewCard
+                  key={review.id}
+                  review={review}
+                  pendingReview
+                  busy={busy}
+                  onApprove={approve}
+                  onRemove={remove}
+                />
+              ))}
             </div>
           )}
         </div>
@@ -170,7 +200,16 @@ export default function Page() {
         <div className="mt-16 border-t border-white/10 pt-12">
           <h2 className="text-2xl font-black uppercase">Veröffentlicht <span className="text-neutral-500">{approved.length}</span></h2>
           <div className="mt-6 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-            {approved.map((review) => <ReviewCard key={review.id} review={review} pendingReview={false} />)}
+            {approved.map((review) => (
+              <ReviewCard
+                key={review.id}
+                review={review}
+                pendingReview={false}
+                busy={busy}
+                onApprove={approve}
+                onRemove={remove}
+              />
+            ))}
           </div>
         </div>
       </section>

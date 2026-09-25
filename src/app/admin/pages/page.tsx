@@ -267,6 +267,10 @@ function isPage(value: string | null): value is FlexibleTextPage {
   return Boolean(value && pages.some((page) => page.id === value));
 }
 
+function uploadObjectKey(folder: string, safeName: string) {
+  return `${folder}/${Date.now()}-${safeName}`;
+}
+
 export default function Page() {
   const [session, setSession] = useState<Session | null>(null);
   const [content, setContent] = useState<SiteContentMap>({ ...SITE_CONTENT_DEFAULTS });
@@ -282,6 +286,8 @@ export default function Page() {
 
   useEffect(() => {
     const requestedTab = new URLSearchParams(window.location.search).get("tab");
+    // The query string is a browser-only input used to initialize this admin tab.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (isPage(requestedTab)) setActivePage(requestedTab);
 
     (async () => {
@@ -340,7 +346,7 @@ export default function Page() {
   async function prepareUpload(file: File, folder: string) {
     const prepared = file.type.startsWith("image/") ? await optimizeImage(file) : file;
     const safeName = prepared.name.replace(/[^a-zA-Z0-9._-]+/g, "-");
-    const blob = await upload(`${folder}/${Date.now()}-${safeName}`, prepared, {
+    const blob = await upload(uploadObjectKey(folder, safeName), prepared, {
       access: "public",
       handleUploadUrl: "/api/site-content/upload",
     });
