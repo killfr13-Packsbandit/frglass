@@ -29,14 +29,14 @@ export default function Navbar() {
           className="flex min-w-0 items-center gap-2.5 sm:gap-3"
           onClick={() => setMenuOpen(false)}
         >
-          <span className="relative h-8 w-7 shrink-0 overflow-hidden sm:h-9 sm:w-8">
+          <span className="relative h-8 w-7 shrink-0 sm:h-9 sm:w-8">
             <Image
-              src="/logo-mark.webp"
+              src="/logo.png"
               alt=""
               aria-hidden="true"
               fill
               sizes="32px"
-              className="absolute inset-0 h-full w-full scale-125 object-cover object-center"
+              className="object-contain object-center"
             />
           </span>
           <span className="truncate text-base font-black tracking-[0.22em] sm:text-xl sm:tracking-[0.3em]">
