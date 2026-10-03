@@ -3,11 +3,10 @@ import { getProductCatalog } from "../lib/productCatalog";
 
 const baseUrl = "https://frglass.at";
 
-// Read the current R2 catalog so admin uploads appear without another build.
+// Keep the sitemap dynamic so newly added products can appear without a rebuild.
 export const dynamic = "force-dynamic";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const products = await getProductCatalog();
   const staticRoutes = [
     { path: "", priority: 1, frequency: "weekly" as const },
     { path: "/shop", priority: 0.95, frequency: "weekly" as const },
@@ -20,8 +19,23 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: "/datenschutz", priority: 0.2, frequency: "yearly" as const },
   ];
 
-  return [
-    ...staticRoutes.map((route) => ({ url: `${baseUrl}${route.path}`, changeFrequency: route.frequency, priority: route.priority })),
-    ...products.map((product) => ({ url: `${baseUrl}/shop/${product.slug}`, changeFrequency: product.status === "Available" ? ("weekly" as const) : ("monthly" as const), priority: product.status === "Available" ? 0.9 : 0.65 })),
-  ];
+  const staticEntries: MetadataRoute.Sitemap = staticRoutes.map((route) => ({
+    url: `${baseUrl}${route.path}`,
+    changeFrequency: route.frequency,
+    priority: route.priority,
+  }));
+
+  try {
+    const products = await getProductCatalog();
+    const productEntries: MetadataRoute.Sitemap = products.map((product) => ({
+      url: `${baseUrl}/shop/${product.slug}`,
+      changeFrequency: product.status === "Available" ? ("weekly" as const) : ("monthly" as const),
+      priority: product.status === "Available" ? 0.9 : 0.65,
+    }));
+
+    return [...staticEntries, ...productEntries];
+  } catch (error) {
+    console.error("Sitemap product catalog unavailable; serving static routes only.", error);
+    return staticEntries;
+  }
 }
