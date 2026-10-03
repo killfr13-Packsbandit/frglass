@@ -40,9 +40,9 @@ export default function Hero() {
           <div className="pointer-events-none absolute -left-24 top-1/4 h-72 w-72 rounded-full bg-orange-400/10 blur-[120px]" />
           <div className="relative z-10 mx-auto w-full max-w-2xl xl:mx-0 xl:max-w-xl">
             <div className="flex items-center gap-5 sm:gap-7">
-              <div className="relative h-24 w-16 shrink-0 overflow-hidden sm:h-32 sm:w-20">
+              <div className="relative h-24 w-16 shrink-0 sm:h-32 sm:w-20">
                 <Image
-                  src="/logo-mark.webp"
+                  src="/logo.png"
                   alt="FRGLASS Logo"
                   fill
                   sizes="160px"
