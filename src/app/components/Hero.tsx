@@ -40,14 +40,14 @@ export default function Hero() {
           <div className="pointer-events-none absolute -left-24 top-1/4 h-72 w-72 rounded-full bg-orange-400/10 blur-[120px]" />
           <div className="relative z-10 mx-auto w-full max-w-2xl xl:mx-0 xl:max-w-xl">
             <div className="flex items-center gap-5 sm:gap-7">
-              <div className="relative h-40 w-30 shrink-0 sm:h-48 sm:w-36">
+              <div className="relative h-40 w-28 shrink-0 overflow-hidden sm:h-48 sm:w-32">
                 <Image
                   src="/logo.png"
                   alt="FRGLASS Logo"
                   fill
-                  sizes="(min-width: 640px) 144px, 120px"
+                  sizes="(min-width: 640px) 128px, 112px"
                   priority
-                  className="object-contain object-center drop-shadow-[0_0_24px_rgba(253,186,116,0.14)]"
+                  className="scale-110 object-cover object-center drop-shadow-[0_0_24px_rgba(253,186,116,0.14)]"
                 />
               </div>
               <h1 className="text-[2.7rem] font-black uppercase leading-none tracking-[-0.045em] text-white sm:text-6xl lg:text-7xl">FRGLASS</h1>
